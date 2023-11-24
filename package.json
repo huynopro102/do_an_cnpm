@@ -1,0 +1,18 @@
+{
+  "name": "web_ban_quan_ao",
+  "version": "1.0.0",
+  "description": "do an muon cong nghe phan mem",
+  "main": "index.js",
+  "scripts": {
+    "start": " nodemon src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mongodb": "^6.3.0",
+    "nodemon": "^3.0.1"
+  }
+}
