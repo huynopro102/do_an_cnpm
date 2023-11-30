@@ -1,0 +1,40 @@
+.container_product {
+    margin-top: 100px;
+}
+.item_products{
+   
+    width: 240px;
+    height: 320px;
+    background-color: white;
+    border-radius: 20px;
+    border: 3px solid orange;
+    margin:10px 2.5px;
+}
+.img_product{
+    height: 80% ;
+    border-radius: 20px;
+
+    
+}
+.wrap{
+    display: grid;
+    grid-template-columns: 15% 85%;
+}
+.listproductflex{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  
+}
+
+.listproduct{
+    border: 1px solid yellow;
+}
+.catagory{
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+}
+.catagory-type div{
+    color: red;
+}

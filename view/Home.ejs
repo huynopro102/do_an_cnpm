@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="http://localhost:8080/congkhai/assets/css/swiper-bundle.min.css" />
     <!-- link css -->
     <link rel="stylesheet" href="http://localhost:8080/congkhai/assets/css/style.css">
+
+    <!-- bắt sự kiện onclick đăng xuất -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/btn_dang_xuat.js">
 </head>
 
 <body>
@@ -21,8 +24,8 @@
         <nav class="navbar container">
             <div class="logo">
                 <a href="/">
-                    <img src="http://localhost:8080/congkhai/logo.png" alt="" class="logo-image">
-                    <h3 class="animate-charcter">Nhóm</h3>
+                    <!-- <img src="http://localhost:8080/congkhai/logo.png" alt="" class="logo-image"> -->
+                    <h3 class="animate-charcter">Adidas</h3>
                 </a>
             </div>
 
@@ -31,10 +34,10 @@
             <div class="menu" id="menu">
                 <ul class="list">
                     <li class="list-item">
-                        <a href="#" class="list-link current">Trang Chủ</a>
+                        <a href="/" class="list-link current">Trang Chủ</a>
                     </li>
                     <li class="list-item">
-                        <a href="#" class="list-link">Thể Loại</a>
+                        <a href="/products" class="list-link">Các Sản Phẩm</a>
                     </li>
                     <li class="list-item">
                         <a href="#" class="list-link">Reviews</a>
@@ -58,6 +61,18 @@
             </div>
 
             <div class="list list-right">
+
+                <button class="btn place-items-center" id="cart-icon">
+            
+                    <h3> Hello <%=  data %> </h3>
+                </button>
+
+        
+                
+                <button class="btn place-items-center" id="cart-icon">
+                    <i class="ri-shopping-cart-line"></i>
+                </button>
+
                 <button class="btn place-items-center" id="theme-toggle-btn">
                     <i class="ri-sun-line sun-icon"></i>
                     <i class="ri-moon-line moon-icon"></i>
@@ -72,8 +87,10 @@
                     <i class="ri-close-line close-menu-icon"></i>
                 </button>
 
-                <a href="/login" class="list-link screen-sm-hidden">
-                    Đăng nhập
+                <a href="/" class="list-link screen-sm-hidden" id="btn_dang_xuat">
+                    <form action="/" method="post"> 
+                        <input type="submit" value="Đăng Xuất">
+                    </form>
                 </a>
                 <a href="/register" class="list-link screen-sm-hidden btn sign-up-btn fancy-border">
                     <span>Đăng ký</span>
@@ -597,7 +614,7 @@
             <div class="company-data">
                 <a href="/">
                     <!-- <img src="./assets/images/icon.png" alt=""> -->
-                    <h3 class="animate-charcter">Khanh</h3>
+                    <h3 class="animate-charcter">Adidas</h3>
                 </a>
                 <p class="company-description">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam ipsum accusamus necessitatibus
