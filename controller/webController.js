@@ -6,7 +6,11 @@ let gethomeController = async(req, res) => {
 // await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields 
   res.render("HomeAdmin.ejs", { dataUser: rows });
 }
-
+let gethomeControllerAccounts = async (req,res) =>{
+  const [rows, fields] = await pool.execute( 'SELECT * FROM `datausers`')
+  // await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields 
+    res.render("AccountsAdmin.ejs", { dataUser: rows });
+}
 // post home
 let postHome = async (req, res) => {
   console.log("post home da login");
@@ -80,7 +84,7 @@ const postLogin = async (req, res) => {
     console.log("admin == 1");
     const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
     res.cookie("tokenAdmin", tokenAdmin);
-    res.render("demo.ejs");
+    res.redirect("/admin/v1")
   } else {
     res.json("ko tim thay tài khoản này ");
   }
@@ -95,4 +99,5 @@ module.exports = {
   postRegister,
   postHome,
   gethomeController,
+  gethomeControllerAccounts
 };

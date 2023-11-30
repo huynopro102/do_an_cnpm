@@ -5,14 +5,15 @@ const MiddleWare = require("../MiddleWare/webMiddleWare")
 
 // page admin
 
-router.get("/admin/v1",webController.gethomeController)
+router.get("/admin/v1", MiddleWare.checkadmin , webController.gethomeController)
+router.get("/admin/v1/accounts", MiddleWare.checkadmin  ,webController.gethomeControllerAccounts)
 
 
 // get post , home
 router.get("/",webController.getHome)
 router.post("/",webController.postHome)
 
-// login
+// get , post login
 router.post("/login", MiddleWare.checkLogin ,webController.postLogin)
 router.get("/login",webController.getLogin)
 
