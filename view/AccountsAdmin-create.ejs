@@ -1,0 +1,59 @@
+<%- include('HeaderAdmin.ejs') %>
+  <%- include('aside.ejs') %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          Quản lý danh mục
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+          <li><a href="#">Examples</a></li>
+          <li class="active">Blank page</li>
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+
+        <!-- Default box -->
+        <div class="box">
+
+          <div class="box-body">
+
+
+            <form>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                  else.</small>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Username</label>
+                <input type="text" class="form-control" id="exampleInputPassword1">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1">
+              </div>
+              <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+              </div>
+              <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Submit</button>
+              <a href="/admin/v1/accounts" class="btn btn-default "><i class="fa fa-arrow-left"></i> tro lai</a>
+            </form>
+
+          </div>
+
+        
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <%- include("FooterAdmin.ejs") %>

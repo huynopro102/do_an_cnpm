@@ -1,5 +1,12 @@
 const pool = require("../model/connectDB")
 
+
+
+let GET_DeleteUser = async(req,res) =>{
+    res.json("get delete user")
+}
+
+
 let getAllusers = async (req, res) => {
     console.log("get all")
     const [rows, fields] = await pool.execute('SELECT * FROM `datausers`')
@@ -69,7 +76,6 @@ let UpdateUser = async (req, res) => {
 let DeleteUser = async (req, res) => {
     const idUser = req.params.id
     const [users, fields] = await pool.execute("select * from users where id = ?", [idUser])
-    console.log(users.length)
     if (users.length === 0) {
        return res.status(200).json("id không tồn tại , err client")
     }
@@ -81,5 +87,6 @@ let DeleteUser = async (req, res) => {
 }
 
 module.exports  = {
-    getOneUser , getAllusers , CreateUser , UpdateUser ,DeleteUser
+    getOneUser , getAllusers , CreateUser , UpdateUser ,DeleteUser ,
+    GET_DeleteUser 
 }

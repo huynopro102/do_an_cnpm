@@ -1,16 +1,51 @@
 const pool = require("../model/connectdbUser");
 const jwt = require("jsonwebtoken");
 // get home admin
-let gethomeController = async(req, res) => {
-  const [rows, fields] = await pool.execute( 'SELECT * FROM `datausers`')
-// await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields 
+let gethomeController = async (req, res) => {
+  const [rows, fields] = await pool.execute("SELECT * FROM `datausers`");
+  // await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields
   res.render("HomeAdmin.ejs", { dataUser: rows });
-}
-let gethomeControllerAccounts = async (req,res) =>{
-  const [rows, fields] = await pool.execute( 'SELECT * FROM `datausers`')
-  // await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields 
-    res.render("AccountsAdmin.ejs", { dataUser: rows });
-}
+};
+let gethomeControllerAccounts = async (req, res) => {
+  let page = req.params.page ? req.params.page : 1
+  let limit = 5
+  let start = (page-1) * limit
+  let totalRow = 0
+  let totalPage = Math.ceil(totalRow/limit)
+  let name = req.query.name;
+  console.log(name);
+  if (name) {
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM `datausers` where `username` like ? ",
+      [`%${name}%`]
+    );
+  res.render("AccountsAdmin.ejs", { dataUser: rows });
+  }
+  const [rows, fields] = await pool.execute("SELECT * FROM `datausers`");
+  res.render("AccountsAdmin.ejs", { dataUser: rows });
+  // await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields
+};
+let gethomeControllerAccountsCreate = async (req, res) => {
+  res.render("AccountsAdmin-create.ejs");
+};
+
+// delete page admin
+let getDeteleAdmin = async (req, res) => {
+  const id = req.params.id;
+  const username = req.params.username;
+  console.log(id);
+  const [rows, fields] = await pool.execute(
+    "SELECT * FROM `datausers` where id = ? and username = ? ",
+    [id, username]
+  );
+  if (username && id && rows[0].id) {
+    const user = await pool.execute("delete from datausers where id = ?", [id]);
+    res.redirect("/admin/v1/accounts");
+  } else {
+    res.json("loi server");
+  }
+};
+
 // post home
 let postHome = async (req, res) => {
   console.log("post home da login");
@@ -29,9 +64,9 @@ const getHome = async (req, res) => {
       [id[0]]
     );
     console.log("data lay ddc ", rows[0]);
-   return res.render("Home.ejs", { data: rows[0].username });
+    return res.render("Home.ejs", { data: rows[0].username });
   }
-  return res.render("NoLoginHome.ejs")
+  return res.render("NoLoginHome.ejs");
 };
 const getLogin = (req, res) => {
   res.render("Login.ejs");
@@ -54,10 +89,10 @@ const postRegister = async (req, res) => {
       "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
       [username, password, email, 0]
     );
-      console.log("dang ky thanh cong post ")
+    console.log("dang ky thanh cong post ");
     res.render("NoLoginHome.ejs");
   }
-  res.json("loi post register")
+  res.json("loi post register");
 };
 
 const getForgotFassword = (req, res) => {
@@ -84,7 +119,7 @@ const postLogin = async (req, res) => {
     console.log("admin == 1");
     const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
     res.cookie("tokenAdmin", tokenAdmin);
-    res.redirect("/admin/v1")
+    res.redirect("/admin/v1");
   } else {
     res.json("ko tim thay tài khoản này ");
   }
@@ -99,5 +134,7 @@ module.exports = {
   postRegister,
   postHome,
   gethomeController,
-  gethomeControllerAccounts
+  gethomeControllerAccounts,
+  gethomeControllerAccountsCreate,
+  getDeteleAdmin,
 };
