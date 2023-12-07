@@ -10,9 +10,3 @@ const poolUser = mysql.createPool({
 
 module.exports = poolUser
 
-// connection.execute(
-//     'SELECT * FROM `datausers` ',
-//     function(err, results, fields) {
-//       console.log(results.length); 
-  
-//     })

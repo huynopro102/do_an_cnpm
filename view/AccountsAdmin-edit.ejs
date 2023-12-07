@@ -5,7 +5,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Quản lý danh mục
+          Sửa danh mục
         </h1>
         <ol class="breadcrumb">
           <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -29,7 +29,7 @@
               <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input name="Email" type="email" class="form-control" id="exampleInputEmail1"
-                  aria-describedby="emailHelp">
+                  aria-describedby="emailHelp"value="<%= row[0].email %>" >
                 <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                   else.</small>
               </div>
@@ -37,24 +37,27 @@
               <!-- username -->
               <div class="form-group">
                 <label for="exampleInputPassword1">Username</label>
-                <input name="UserName" type="text" class="form-control" id="exampleInputUsername1">
+                <input name="UserName" type="text" class="form-control" id="exampleInputUsername1" value="<%= row[0].username %>">
               </div>
 
               <!-- password -->
               <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input name="PassWord" type="password" class="form-control" id="exampleInputPassword1">
+                <input name="PassWord" type="password" class="form-control" id="exampleInputPassword1" value="<%= row[0].password%>">
               </div>
 
               <!-- comfirm password -->
               <div class="form-group">
                 <label for="exampleInputPassword1">Comfirm Password</label>
-                <input name="ConfirmPassWord" type="password" class="form-control" id="exampleInputConfirmPassword1">
+                <input name="ConfirmPassWord" type="password" class="form-control" 
+                id="exampleInputConfirmPassword1" value="<%= row[0].password%>" >
               </div>
+
+              <input type="text" class="cachCuChuoi"  hidden value="<%= row[0].id %>">
 
 
               <!-- button submit -->
-              <button type="submit" class="btn btn-primary btnSubmit"><i class="fa fa-save"></i> Submit</button>
+              <button type="submit" class="btn btn-primary btnluu"><i class="fa fa-save"></i> Lưu </button>
               <a href="/admin/v1/accounts" class="btn btn-default"><i class="fa fa-arrow-left"></i> Trở lại</a>
 
             </form>
@@ -129,8 +132,8 @@
         const postRequired = async (requestBody) => {
           // Send POST request using Fetch API
           try {
-            const response = await fetch('/api/v1/create-user', {
-              method: 'POST',
+            const response = await fetch(`/api/v1/update-user/${document.querySelector(".cachCuChuoi").value.trim()}`, {
+              method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -150,9 +153,9 @@
         }
 
 
-        // btn click
-        let btn_submit = document.querySelector(".btnSubmit");
-        btn_submit.addEventListener("click", async (e) => {
+        // btn_submit click
+        let btn_Luu = document.querySelector(".btnluu");
+        btn_Luu.addEventListener("click", async (e) => {
           e.preventDefault();
           if (checkEmpty() == false) {
             alert("Không để trống thông tin");
@@ -170,7 +173,6 @@
               const exampleData = {
                 UserName: document.querySelector("#exampleInputUsername1").value,
                 PassWord: document.querySelector("#exampleInputPassword1").value,
-                ConfirmPassWord: document.querySelector("#exampleInputConfirmPassword1").value,
                 Email: document.querySelector("#exampleInputEmail1").value,
 
               };
@@ -179,7 +181,7 @@
               await postRequired(exampleData);
 
               // Inform the user about the success (or you can do something else)
-              alert("User created successfully!");
+              alert("Lưu thành công !");
               document.querySelector("#exampleInputUsername1").value = ""
               document.querySelector("#exampleInputPassword1").value = ""
               document.querySelector("#exampleInputConfirmPassword1").value = ""

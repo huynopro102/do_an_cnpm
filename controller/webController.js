@@ -1,30 +1,122 @@
 const pool = require("../model/connectdbUser");
 const jwt = require("jsonwebtoken");
+
+// gethomeControllerCategory
+
+let gethomeControllerCategory = async (req, res) => {
+  let _page = req.query.page ? req.query.page : 1;
+  let limit = 5;
+  let start = (_page - 1) * limit;
+  // let totalRow = 20;
+  let name = req.query.name;
+
+  // total tổng các item trong database
+  const [total, fields] = await pool.execute(
+    "select count(*) as total from category"
+  );
+  let totalRow = total[0].total;
+
+  // tong so trang
+  let totalPage = Math.ceil(totalRow / limit);
+
+  //
+  if (name) {
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM `category` where `name` like ? limit ? , ? ",
+      [`%${name}%`, start, limit]
+    );
+    res.render("CategoryAdmin.ejs", {
+      dataUser: rows ? rows : [],
+      totalPage: totalPage,
+      page: parseInt(_page),
+    });
+  } else {
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM `category` limit ? , ? ",
+      [start, limit]
+    );
+    res.render("CategoryAdmin.ejs", {
+      dataUser: rows ? rows : [],
+      totalPage: totalPage,
+      page: parseInt(_page),
+    });
+  }
+};
+
+// edit admin accounts
+let getAccountsEditAdmin = async (req, res) => {
+  const itemId = req.params.id;
+  const [rows, fields] = await pool.execute(
+    "SELECT * FROM `datausers` where id = ? ",
+    [itemId]
+  );
+
+  res.render("AccountsAdmin-edit.ejs", {
+    row: rows,
+  });
+};
+
+//getCategorysEditAdmin
+let getCategorysEditAdmin = async (req, res) => {
+  const itemId = req.params.id;
+  const [rows, fields] = await pool.execute(
+    "SELECT * FROM `category` where id = ? ",
+    [itemId]
+  );
+  console.log( "id" , rows[0]==undefined)
+    if(rows[0]==undefined) return res.json("loi server")
+  res.render("CategoryAdmin-edit.ejs", {
+    row: rows,
+  });
+};
+
 // get home admin
 let gethomeController = async (req, res) => {
   const [rows, fields] = await pool.execute("SELECT * FROM `datausers`");
   // await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields
   res.render("HomeAdmin.ejs", { dataUser: rows });
 };
+
 let gethomeControllerAccounts = async (req, res) => {
-  let page = req.params.page ? req.params.page : 1
-  let limit = 5
-  let start = (page-1) * limit
-  let totalRow = 0
-  let totalPage = Math.ceil(totalRow/limit)
+  let _page = req.query.page ? req.query.page : 1;
+  let limit = 5;
+  let start = (_page - 1) * limit;
+  // let totalRow = 20;
   let name = req.query.name;
-  console.log(name);
+
+  // total tổng các item trong database
+  const [total, fields] = await pool.execute(
+    "select count(*) as total from datausers"
+  );
+  let totalRow = total[0].total;
+
+  // tong so trang
+  let totalPage = Math.ceil(totalRow / limit);
+
+  //
   if (name) {
     const [rows, fields] = await pool.execute(
-      "SELECT * FROM `datausers` where `username` like ? ",
-      [`%${name}%`]
+      "SELECT * FROM `datausers` where `username` like ? limit ? , ? ",
+      [`%${name}%`, start, limit]
     );
-  res.render("AccountsAdmin.ejs", { dataUser: rows });
+    res.render("AccountsAdmin.ejs", {
+      dataUser: rows ? rows : [],
+      totalPage: totalPage,
+      page: parseInt(_page),
+    });
+  } else {
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM `datausers` limit ? , ? ",
+      [start, limit]
+    );
+    res.render("AccountsAdmin.ejs", {
+      dataUser: rows ? rows : [],
+      totalPage: totalPage,
+      page: parseInt(_page),
+    });
   }
-  const [rows, fields] = await pool.execute("SELECT * FROM `datausers`");
-  res.render("AccountsAdmin.ejs", { dataUser: rows });
-  // await pool.execute( 'SELECT * FROM `users`') sẽ trả về 1 mảng các phần tử trong db , 2 là trả về fields
 };
+
 let gethomeControllerAccountsCreate = async (req, res) => {
   res.render("AccountsAdmin-create.ejs");
 };
@@ -51,6 +143,12 @@ let postHome = async (req, res) => {
   console.log("post home da login");
   res.clearCookie("tokenUser");
   res.render("NoLoginHome.ejs");
+};
+
+let getHomeAdmin = async (req, res) => {
+  console.log("post homeAdmin ");
+  res.clearCookie("tokenAdmin");
+  res.redirect("/");
 };
 // get home
 const getHome = async (req, res) => {
@@ -137,4 +235,10 @@ module.exports = {
   gethomeControllerAccounts,
   gethomeControllerAccountsCreate,
   getDeteleAdmin,
+  getHomeAdmin,
+  getAccountsEditAdmin,
+
+
+  gethomeControllerCategory,
+  getCategorysEditAdmin,
 };

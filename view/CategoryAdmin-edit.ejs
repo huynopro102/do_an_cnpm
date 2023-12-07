@@ -1,0 +1,157 @@
+<%- include('HeaderAdmin.ejs') %>
+  <%- include('aside.ejs') %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          Tạo loại sản phẩm
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+          <li><a href="#">Examples</a></li>
+          <li class="active">Blank page</li>
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+
+        <!-- Default box -->
+        <div class="box">
+
+          <div class="box-body">
+
+            <form action="/update-category/:id" method="post">
+
+              <!-- username -->
+              <div class="form-group">
+                <label for="exampleInputPassword1">name</label>
+                <input name="name" type="text" value="<%= row[0].name%>" class="form-control"
+                  id="exampleInputUsername1">
+              </div>
+
+              <!-- cách củ chuối -->
+              <input type="text" class="cachCuChuoi" value="<%= row[0].id %>" hidden>
+
+              <!-- check box -->
+              <% if ( row[0].status==1 ) { %>
+                <div class="form-check">
+                  <input class="form-check-input" checked="true" type="radio" name="radio" id="exampleRadios1">
+                  <label class="form-check-label" for="exampleRadios1">
+                    hiển thị
+                  </label>
+                </div>
+
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="radio" id="exampleRadios2">
+                  <label class="form-check-label" for="exampleRadios2">
+                    tạm ẩn
+                  </label>
+                </div>
+
+                <% } else { %>
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radio" id="exampleRadios1">
+                    <label class="form-check-label" for="exampleRadios1">
+                      hiển thị
+                    </label>
+                  </div>
+
+
+                  <div class="form-check">
+                    <input class="form-check-input" checked="true" type="radio" checked="true" name="radio"
+                      id="exampleRadios2">
+                    <label class="form-check-label" for="exampleRadios2">
+                      tạm ẩn
+                    </label>
+                  </div>
+
+                  <%} %>
+
+                    <!-- button submit -->
+                    <button type="submit" class="btn btn-primary btnSubmit"><i class="fa fa-save"></i> Submit</button>
+                    <a href="/admin/v1/category" class="btn btn-default"><i class="fa fa-arrow-left"></i> Trở lại</a>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <%- include("FooterAdmin.ejs") %>
+
+      <script>
+
+        // check empty
+        const checkEmpty = () => {
+          let name = document.querySelector("#exampleInputUsername1")
+          const radio1 = document.querySelector("#exampleRadios1")
+          const radio2 = document.querySelector("#exampleRadios2")
+
+          if (name.value == "" || radio1.checked == false && radio2.checked == false) {
+            return false
+          }
+          return true
+        }
+
+        // function send requird
+        const postRequired = async (requestBody) => {
+          // Send POST request using Fetch API
+          try {
+            const response = await fetch(`/api/v1/update-category/${document.querySelector(".cachCuChuoi").value.trim()}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestBody),
+            });
+
+            // Check if the request was successful (status code 2xx)
+            if (response.ok) {
+              console.log('update successfully!');
+              alert("update successfully!");
+
+            } else if (response.status === 500) {
+              alert(" id khong ton tai !");
+            } else if (response.status === 501) {
+              alert(" khong de trong cac truong du lieu nao !");
+            }
+            else {
+              console.error('Failed to create user:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Error during fetch:', error);
+          }
+        }
+
+        // btn click
+        let btn_submit = document.querySelector(".btnSubmit");
+        btn_submit.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (checkEmpty() == false) {
+            alert("Không để trống thông tin");
+          } else {
+            const radio1 = document.querySelector("#exampleRadios1")
+            // Example data
+            const exampleData = {
+              name: document.querySelector("#exampleInputUsername1").value,
+              radio: radio1.checked == true ? 1 : 0
+            };
+
+            // Call the postRequired function to send data
+            await postRequired(exampleData);
+
+            document.querySelector("#exampleInputUsername1").value = ""
+            document.querySelector("#exampleRadios1").checked = false
+            document.querySelector("#exampleRadios2").checked = false
+          }
+        });
+
+      </script>

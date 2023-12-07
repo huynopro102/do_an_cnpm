@@ -9,7 +9,7 @@ let checkadmin = (req, res, next) => {
         if (token === undefined)  return res.json("đây là quyền admin phải đăng nhập")
        
         const result = jwt.verify(token, "matkhau1234" ,function(err , decoded){
-            console.log("lỗi verify token ",err)
+            console.log("lỗi verify tokenAdmin ",err)
         })
         next()
 }

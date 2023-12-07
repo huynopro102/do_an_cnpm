@@ -84,121 +84,131 @@
         </nav>
 
     </header>
-    
+
     <!-- container -->
-    <div class="container_product">
+    <header>
+        <h1>Product Page</h1>
+    </header>
 
-        <div class="wrap">
-            <div class="catagory">
+    <main>
+        <aside>
+            <div class="filter">
+                <h2>Filter Options</h2>
 
-                <div class="catagory-type">
-                    <div>the loai</div>
-                    <ul>
-                        <li>ao khoac</li>
-                        <li>quan jean</li>
-                        <li>quan tay</li>
-                        <li>ao so mi</li>
-                    </ul>
-                </div>
-              
-                <div> gia tien</div>
-                <div class="catagory-price">
-                    <input type="radio">
-                    <input type="radio">
-                    <input type="radio">
-                    <input type="radio">
-                    <input type="radio">
-                </div>
+                <!-- Category filter -->
+                <fieldset>
+                    <legend>Category:</legend>
+                    <label>
+                        <input type="checkbox" name="category" value="clothing" />
+                        Clothing
+                    </label>
+                    <label>
+                        <input type="checkbox" name="category" value="electronics" />
+                        Electronics
+                    </label>
+                    <!-- Add more categories as needed -->
+                </fieldset>
 
+                <!-- Price filter -->
+                <fieldset>
+                    <legend>Price:</legend>
+                    <label>
+                        <input type="radio" name="price" value="0" checked />
+                        All
+                    </label>
+                    <label>
+                        <input type="radio" name="price" value="20" /> $0 -
+                        $20
+                    </label>
+                    <label>
+                        <input type="radio" name="price" value="50" /> $20 -
+                        $50
+                    </label>
+                    <!-- Add more price ranges as needed -->
+                </fieldset>
             </div>
-            <div class="listproduct">
-                <header class="header_product"> day la header</header>
+            <button class="reset-btn" onclick="resetFilters()">
+                Reset Filters
+            </button>
+        </aside>
 
-                <div class="listproductflex">
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                    
-                    <div class="item_products">
-                        <img class="img_product" src="http://localhost:8080/congkhai/page_product/ao kali.jpg" alt="">
-                        <span>quan kaki</span>
-                        <h3> <span>$5000</span> </h3>
-                    </div>
-
-                </div>
-                    <div class="pagination">  phan trang   </div>
-
+        <section>
+            <!-- Product listings go here -->
+            <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
             </div>
+            <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>
+            <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>     <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>     <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>     <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>     <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>     <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>
+            <div class="product" data-category="clothing" data-price="20">
+                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
+                <h3>Clothing Product 1</h3>
+                <p>$19.99</p>
+                <button class="btn view-button">Xem</button>
+                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+            </div>  
+            <!-- Add more products with appropriate data-category and data-price attributes -->
+        </section>
+    </main>
 
-
-        </div>
+    <!-- pagination -->
+    <div class="pagination">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
     </div>
+
 
     <!-- Footer -->
     <footer class="footer section">
@@ -311,6 +321,30 @@
             </div>
         </div>
     </footer>
+
+
+    <!-- Nhúng JavaScript -->
+    <script>
+        // JavaScript function to reset filters
+        function resetFilters() {
+            document
+                .querySelectorAll('input[name="category"]')
+                .forEach((checkbox) => {
+                    checkbox.checked = false;
+                });
+            document
+                .querySelectorAll('input[name="price"]')
+                .forEach((radio) => {
+                    radio.checked = false;
+                });
+            document.querySelector(
+                'input[name="price"][value="0"]'
+            ).checked = true;
+            // Add more reset logic for other filters if needed
+        }
+    </script>
+
+
 
 </body>
 
