@@ -4,6 +4,7 @@ const webController = require("../controller/webController")
 const categoryController = require("../controller/categoryController")
 const MiddleWare = require("../MiddleWare/webMiddleWare")
 
+
 // page admin
 router.get("/admin/v1", MiddleWare.checkadmin , webController.gethomeController)
 
@@ -17,6 +18,12 @@ router.get("/admin/v1/accountdelete/:id/:username",MiddleWare.checkadmin, webCon
 router.get("/admin/v1/category", MiddleWare.checkadmin  ,categoryController.gethomeControllerCategory)
 router.get("/admin/v1/categoryscreate", MiddleWare.checkadmin  , categoryController.gethomeControllerCategorysCreate)
 router.get("/admin/v1/categorysedit/:id" , MiddleWare.checkadmin ,webController.getCategorysEditAdmin)
+
+// products
+router.get("/admin/v1/product", MiddleWare.checkadmin  ,webController.gethomeControllerProduct)
+router.get("/admin/v1/productscreate", MiddleWare.checkadmin , webController.gethomeControllerProductsCreate)
+router.get("/admin/v1/productsedit/:id" , MiddleWare.checkadmin ,webController.getProductsEditAdmin)
+
 
 
 

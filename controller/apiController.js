@@ -141,6 +141,8 @@ let DeleteCategory = async (req, res) => {
   }
 };
 
+
+// category
 let CreateCategory = async (req, res) => {
   let name = req.body.name;
   let radio = req.body.radio;
@@ -168,6 +170,58 @@ let CreateCategory = async (req, res) => {
   }
 };
 
+//  CreateProduct
+
+let CreateProduct = async (req, res) => {
+  try {
+    let databody = req.body;
+    databody.image = req.file;
+
+    // Kiểm tra xem có tồn tại file hay không
+    if (!databody.image) {
+      return res.status(510).json("Không tải được file");
+    }
+
+    // Kiểm tra xem các trường dữ liệu cần thiết có được cung cấp hay không
+    if (
+      !databody.name ||
+      !databody.price ||
+      !databody.sale_price ||
+      !databody.category ||
+      !databody.status
+    ) {
+      return res.status(200).json("Không để trống các trường dữ liệu");
+    }
+
+    // Kiểm tra xem đã có sản phẩm này trong cơ sở dữ liệu chưa
+    const [row, field] = await pool.execute(
+      "SELECT * FROM `product` WHERE image = ?",
+      [databody.image.originalname]
+    );
+
+    if (row[0] === undefined) {
+      const [rows, fields] = await pool.execute(
+        "INSERT INTO product(name, price, sale_price, image, category_id, status) VALUES(?, ?, ?, ?, ?, ?)",
+        [
+          databody.name,
+          databody.price,
+          databody.sale_price,
+          databody.image.originalname,
+          databody.category,
+          databody.status,
+        ]
+      );
+
+      res.status(200).json("Tạo thành công");
+    } else {
+      return res.status(409).json("Trùng sản phẩm");
+    }
+  } catch (error) {
+    console.error("Error during product creation:", error);
+    res.status(500).json("Lỗi trong quá trình tạo sản phẩm");
+  }
+};
+
 module.exports = {
   getOneUser,
   getAllusers,
@@ -179,4 +233,6 @@ module.exports = {
   CreateCategory,
   DeleteCategory,
   UpdateCategory,
+
+  CreateProduct,
 };

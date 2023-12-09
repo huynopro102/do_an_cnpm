@@ -63,8 +63,8 @@ let getCategorysEditAdmin = async (req, res) => {
     "SELECT * FROM `category` where id = ? ",
     [itemId]
   );
-  console.log( "id" , rows[0]==undefined)
-    if(rows[0]==undefined) return res.json("loi server")
+  console.log("id", rows[0] == undefined);
+  if (rows[0] == undefined) return res.json("loi server");
   res.render("CategoryAdmin-edit.ejs", {
     row: rows,
   });
@@ -222,6 +222,67 @@ const postLogin = async (req, res) => {
     res.json("ko tim thay tài khoản này ");
   }
 };
+
+// product
+
+let gethomeControllerProduct = async (req, res) => {
+  let _page = req.query.page ? req.query.page : 1;
+  let limit = 5;
+  let start = (_page - 1) * limit;
+  // let totalRow = 20;
+  let name = req.query.name;
+
+  // total tổng các item trong database
+  const [total, fields] = await pool.execute(
+    "select count(*) as total from product"
+  );
+  let totalRow = total[0].total;
+
+  // tong so trang
+  let totalPage = Math.ceil(totalRow / limit);
+
+  //
+  if (name) {
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM `product` p join category c on p.category_id = c.id where `name` like ? limit ? , ? ",
+      [`%${name}%`, start, limit]
+    );
+    res.render("ProductsAdmin.ejs", {
+      dataProduct: rows ? rows : [],
+      totalPage: totalPage,
+      page: parseInt(_page),
+    });
+  } else {
+    const [rows, fields] = await pool.execute(
+      "SELECT p.*, c.name as cname FROM `product` p join category c on p.category_id = c.id limit ? , ? ",
+      [start, limit]
+    );
+    res.render("ProductsAdmin.ejs", {
+      dataProduct: rows ? rows : [],
+      totalPage: totalPage,
+      page: parseInt(_page),
+    });
+  }
+};
+
+let gethomeControllerProductsCreate = async (req, res) => {
+  // lay danh muc
+
+  const [rows, fields] = await pool.execute("SELECT * FROM `category`");
+  if (rows.length <= 0) {
+    res.render("ProductsAdmin-create.ejs", {
+      data: [],
+    });
+  } else {
+    res.render("ProductsAdmin-create.ejs", {
+      data: rows,
+    });
+  }
+};
+let getProductsEditAdmin = async (req, res) => {
+  res.json("product 3");
+};
+
 module.exports = {
   getHome,
   getLogin,
@@ -238,7 +299,10 @@ module.exports = {
   getHomeAdmin,
   getAccountsEditAdmin,
 
-
   gethomeControllerCategory,
   getCategorysEditAdmin,
+
+  gethomeControllerProduct,
+  gethomeControllerProductsCreate,
+  getProductsEditAdmin,
 };

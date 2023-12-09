@@ -1,0 +1,184 @@
+<%- include('HeaderAdmin.ejs') %>
+  <%- include('aside.ejs') %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          Quản lý sản phẩm
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+          <li><a href="#">Examples</a></li>
+          <li class="active">Blank page</li>
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+
+        <!-- Default box -->
+        <div class="box">
+
+
+          <div class="box-body">
+            <table class="table">
+
+              <form class="form-inline" method="get">
+                <div class="form-group mb-2">
+                  <label for="staticEmail2" class="sr-only">Email</label>
+                  <input type="text" name="name" class="form-control-plaintext" id="staticEmail2"
+                    placeholder="input field">
+                  <button type="submit" class="btn btn-primary mb-5"><i class="fa fa-search"></i></button>
+                  <a href="/admin/v1/productscreate" class="btn btn-success mb-5"><i class="fa fa-plus"></i> Create</a>
+                </div>
+              </form>
+
+              <thead>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">name</th>
+                  <th scope="col">category</th>
+                  <th scope="col">price/sale_price</th>
+                  <th scope="col">status</th>
+                  <th scope="col">image</th>
+                </tr>
+              </thead>
+              <tbody>
+
+
+                <% dataProduct.map(item => {  %>
+                  <tr>
+                    <th scope="row">
+                      <%= item.id%>
+                    </th>
+                    <td>
+                      <%= item.name%>
+                    </td>
+                    <td>
+                      <%= item.cname%>
+                    </td>
+                    <td>
+                      <%= item.price %>/<%= item.sale_price%>
+                    </td>
+                    <td>
+                      <%= item.status == 0 ? "tạm ẩn" : "hiển thị" %>
+                    </td>
+                    <td>
+                      <img 
+                      width="60"
+                      src="http://localhost:8080/congkhai/img_product/asm1.jpg" 
+                      alt="">
+                   
+                    </td>
+                    <td>
+                      <a href="" class="btn btn-sm btn-primary btn-sua"><i class="fa fa-edit"></i> sua</a>
+                      <a href="#" class="btn btn-sm btn-danger btn-xoa "><i class="fa fa-trash"></i> xoa</a>
+                    </td>
+                  </tr>
+                  <% }); %>
+
+              </tbody>
+            </table>
+          </div>
+
+
+          <!-- pagination -->
+          <div class="box-footer">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="?page=<%= page <=1 ? page=1 : page -1 %>">Previous</a>
+                </li>
+                <% for(i=1 ;i<=totalPage;i++) { %>
+                  <li class="<%= page == i ? 'active' : '' %>"> <a href="?page=<%=i%>">
+                      <%= i%>
+                    </a> </li>
+                  <% } %>
+                    <li class="page-item"><a class="page-link"
+                        href="?page=<%= page >= totalPage ? totalPage : page+1   %>">Next</a></li>
+              </ul>
+            </nav>
+          </div>
+
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <%- include("FooterAdmin.ejs") %>
+
+
+      <!-- ... (các phần khác của trang) ... -->
+
+      <script>
+
+        // btn sua
+        const btn_sua = document.querySelector(".btn-sua");
+        btn_sua.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Use Fetch API to make a GET request
+          fetch("/admin/v1/accountsedit")
+            .then((response) => {
+              // Check if the request was successful (status code 2xx)
+              if (response.ok) {
+                // Perform additional actions if needed
+                return response.text();
+              } else {
+                console.error('Failed to fetch data:', response.statusText);
+                // Handle error
+                throw new Error('Failed to fetch data');
+              }
+            })
+            .then((data) => {
+              // Handle the data received from the server (if needed)
+              console.log(data);
+              // You might want to redirect to the edit page or handle the data accordingly
+            })
+            .catch((error) => {
+              console.error('Error during fetch:', error);
+              // Handle error
+              alert("Failed to fetch data. Please try again.");
+            });
+        });
+
+
+
+        // btn xoa
+        const btn_xoa_list = document.querySelectorAll(".btn-xoa");
+
+        btn_xoa_list.forEach(item => {
+          item.addEventListener("click", (e) => {
+            e.preventDefault();
+            const result = confirm(`Bạn có chắc chắn muốn xóa  không?`);
+            if (result) {
+              const trElement = item.closest("tr");
+              const thIdElement = trElement.querySelector("th");
+              const userId = thIdElement.textContent || thIdElement.innerText;
+
+              if (userId) {
+                // Thực hiện yêu cầu DELETE sử dụng fetch
+                fetch(`/api/v1/delete-user/${parseInt(userId.trim())}`, {
+                  method: 'DELETE',
+                })
+                  .then(response => response.json())
+                  .then(data => {
+                    alert("xóa thành công")
+                    console.log(data);
+                    location.reload();
+                  })
+                  .catch(error => {
+                    console.error('Error:', error);
+                    alert("Xóa thất bại");
+                  });
+              } else {
+                alert("Không thể xác định userId");
+              }
+            } else {
+
+            }
+          });
+        });
+      </script>

@@ -1,0 +1,234 @@
+<%- include('HeaderAdmin.ejs') %>
+  <%- include('aside.ejs') %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          Tạo mới sản phẩm
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+          <li><a href="#">Examples</a></li>
+          <li class="active">Blank page</li>
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+
+        <!-- Default box -->
+        <div class="box">
+
+          <div class="box-body">
+
+
+            <form action="/api/v1/create-product" method="post" enctype="multipart/form-data">
+
+
+
+              <!-- name -->
+              <div class="form-group">
+                <label for="exampleInputPassword1">name</label>
+                <input name="name" type="text" class="form-control" id="exampleInputname1">
+              </div>
+
+
+              <!-- price -->
+              <div class="form-group">
+                <label for="exampleInputPassword1">price</label>
+                <input name="price" type="text" class="form-control" id="priceInput">
+              </div>
+
+
+
+              <!-- sale_price -->
+              <div class="form-group">
+                <label for="exampleInputPassword1">sale_price</label>
+                <input name="sale_price" type="text" class="form-control" id="salePriceInput">
+              </div>
+
+
+
+              <!-- category -->
+              <div class="form-group">
+                <label for="exampleInputPassword1">Category</label>
+                <select name="category" id="categorySelect" class="form-control">
+                  <option>chọn danh mục</option>
+                  <% data.map( (item)=> { %>
+                    <option value="<%= item.id%>">
+                      <%= item.name%> - <%= item.id%>
+                    </option>
+                    <% }) %>
+                </select> 
+              </div>
+
+              <!-- radio -->
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio" id="exampleRadios1" value="1" checked>
+                <label class="form-check-label" for="exampleRadios1">
+                  hiển thị
+                </label>
+              </div>
+
+              <div class="form-check" style="margin-bottom: 30px;">
+                <input class="form-check-input" type="radio" name="radio" id="exampleRadios2" value="0">
+                <label class="form-check-label" for="exampleRadios2">
+                  tạm ẩn
+                </label>
+              </div>
+
+
+              <!-- choose file -->
+              <div class="form-group col-md-6">
+                <label for="exampleInputPassword1">hình ảnh</label>
+                <input name="image" onchange="showImage(this)" type="file" class="form-control"
+                  id="exampleInputImage">
+              </div>
+
+              <!-- show_image -->
+              <div class="form-group col-md-6">
+                <a href="">
+                  <img id="pro-img" src="" alt="">
+                </a>
+              </div>
+
+              <!-- button submit -->
+              <button type="submit" class="btn btn-primary btnSubmit"><i class="fa fa-save"></i> Submit</button>
+              <a href="/admin/v1/product" class="btn btn-default"><i class="fa fa-arrow-left"></i> Trở lại</a>
+
+
+
+
+            </form>
+
+          </div>
+
+
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <%- include("FooterAdmin.ejs") %>
+
+      <script>
+
+        // upload file
+        function showImage(input) {
+          console.log(input.files[0])
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+              $('#pro-img').attr('src', e.target.result).width(150).height(200);
+            };
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
+
+        // check number
+        function isNumeric(value) {
+          return /^[0-9]+$/.test(value);
+        }
+
+        // check empty
+        const checkEmpty = () => {
+          let name = document.querySelector("#exampleInputname1");
+          let price = document.querySelector("#priceInput");
+          let salePrice = document.querySelector("#salePriceInput");
+          let category = document.querySelector("#categorySelect");
+          const radio1 = document.querySelector("#exampleRadios1");
+          const radio2 = document.querySelector("#exampleRadios2");
+          let image = document.querySelector("#exampleInputImage");
+
+          // Kiểm tra xem các phần tử có tồn tại không
+          if (
+            !isNumeric(price.value) ||   // Kiểm tra price là số
+            !isNumeric(salePrice.value) ||   // Kiểm tra sale_price là số
+            salePrice.value == "" ||
+            category.value == "chọn danh mục" ||
+            (radio1.checked == false && radio2.checked == false) ||
+            image.files.length === 0
+          ) {
+            return false;
+          }
+          return true;
+        };
+
+        // function send requird
+        const postRequired = async (requestBody) => {
+          // Send POST request using Fetch API
+          try {
+            const response = await fetch('/api/v1/create-product', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestBody),
+            });
+
+            // Check if the request was successful (status code 2xx)
+            if (response.ok) {
+              console.log('User created successfully!');
+              alert("User created successfully!");
+
+            } else if (response.status === 409) {
+              alert(" lỗi tạo sản phẩm");
+            } else if(response.status == 509){
+              alert(" trùng sản phẩm ")
+            } else if(response.status == 510){
+              alert("khong tai duoc file")
+            }
+            else {
+              console.error('Failed to create user:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Error during fetch:', error);
+          }
+        }
+
+
+        // btn click
+        let btn_submit = document.querySelector(".btnSubmit");
+        btn_submit.addEventListener("click", async (e) => {
+          // e.preventDefault();
+ 
+          if ( await checkEmpty() == false) {
+            alert("Không để trống thông tin hoặc thông tin không hợp lệ");
+          }       
+          else {
+            const radio1 = document.querySelector("#exampleRadios1");
+            // Example data
+            const exampleData = {
+              name: document.querySelector("#exampleInputname1").value,
+              price: document.querySelector("#priceInput").value,
+              salePrice: document.querySelector("#salePriceInput").value,
+              category: document.querySelector("#categorySelect").value,
+              status: radio1.checked == true ? 1 : 0,
+              image: document.querySelector("#exampleInputImage").files,  // Cần cập nhật đường dẫn ảnh thực tế từ input file
+            };
+
+            // Call the postRequired function to send data
+            await postRequired(exampleData);
+
+            // Reset form fields
+            document.querySelector("#exampleInputname1").value = "";
+            document.querySelector("#priceInput").value = "";
+            document.querySelector("#salePriceInput").value = "";
+            document.querySelector("#categorySelect").value = "chọn danh mục";
+            document.querySelector("#exampleRadios1").checked = false;
+            document.querySelector("#exampleRadios2").checked = false;
+            document.querySelector("#exampleInputImage").value = "";
+
+            // Optional: Reset displayed image
+            $('#pro-img').attr('src', '').width(0).height(0);
+          }
+        });
+
+
+
+      </script>
