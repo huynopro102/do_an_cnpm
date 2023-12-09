@@ -196,9 +196,19 @@ const postRegister = async (req, res) => {
 const getForgotFassword = (req, res) => {
   res.render("ForgotFassword.ejs");
 };
-const getProducts = (req, res) => {
-  res.render("Products.ejs");
+const getProducts = async (req, res) => {
+  try {
+    const [rows, fields] = await pool.execute('SELECT * FROM product');
+
+    res.render("Products.ejs", {
+      image: rows || []  // Ensure that image is an array, or provide an empty array as a default
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).send("Internal Server Error");
+  }
 };
+
 
 // post login
 const postLogin = async (req, res) => {
@@ -241,16 +251,20 @@ let gethomeControllerProduct = async (req, res) => {
   // tong so trang
   let totalPage = Math.ceil(totalRow / limit);
 
-  //
+ 
   if (name) {
+
     const [rows, fields] = await pool.execute(
       "SELECT * FROM `product` p join category c on p.category_id = c.id where `name` like ? limit ? , ? ",
       [`%${name}%`, start, limit]
     );
+    console.log("get product ", rows[0].image)
     res.render("ProductsAdmin.ejs", {
       dataProduct: rows ? rows : [],
       totalPage: totalPage,
       page: parseInt(_page),
+
+
     });
   } else {
     const [rows, fields] = await pool.execute(
@@ -261,6 +275,8 @@ let gethomeControllerProduct = async (req, res) => {
       dataProduct: rows ? rows : [],
       totalPage: totalPage,
       page: parseInt(_page),
+
+
     });
   }
 };

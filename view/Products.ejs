@@ -133,66 +133,19 @@
         </aside>
 
         <section>
-            <!-- Product listings go here -->
-            <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>
-            <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>
-            <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>     <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>     <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>     <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>     <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>     <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>
-            <div class="product" data-category="clothing" data-price="20">
-                <img src="http://localhost:8080/congkhai/img_product/ao1.jpg" alt="Clothing Product" />
-                <h3>Clothing Product 1</h3>
-                <p>$19.99</p>
-                <button class="btn view-button">Xem</button>
-                <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
-            </div>  
-            <!-- Add more products with appropriate data-category and data-price attributes -->
+            <% image.map((item, index)=> { %>
+                <div class="product" data-category="clothing" data-price="20">
+                    <img src="http://localhost:8080/congkhai/img_product/<%= item.image %>" alt="Clothing Product" />
+                    <h3><%= item.name%></h3>
+                    <p><%= item.price%></p>
+                    <button class="btn view-button">Xem</button>
+                    <button class="btn add-to-cart-button">Thêm giỏ hàng</button>
+                </div>
+                <% }) %>
+
+
+
+                    <!-- Add more products with appropriate data-category and data-price attributes -->
         </section>
     </main>
 
