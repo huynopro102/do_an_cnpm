@@ -5,7 +5,7 @@
     --light-color: #fff;
     --light-color-alt: #afb6cd;
     --primary-background-color: #131417;
-    --secondary-background-color: #252830;
+    --secondary-background-color: #fff;
     --hover-light-color: var(--light-color);
     --hover-dark-color: var(--primary-background-color);
     --gradient-color: linear-gradient(
@@ -727,6 +727,7 @@ body.light-theme {
 .quote span i {
     font-size: 2.5rem;
 }
+
 
 .author {
     margin-top: 5rem;

@@ -40,8 +40,8 @@ router.get("/login",webController.getLogin)
 router.get("/register",webController.getRegister)
 router.post("/register",webController.postRegister)
 
-// forgotFassword
-router.get("/forgotpassword",webController.getForgotFassword)
+// forgotPassword
+router.get("/forgotpassword",webController.getForgotPassword)
 
 // san pham
 router.get("/products" , webController.getProducts)
