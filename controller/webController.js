@@ -95,8 +95,8 @@ const postRegister = async (req, res) => {
   res.json("loi post register");
 };
 
-const getForgotFassword = (req, res) => {
-  res.render("ForgotFassword.ejs");
+const getForgotPassword = (req, res) => {
+  res.render("ForgotPassword.ejs");
 };
 const getProducts = (req, res) => {
   res.render("Products.ejs");
@@ -128,7 +128,7 @@ module.exports = {
   getHome,
   getLogin,
   getRegister,
-  getForgotFassword,
+  getForgotPassword,
   getProducts,
   postLogin,
   postRegister,
