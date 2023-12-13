@@ -16,6 +16,8 @@
 
     <!-- bắt sự kiện onclick đăng xuất -->
     <link rel="stylesheet" href="http://localhost:8080/congkhai/btn_dang_xuat.js">
+
+
 </head>
 
 <body>
@@ -25,7 +27,7 @@
             <div class="logo">
                 <a href="/">
                     <!-- <img src="http://localhost:8080/congkhai/logo.png" alt="" class="logo-image"> -->
-                    <h3 class="animate-charcter">Adidas</h3>
+                    <h3 class="animate-charcter">DarkT</h3>
                 </a>
             </div>
 
@@ -37,16 +39,10 @@
                         <a href="/" class="list-link current">Trang Chủ</a>
                     </li>
                     <li class="list-item">
-                        <a href="/products" class="list-link">Các Sản Phẩm</a>
+                        <a href="/products" class="list-link">Sản Phẩm</a>
                     </li>
                     <li class="list-item">
-                        <a href="#" class="list-link">Reviews</a>
-                    </li>
-                    <li class="list-item">
-                        <a href="#" class="list-link">Tin Tức</a>
-                    </li>
-                    <li class="list-item">
-                        <a href="#" class="list-link">Vấn Đề</a>
+                        <a href="#" class="list-link">giỏ hàng</a>
                     </li>
                     <li class="list-item">
                         <a href="#" class="list-link">Liên Hệ</a>
@@ -62,40 +58,64 @@
 
             <div class="list list-right">
 
-                <button class="btn place-items-center" id="cart-icon">
-            
-                    <h3> Hello <%=  data %> </h3>
+                <input type="text" hidden class="id_user" value="<%= id%>">
+
+                <button hidden class="btn place-items-center" id="search-icon">
+
                 </button>
 
-        
-                
+                <button class="btn place-items-center" id="theme-toggle-btn">
+
+                </button>
+
+
+                <button class="btn place-items-center" id="cart-icon">
+
+                    <h3 class="click_profile">
+                        <% if(data.length==0) { %>
+
+                            <% } else { %>
+
+                                <%= "xin chào " + data %>
+
+                                    <% } %>
+
+                    </h3>
+
+                </button>
+
+
+
                 <button class="btn place-items-center" id="cart-icon">
                     <i class="ri-shopping-cart-line"></i>
                 </button>
 
-                <button class="btn place-items-center" id="theme-toggle-btn">
-                    <i class="ri-sun-line sun-icon"></i>
-                    <i class="ri-moon-line moon-icon"></i>
-                </button>
 
-                <button class="btn place-items-center" id="search-icon">
-                    <i class="ri-search-line"></i>
-                </button>
 
                 <button class="btn place-items-center screen-lg-hidden menu-toggle-icon" id="menu-toggle-icon">
                     <i class="ri-menu-3-line open-menu-icon"></i>
                     <i class="ri-close-line close-menu-icon"></i>
                 </button>
 
-                <a href="/" class="list-link screen-sm-hidden" id="btn_dang_xuat">
-                    <form action="/" method="post"> 
-                        <input type="submit" value="Đăng Xuất">
-                    </form>
-                </a>
-                <a href="/register" class="list-link screen-sm-hidden btn sign-up-btn fancy-border">
-                    <span>Đăng ký</span>
-                </a>
-                
+                <% if(data.length==0) { %>
+                    <a href="#" class="list-link screen-sm-hidden" id="btn_dang_xuat">
+                        <form action="/login" method="get">
+                            <input type="submit" value="Đăng Nhập">
+                        </form>
+                    </a>
+                    <% } else { %>
+                        <a href="/" class="list-link screen-sm-hidden" id="btn_dang_xuat">
+                            <form action="/" method="post">
+                                <input type="submit" value="Đăng Xuất">
+                            </form>
+                        </a>
+                        <% } %>
+
+
+                            <a href="/register" class="list-link screen-sm-hidden btn sign-up-btn fancy-border">
+                                <span>Đăng ký</span>
+                            </a>
+
             </div>
         </nav>
 
@@ -117,199 +137,41 @@
             <i class="ri-close-line"></i>
         </button>
     </div>
+
     <!-- Featured articles -->
-    <section class="featured-articles section-header-offset">
-        <div class="featured-articles-container container d-grid">
 
-            <div class="featured-content d-grid">
-
-                <div class="headline-banner">
-                    <h3 class="headline fancy-border">
-                        <span class="place-items-center">Tin Mới Nhất</span>
-                    </h3>
-                    <span class="headline-description">Khung cảnh tuyệt đẹp trong Anime pixel...</span>
-                </div>
-
-                <a href="./post.html" class="article featured-article featured-article-1">
-                    <img src="http://localhost:8080/congkhai/assets/images/featured/featured-1.jpg" alt=""
-                        class="article-image">
-                    <span class="article-category">Cosplay</span>
-
-                    <div class="article-data-container">
-
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>8 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Gái xinh cosplay gantz !</h3>
-                    </div>
-                </a>
-
-                <a href="./post2.html" class="article featured-article featured-article-2">
-                    <img src="http://localhost:8080/congkhai/assets/images/featured/featured-2.gif" alt=""
-                        class="article-image">
-                    <span class="article-category">Pixel Art</span>
-
-                    <div class="article-data-container">
-
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>45 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Pixel art trong tương lai ?</h3>
-                    </div>
-                </a>
-
-                <a href="./post3.html" class="article featured-article featured-article-3">
-                    <img src="http://localhost:8080/congkhai/assets/images/featured/featured-3.jpg" alt=""
-                        class="article-image">
-                    <span class="article-category">Car</span>
-
-                    <div class="article-data-container">
-
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>16 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Siêu xe Pagani Huayra Black.</h3>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="sidebar d-grid">
-
-                <h3 class="title featured-content-title">Xu Hướng Mới!</h3>
-
-                <a href="#" class="trending-news-box">
-                    <div class="trending-news-image-box">
-                        <span class="trending-number place-items-center">01</span>
-                        <img src="http://localhost:8080/congkhai/assets/images/trending/trending-1.jpg" alt=""
-                            class="article-image">
-                    </div>
-
-                    <div class="trending-news-data">
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>8 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Tiêu để bài viết mẫu</h3>
-                    </div>
-                </a>
-
-                <a href="#" class="trending-news-box">
-                    <div class="trending-news-image-box">
-                        <span class="trending-number place-items-center">02</span>
-                        <img src="http://localhost:8080/congkhai/assets/images/trending/trending-2.jpg" alt=""
-                            class="article-image">
-                    </div>
-
-                    <div class="trending-news-data">
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>8 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Tiêu để bài viết mẫu</h3>
-                    </div>
-                </a>
-
-                <a href="#" class="trending-news-box">
-                    <div class="trending-news-image-box">
-                        <span class="trending-number place-items-center">03</span>
-                        <img src="http://localhost:8080/congkhai/assets/images/trending/trending-3.jpg" alt=""
-                            class="article-image">
-                    </div>
-
-                    <div class="trending-news-data">
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>8 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Tiêu để bài viết mẫu</h3>
-                    </div>
-                </a>
-
-                <a href="#" class="trending-news-box">
-                    <div class="trending-news-image-box">
-                        <span class="trending-number place-items-center">04</span>
-                        <img src="http://localhost:8080/congkhai/assets/images/trending/trending-4.jpg" alt=""
-                            class="article-image">
-                    </div>
-
-                    <div class="trending-news-data">
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>8 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Tiêu để bài viết mẫu</h3>
-                    </div>
-                </a>
-
-                <a href="#" class="trending-news-box">
-                    <div class="trending-news-image-box">
-                        <span class="trending-number place-items-center">05</span>
-                        <img src="http://localhost:8080/congkhai/assets/images/trending/trending-5.jpg" alt=""
-                            class="article-image">
-                    </div>
-
-                    <div class="trending-news-data">
-                        <div class="article-data">
-                            <span>Aug 5th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>8 min red </span>
-                        </div>
-
-                        <h3 class="title article-title">Tiêu để bài viết mẫu</h3>
-                    </div>
-                </a>
-            </div>
-        </div>
-
+    <section class=" section-header-offset">
+        <img src="http://localhost:8080/congkhai/assets/images/banner_web.png" alt="" srcset="">
     </section>
+
+
     <!-- Quick read -->
     <section class="quick-read section">
 
         <div class="container">
 
-            <h2 class="title section-title" data-name="Đọc Nhanh">Đọc nhanh</h2>
+            <h2 class="title section-title" data-name="Đọc Nhanh">XEM NHANH</h2>
 
             <div class="swiper">
                 <div class="swiper-wrapper">
 
                     <a href="#" class="article swiper-slide">
-                        <img src="http://localhost:8080/congkhai/assets/images/quickread/quickread-1.jpg" alt=""
-                            class="article-image">
 
-                        <div class="article-data-container">
+                        <img src="http://localhost:8080/congkhai/img_product/1702193719521-261459302-mu%20long%20cuu.jpg"
+                            alt="" class="article-image">
 
-                            <div class="article-data">
-                                <span>Aug 6th 2022</span>
-                                <span class="article-data-spacer"></span>
-                                <span>23 min red </span>
-                            </div>
-
-                            <h3 class="title article-title">Tin tức về Haker mũ đen.</h3>
+                        <div class="article-data">
+                            <span>Aug 6th 2022</span>
+                            <span class="article-data-spacer"></span>
+                            <span>24 min red </span>
                         </div>
+
                     </a>
 
 
                     <a href="#" class="article swiper-slide">
-                        <img src="http://localhost:8080/congkhai/assets/images/quickread/quickread-2.gif" alt=""
-                            class="article-image">
+                        <img src="http://localhost:8080/congkhai/img_product/1702189656699-637583567-tui%20xach.png "
+                            alt="" class="article-image">
 
                         <div class="article-data-container">
 
@@ -319,7 +181,7 @@
                                 <span>24 min red </span>
                             </div>
 
-                            <h3 class="title article-title">Hàng loạt Pixel art đẹp mắt.</h3>
+
                         </div>
                     </a>
 
@@ -358,39 +220,6 @@
                     </a>
 
 
-                    <a href="#" class="article swiper-slide">
-                        <img src="http://localhost:8080/congkhai/assets/images/quickread/quickread-5.jpg" alt=""
-                            class="article-image">
-
-                        <div class="article-data-container">
-
-                            <div class="article-data">
-                                <span>Aug 6th 2022</span>
-                                <span class="article-data-spacer"></span>
-                                <span>28 min red </span>
-                            </div>
-
-                            <h3 class="title article-title">Tin tức hoạt hình TQ.</h3>
-                        </div>
-                    </a>
-
-
-                    <a href="#" class="article swiper-slide">
-                        <img src="http://localhost:8080/congkhai/assets/images/quickread/quickread-6.jpg" alt=""
-                            class="article-image">
-
-                        <div class="article-data-container">
-
-                            <div class="article-data">
-                                <span>Aug 6th 2022</span>
-                                <span class="article-data-spacer"></span>
-                                <span>28 min red </span>
-                            </div>
-
-                            <h3 class="title article-title">Tổng hợp game mới.</h3>
-                        </div>
-                    </a>
-
                 </div>
 
                 <div class="swiper-button-prev swiper-controls"></div>
@@ -400,6 +229,8 @@
             </div>
         </div>
     </section>
+
+
     <!-- Older posts -->
     <section class="older-posts section">
 
@@ -614,7 +445,7 @@
             <div class="company-data">
                 <a href="/">
                     <!-- <img src="./assets/images/icon.png" alt=""> -->
-                    <h3 class="animate-charcter">Adidas</h3>
+                    <h3 class="animate-charcter">DarkT </h3>
                 </a>
                 <p class="company-description">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam ipsum accusamus necessitatibus
@@ -718,9 +549,27 @@
         </div>
     </footer>
 </body>
+
 <!-- Swiper.js -->
 <script src="http://localhost:8080/congkhai/assets/js/swiper-bundle.min.js"></script>
+
 <!-- Js -->
 <script src="http://localhost:8080/congkhai/assets/js/main.js"></script>
+
+<!-- nhúng jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous">
+    </script>
+
+<script>
+
+    $(document).ready(function(){
+        const click_profile = document.querySelector(".click_profile")
+        click_profile.addEventListener("click",(e)=>{
+            console.log("id hien tai ", document.querySelector(".id_user").value )
+            document.location.href = `/profile/${document.querySelector(".id_user").value}`
+        })
+    })
+</script>
 
 </html>

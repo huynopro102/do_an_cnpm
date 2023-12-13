@@ -33,8 +33,10 @@ const  router = express.Router()
 
 
         // product
-        router.post("/create-product",MiddleWare.checkadmin , upload.single("image") , apiController.CreateProduct)
- 
+        router.post("/create-product", MiddleWare.checkadmin , upload.single("image") , apiController.CreateProduct)
+        router.post("/update-product/:id" , MiddleWare.checkadmin , upload.single("image") , apiController.UpdateProduct)
+
+        
 
     
 module.exports = router

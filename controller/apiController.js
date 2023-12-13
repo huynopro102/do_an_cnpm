@@ -1,3 +1,4 @@
+const { render } = require("ejs");
 const pool = require("../model/connectDB");
 
 let GET_DeleteUser = async (req, res) => {
@@ -169,23 +170,93 @@ let CreateCategory = async (req, res) => {
   }
 };
 
-//  CreateProduct
+// Update Product
+let UpdateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const databody = req.body;
 
+    // Nếu có file hình ảnh được tải lên
+    if (req.file !== undefined) {
+      const filePath = req.file.path;
+      const lastIndex = filePath.lastIndexOf("\\");
+      const cutString =
+        lastIndex !== -1 ? filePath.substring(lastIndex + 1) : null;
+      databody.image = cutString;
+      console.log(databody)
+      // Tạo câu lệnh SQL UPDATE
+      const updateQuery =
+        "UPDATE product SET name = ?, price = ?, sale_price = ?, image = ?, category_id = ?, status = ? WHERE id = ?";
+
+      // Thực hiện câu lệnh SQL UPDATE
+      await pool.query(updateQuery, [
+        databody.name,
+        databody.price,
+        databody.sale_price,
+        databody.image,
+        databody.category,
+        databody.status,
+        productId,
+      ]);
+      console.log("co file hinh anh ")
+    return  res.redirect("/admin/v1/product");
+    } else if (req.file == undefined) {
+    }
+
+    // Tạo câu lệnh SQL UPDATE
+    const updateQuery =
+      "UPDATE product SET name = ?, price = ?, sale_price = ?, image = ?, category_id = ?, status = ? WHERE id = ?";
+
+    // Thực hiện câu lệnh SQL UPDATE
+    await pool.query(updateQuery, [
+      databody.name,
+      databody.price,
+      databody.sale_price,
+      databody.image_old,
+      databody.category,
+      databody.status,
+      productId,
+    ]);
+    console.log("khong co file hinh anh ")
+
+    // Nếu không có lỗi, trả về kết quả thành công
+    res.redirect("/admin/v1/product");
+  } catch (error) {
+    console.error("Lỗi trong quá trình cập nhật sản phẩm:", error);
+    res.render("err500.ejs");
+  }
+};
+
+
+
+
+
+//  CreateProduct
 let CreateProduct = async (req, res) => {
   try {
     let databody = req.body;
     databody.image = req.file;
     console.log(databody);
-    const filePath = req.file.path
-    const lastIndex = filePath.lastIndexOf('\\');
-    let cutString = null
+   
+    if (databody.name == "" || databody.price == "" || databody.sale_price == "" || databody.category == "" ) {
+      return res.render("empty505.ejs");
+    }
+    if(!req.file){
+      return res.render("errfile505.ejs");
+
+    }
+    const filePath = req.file.path;
+    const lastIndex = filePath.lastIndexOf("\\");
+    let cutString = null;
     if (lastIndex !== -1) {
       cutString = filePath.substring(lastIndex + 1);
-      console.log(cutString); // Output: aobaba1.jpg-1702133409552-481773093
+      console.log("day la cutstring " , cutString); // Output: aobaba1.jpg-1702133409552-481773093
+      
     } else {
       console.error('String does not contain "\\" character');
     }
-    
+   
+
     await pool.query(
       "INSERT INTO product(name, price, sale_price, image, category_id, status) VALUES(?, ?, ?, ?, ?, ?)",
       [
@@ -219,4 +290,6 @@ module.exports = {
   UpdateCategory,
 
   CreateProduct,
+  UpdateProduct,
+
 };

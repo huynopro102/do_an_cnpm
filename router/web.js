@@ -23,6 +23,8 @@ router.get("/admin/v1/categorysedit/:id" , MiddleWare.checkadmin ,webController.
 router.get("/admin/v1/product", MiddleWare.checkadmin  ,webController.gethomeControllerProduct)
 router.get("/admin/v1/productscreate", MiddleWare.checkadmin , webController.gethomeControllerProductsCreate)
 router.get("/admin/v1/productsedit/:id" , MiddleWare.checkadmin ,webController.getProductsEditAdmin)
+router.get("/admin/v1/productsdelete/:id" , MiddleWare.checkadmin , webController.getProductsDeleteAdmin    )
+
 
 
 
@@ -45,6 +47,10 @@ router.get("/forgotpassword",webController.getForgotFassword)
 
 // san pham
 router.get("/products" , webController.getProducts)
+router.get("/productsDetail/:id" , webController.getProductsDetails)
+
+// thong tin ca nhan khi dang nhap
+router.get("/profile/:id", webController.getProfile)
 
 
 

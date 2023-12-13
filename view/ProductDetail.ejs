@@ -25,225 +25,91 @@
 
 
     <style>
-        /* Thêm hoặc sửa đổi các quy tắc CSS trong phần style của bạn */
-
-
-
-        .main_pt {
-            display: flex;
-            justify-content: space-between;
+        /* Add or modify CSS rules in your style section */
+        .section_sub {
+            padding: 40px;
+            /* Adjust the padding according to your design */
+            background-color: #f4f4f4;
+            margin-top: 73px;
         }
 
-        .aside_pt {
-            padding-top: 70px;
-        }
-
-        .filter_pt {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 10px;
-            width: 250px;
-            margin-right: 10px;
-        }
-
-        .product_pt {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            padding: 15px;
-            width: 444px;
-            /* Thiết lập kích thước của sản phẩm */
-            height: 460px;
-            transition: transform 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .product_pt:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .product_pt img {
-            width: 100%;
-
-            max-height: 330px;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
-
-        .product_pt h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .product_pt p {
-            font-size: 1.2rem;
-            color: #888;
-            margin-bottom: 10px;
-        }
-
-        .product_pt a {
-            display: inline-block;
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .product_pt a:hover {
-            background-color: #0056b3;
-        }
-
-        .add-to-cart-button_pt {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .add-to-cart-button_pt:hover {
-            background-color: #218838;
-        }
-
-
-        .main_pt {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .section_pt {
-            margin-top: 30px;
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .product_pt {
-            width: calc(33.33% - 20px);
-            /* 20px là khoảng cách giữa các sản phẩm */
-            margin: 10px;
-            box-sizing: border-box;
-        }
-
-
-        .aside_pt {
-            width: 20%;
-        }
-
-        .filter_pt {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            margin: 30px 20px 30px 20px;
-        }
-
-        .filter-section {
-            margin: 10px 0;
-        }
-
-        .reset-btn_pt {
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .reset-btn_pt:hover {
-            background-color: #c82333;
-        }
-
-        /* btn_sub , btn_add  , price_name , title_name*/
-        .btn_submit {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-        }
-
-        .price_name {
-            position: absolute;
-            bottom: 5rem;
-        }
-
-        .title_name {
-            position: absolute;
-            bottom: 7rem;
-
-        }
-
-        .btn_add {
-            position: absolute;
-            bottom: 10px;
-            left: 10rem;
-
-        }
-
-        /* Pagination styles */
-
-
-        .pagination_pt {
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            margin-bottom: 0;
-            padding: 3rem;
+        .wrap {
             display: flex;
             justify-content: center;
-            /* Căn giữa phân trang */
+            align-items: center;
         }
 
-        .pagination_pt .page-item {
-            list-style: none;
-            margin: 0 5px;
-            /* Khoảng cách giữa các trang */
-            font-size: 14px;
-            /* Kích thước chữ cho thẻ li */
+        .image_sub {
+            width: 30%;
+            border-radius: 2px solid red;
         }
 
-        .pagination_pt .page-item .page-link {
+        .subwrap {
+            max-width: 800px;
+            margin: 20px;
+            /* Add margin to separate from the edges */
+            padding: 20px;
+            /* Add padding for a better visual appearance */
+            background-color: #fff;
+            /* Set a background color */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Add a subtle box shadow */
+            border-radius: 8px;
+            /* Add border-radius for rounded corners */
+        }
+
+        .subwrap h2 {
+            font-size: 24px;
+            /* Adjust the font size of the heading */
             color: #333;
-            border: 1px solid #ddd;
-            padding: 8px 12px;
-            margin: 0 2px;
-            text-decoration: none;
-            transition: background-color 0.3s ease-in-out;
+            /* Set the color of the heading */
+        }
+
+        .form-check {
+            margin-top: 20px;
+        }
+
+
+        /* btn success */
+        .btn-success {
+            background-color: #28a745;
+            /* Set the background color for the success button */
+            color: #fff;
+            /* Set the text color for the success button */
+            border: none;
+            /* Remove the button border */
+            padding: 4px;
             cursor: pointer;
-            border-radius: 5px;
-            /* Bo tròn các góc */
+            border-radius: 4px;
         }
 
-        .pagination_pt .page-item .page-link:hover {
-            background-color: #007bff;
+        /* btn primary */
+        .btn-success:hover {
+            background-color: #218838;
+            /* Darken the background color on hover */
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            /* Set the background color for the success button */
             color: #fff;
-        }
-
-        .pagination_pt .page-item.active .page-link {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        .item_page {
-            padding: 1rem;
-            margin: 3px;
-            border: 1px solid #b3acac;
-            color: #333;
-            border: 1px solid #ddd;
-            padding: 8px 12px;
-            margin: 0 2px;
-            text-decoration: none;
-            transition: background-color 0.3s ease-in-out;
+            /* Set the text color for the success button */
+            border: none;
+            padding: 4px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 4px;
+            margin-bottom: 8px;
         }
 
+        .btn-primary:hover {
+            background-color: #218838;
 
+        }
 
-        .active {
-            background-color: #007bff;
-            color: #fff;
+        /* radio */
+        .form-check {
+            margin-top: 8px;
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -286,14 +152,10 @@
 
             <div class="list list-right">
 
-                <input type="text" hidden class="id_user" value="<%= id%>">
-
-
                 <button class=" btn place-items-center" id="cart-icon">
 
                 </button>
-
-                <h3 class="click_profile" style="cursor: pointer;">
+                <h3 style="cursor: pointer;">
                     <%= data.length==0 ? '' : 'xin chào ' +data %>
                 </h3>
                 <%= console.log("data : ",data) %>
@@ -323,111 +185,46 @@
                                 <a href="/register" class="list-link screen-sm-hidden btn sign-up-btn fancy-border">
                                     <span>Đăng ký</span>
                                 </a>
+
             </div>
         </nav>
 
     </header>
 
-    <!-- container -->
-
-    <main class="main_pt">
-
-
-
-        <aside class="aside_pt" style="padding-top: 70px;">
-            <div class="filter filter_pt">
-                <h2>Filter Options</h2>
-
-                <!-- Category filter -->
-                <fieldset class="filter-section">
-                    <legend>Category:</legend>
-                    <label>
-                        <input type="checkbox" name="category" value="clothing" />
-                        Clothing
+    <!-- section -->
+    <section class="section_sub">
+        <div class="wrap">
+            <img src="http://localhost:8080/congkhai/img_product/<%= user.image%>" class="image_sub" alt="" srcset="">
+            <div class="subwrap">
+                <h2><%= user.name%></h2>
+                <h3><%= user.price%>$</h3>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Default radio
                     </label>
-                    <label>
-                        <input type="checkbox" name="category" value="electronics" />
-                        Electronics
-                    </label>
-                    <!-- Add more categories as needed -->
-                </fieldset>
-
-                <!-- Price filter -->
-                <fieldset class="filter-section">
-                    <legend>Price:</legend>
-                    <label>
-                        <input type="radio" name="price" value="0" checked />
-                        All
-                    </label>
-                    <label>
-                        <input type="radio" name="price" value="20" />
-                        $0 - $20
-                    </label>
-                    <label>
-                        <input type="radio" name="price" value="50" />
-                        $20 - $50
-                    </label>
-                    <!-- Add more price ranges as needed -->
-                </fieldset>
-
-                <button class="reset-btn reset-btn_pt " onclick="resetFilters()">Reset Filters</button>
-            </div>
-        </aside>
-
-
-        <section class="section_pt" style="padding-top: 60px;">
-            <% image.map((item, index)=> { %>
-                <div class="product product_pt" style="width: 390px; height: 460px;" data-category="clothing"
-                    data-price="20">
-                    <img src="http://localhost:8080/congkhai/img_product/<%= item.image %>" alt="Clothing Product" />
-                    <h3 class="title_name">
-                        <%= item.name%>
-                    </h3>
-                    <p class="price_name">
-                        <%= item.price%>$
-                    </p>
-
-                    <a href="/productsDetail/<%= item.id%>" class="btn view-button btn_submit"> Xem </a>
-
-                    <button class="btn add-to-cart-button add-to-cart-button_pt btn_add ">Thêm giỏ hàng</button>
-
                 </div>
-                <% }) %>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Default checked radio
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" checked>
+                    <label class="form-check-label" for="flexRadioDefault3">
+                        Default checked radio
+                    </label>
+                </div>
+                <button type="button" class="btn btn-success">thêm giỏ hàng</button>
+                <button type="button" class="btn btn-primary">trở lại</button>
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veniam, sequi tempora
+                    obcaecati laborum ut aliquid similique nobis error blanditiis delectus eum quibusdam.
+                    Sint, repellendus esse. Consectetur facere quod necessitatibus quae.</p>
 
-
-
-                    <!-- Add more products with appropriate data-category and data-price attributes -->
-        </section>
-
-    </main>
-
-
-
-    <!-- pagination -->
-
-    <div class="pagination pagination_pt mb-3">
-        <nav aria-label="Page navigation example">
-            <nav aria-label="Page navigation example ">
-                <ul class="pagination pagination_pt">
-                    <li class="page-item"><a class="page-link"
-                            href="?page=<%= page <=1 ? page=1 : page -1 %>">Previous</a>
-                    </li>
-
-                    <% for(i=1 ;i<=totalPage;i++) { %>
-                        <li>
-                            <a href="?page=<%=i%>" class="<%= page == i ? 'active' : '' %> item_page ">
-                                <%= i%>
-                            </a>
-                        </li>
-                        <% } %>
-
-
-                            <li class="page-item"><a class="page-link"
-                                    href="?page=<%= page >= totalPage ? totalPage : page+1   %>">Next</a></li>
-                </ul>
-            </nav>
-        </nav>
-    </div>
+            </div>
+        </div>
+    </section>
 
 
     <!-- Footer -->
@@ -550,17 +347,16 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
         </script>
-
     <script>
 
+        // Đảm bảo mã JavaScript chạy sau khi trang đã tải hoàn toàn
         $(document).ready(function () {
-            const click_profile = document.querySelector(".click_profile")
-            click_profile.addEventListener("click", (e) => {
-                console.log("id hien tai ", document.querySelector(".id_user").value)
-                alert(document.querySelector(".id_user").value)
-                document.location.href = `/profile/${document.querySelector(".id_user").value}`
-            })
-        })
+            // Lắng nghe sự kiện click trên nút "trở lại"
+            $(".btn-primary").click(function () {
+                // Chuyển hướng đến đường dẫn /products
+                window.location.href = "/products";
+            });
+        });
 
     </script>
 

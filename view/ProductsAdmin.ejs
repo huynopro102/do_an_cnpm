@@ -67,14 +67,15 @@
                     <td>
 
                       <img 
-                      width="60"
+                      width="70"
                       src="http://localhost:8080/congkhai/img_product/<%= item.image %>" 
                       alt=""  >
+                      <input hidden type="text" value="<%= item.image%>">
                    
                     </td>
                     <td>
-                      <a href="" class="btn btn-sm btn-primary btn-sua"><i class="fa fa-edit"></i> sua</a>
-                      <a href="#" class="btn btn-sm btn-danger btn-xoa "><i class="fa fa-trash"></i> xoa</a>
+                      <a href="/admin/v1/productsedit/<%= item.id%>" class="btn btn-sm btn-primary "><i class="fa fa-edit"></i> sua</a>
+                      <a href="/admin/v1/productsdelete/<%= item.id%>" class="btn btn-sm btn-danger  "><i class="fa fa-trash"></i> xoa</a>
                     </td>
                   </tr>
                   <% }); %>
@@ -115,35 +116,35 @@
 
       <script>
 
-        // btn sua
-        const btn_sua = document.querySelector(".btn-sua");
-        btn_sua.addEventListener("click", (e) => {
-          e.preventDefault();
+        // // btn sua
+        // const btn_sua = document.querySelector(".btn-sua");
+        // btn_sua.addEventListener("click", (e) => {
+        //   e.preventDefault();
 
-          // Use Fetch API to make a GET request
-          fetch("/admin/v1/accountsedit")
-            .then((response) => {
-              // Check if the request was successful (status code 2xx)
-              if (response.ok) {
-                // Perform additional actions if needed
-                return response.text();
-              } else {
-                console.error('Failed to fetch data:', response.statusText);
-                // Handle error
-                throw new Error('Failed to fetch data');
-              }
-            })
-            .then((data) => {
-              // Handle the data received from the server (if needed)
-              console.log(data);
-              // You might want to redirect to the edit page or handle the data accordingly
-            })
-            .catch((error) => {
-              console.error('Error during fetch:', error);
-              // Handle error
-              alert("Failed to fetch data. Please try again.");
-            });
-        });
+        //   // Use Fetch API to make a GET request
+        //   fetch("/admin/v1/accountsedit")
+        //     .then((response) => {
+        //       // Check if the request was successful (status code 2xx)
+        //       if (response.ok) {
+        //         // Perform additional actions if needed
+        //         return response.text();
+        //       } else {
+        //         console.error('Failed to fetch data:', response.statusText);
+        //         // Handle error
+        //         throw new Error('Failed to fetch data');
+        //       }
+        //     })
+        //     .then((data) => {
+        //       // Handle the data received from the server (if needed)
+        //       console.log(data);
+        //       // You might want to redirect to the edit page or handle the data accordingly
+        //     })
+        //     .catch((error) => {
+        //       console.error('Error during fetch:', error);
+        //       // Handle error
+        //       alert("Failed to fetch data. Please try again.");
+        //     });
+        // });
 
 
 
@@ -153,7 +154,7 @@
         btn_xoa_list.forEach(item => {
           item.addEventListener("click", (e) => {
             e.preventDefault();
-            const result = confirm(`Bạn có chắc chắn muốn xóa  không?`);
+            const result = confirm(`Bạn có chắc chắn muốn xóa không?`);
             if (result) {
               const trElement = item.closest("tr");
               const thIdElement = trElement.querySelector("th");
@@ -161,7 +162,7 @@
 
               if (userId) {
                 // Thực hiện yêu cầu DELETE sử dụng fetch
-                fetch(`/api/v1/delete-user/${parseInt(userId.trim())}`, {
+                 await (`/api/v1/delete-product/${parseInt(userId.trim())}`, {
                   method: 'DELETE',
                 })
                   .then(response => response.json())
