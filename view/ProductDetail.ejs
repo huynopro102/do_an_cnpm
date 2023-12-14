@@ -110,6 +110,11 @@
         .form-check {
             margin-top: 8px;
             margin-bottom: 8px;
+            
+        }
+        .form-check-label , 
+        .form-check-input{
+            cursor: pointer;
         }
     </style>
 </head>
@@ -155,10 +160,13 @@
                 <button class=" btn place-items-center" id="cart-icon">
 
                 </button>
-                <h3 style="cursor: pointer;">
+
+                <input type="text" hidden class="id_user" value="<%= user.id%>">
+                <h3 class="click_profile" style="cursor: pointer;">
                     <%= data.length==0 ? '' : 'xin chào ' +data %>
                 </h3>
-                <%= console.log("data : ",data) %>
+                <%= console.log("data1 : ",data ) %>
+                <%= console.log("user1 : ",user ) %>
 
 
                     <button class=" btn place-items-center" id="cart-icon">
@@ -201,19 +209,19 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                     <label class="form-check-label" for="flexRadioDefault1">
-                        Default radio
+                        size S
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
                     <label class="form-check-label" for="flexRadioDefault2">
-                        Default checked radio
+                        size M
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" checked>
                     <label class="form-check-label" for="flexRadioDefault3">
-                        Default checked radio
+                        size L
                     </label>
                 </div>
                 <button type="button" class="btn btn-success">thêm giỏ hàng</button>
@@ -356,6 +364,10 @@
                 // Chuyển hướng đến đường dẫn /products
                 window.location.href = "/products";
             });
+
+            $(".click_profile").click(()=>{
+                window.location.href = `/profile/${document.querySelector(".id_user").value}`;
+            })
         });
 
     </script>
