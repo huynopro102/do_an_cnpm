@@ -52,6 +52,9 @@ router.get("/productsDetail/:id" , webController.getProductsDetails)
 // thong tin ca nhan khi dang nhap
 router.get("/profile/:id", webController.getProfile)
 
+// gio hang
+router.get("/carts/:id", webController.getCarts)
+
 
 
 module.exports = router

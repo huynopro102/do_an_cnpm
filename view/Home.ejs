@@ -17,6 +17,9 @@
     <!-- bắt sự kiện onclick đăng xuất -->
     <link rel="stylesheet" href="http://localhost:8080/congkhai/btn_dang_xuat.js">
 
+    <!-- css gio hang an hien -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/giohang.css">
+
 
 </head>
 
@@ -42,7 +45,7 @@
                         <a href="/products" class="list-link">Sản Phẩm</a>
                     </li>
                     <li class="list-item">
-                        <a href="#" class="list-link">giỏ hàng</a>
+                        <a href="/carts/<%= id.length == 0 ? '0' : id %>" class="list-link">giỏ hàng</a>
                     </li>
                     <li class="list-item">
                         <a href="#" class="list-link">Liên Hệ</a>
@@ -81,21 +84,100 @@
                                     <% } %>
 
                     </h3>
-                    <% console.log("data1 : ", data )  %>
+                    <% console.log("data : ", data )  %>
                     
                 </button>
 
 
 
-                <button class="btn place-items-center" id="cart-icon">
-                    <i class="ri-shopping-cart-line"></i>
+        
+
+
+
+                <button class=" btn_icon_cart place-items-center" id="cart-icon">
+
+                        <span class="icon_show_cart">0</span>
+
+                        <i class="ri-shopping-cart-line"></i>
+
                 </button>
+
+                <!-- gio hang -->
+                <div class="showcart none">
+                    <div class="row mb">
+                        <table class="table-header">
+                            <tr>
+                                <th>STT</th>
+                                <th>Hình</th>
+                                <th>Tên</th>
+                                <th>giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                            </tr>
+
+                            <!--  danh sach san pham -->
+                            <tbody class="my_cart">
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><img style="width: 50px;"
+                                            src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                            alt=""></td>
+                                    <td>Đồng hồ</td>
+                                    <td>10</td>
+                                    <td>1</td>
+                                    <td>
+                                        <div>10</div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><img style="width: 50px;"
+                                            src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                            alt=""></td>
+                                    <td>Đồng hồ</td>
+                                    <td>10</td>
+                                    <td>1</td>
+                                    <td>
+                                        <div>10</div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><img style="width: 50px;"
+                                            src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                            alt=""></td>
+                                    <td>Đồng hồ</td>
+                                    <td>10</td>
+                                    <td>1</td>
+                                    <td>
+                                        <div>10</div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+
+                            <tr>
+                                <th colspan="5">Tổng đơn hàng</th>
+                                <th>
+                                    <div class="tong_don_hang">10</div>
+                                </th>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+
 
 
 
                 <button class="btn place-items-center screen-lg-hidden menu-toggle-icon" id="menu-toggle-icon">
-                    <i class="ri-menu-3-line open-menu-icon"></i>
-                    <i class="ri-close-line close-menu-icon"></i>
+
                 </button>
 
                 <% if(data.length==0) { %>
@@ -156,69 +238,22 @@
             <div class="swiper">
                 <div class="swiper-wrapper">
 
-                    <a href="#" class="article swiper-slide">
-
-                        <img src="http://localhost:8080/congkhai/img_product/1702193719521-261459302-mu%20long%20cuu.jpg"
-                            alt="" class="article-image">
-
-                        <div class="article-data">
-                            <span>Aug 6th 2022</span>
-                            <span class="article-data-spacer"></span>
-                            <span>24 min red </span>
-                        </div>
-
-                    </a>
-
-
-                    <a href="#" class="article swiper-slide">
-                        <img src="http://localhost:8080/congkhai/img_product/1702189656699-637583567-tui%20xach.png "
-                            alt="" class="article-image">
-
-                        <div class="article-data-container">
-
+           
+                    <% list_sp.map((item) => { %>     
+                        <a href="/productsDetail/<%= item.id%>" class="article swiper-slide">
+    
+                            <img src="http://localhost:8080/congkhai/img_product/<%= item.image%>"
+                                alt="" class="article-image">
+    
                             <div class="article-data">
-                                <span>Aug 6th 2022</span>
+                                <span></span>
                                 <span class="article-data-spacer"></span>
-                                <span>24 min red </span>
+                                <span></span>
                             </div>
-
-
-                        </div>
-                    </a>
-
-
-                    <a href="#" class="article swiper-slide">
-                        <img src="http://localhost:8080/congkhai/assets/images/quickread/quickread-3.jpg" alt=""
-                            class="article-image">
-
-                        <div class="article-data-container">
-
-                            <div class="article-data">
-                                <span>Aug 6th 2022</span>
-                                <span class="article-data-spacer"></span>
-                                <span>26 min red </span>
-                            </div>
-
-                            <h3 class="title article-title">Ảnh kết hợp công nghệ ?</h3>
-                        </div>
-                    </a>
-
-
-                    <a href="#" class="article swiper-slide">
-                        <img src="http://localhost:8080/congkhai/assets/images/quickread/quickread-4.jpg" alt=""
-                            class="article-image">
-
-                        <div class="article-data-container">
-
-                            <div class="article-data">
-                                <span>Dec 6th 2022</span>
-                                <span class="article-data-spacer"></span>
-                                <span>27 min red </span>
-                            </div>
-
-                            <h3 class="title article-title">Tin tức bóng đá.</h3>
-                        </div>
-                    </a>
+    
+                        </a>
+                    <% }) %>
+    
 
 
                 </div>
@@ -564,13 +599,76 @@
 
 <script>
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         const click_profile = document.querySelector(".click_profile")
-        click_profile.addEventListener("click",(e)=>{
-            console.log("id hien tai ", document.querySelector(".id_user").value )
+        click_profile.addEventListener("click", (e) => {
+            console.log("id hien tai ", document.querySelector(".id_user").value)
             document.location.href = `/profile/${document.querySelector(".id_user").value}`
         })
     })
+    //  an hien gio hang
+    document.addEventListener("DOMContentLoaded", function () {
+        const cartIcon = document.querySelector(".btn_icon_cart")
+        const showCart = document.querySelector(".showcart");
+
+        // Show cart
+        cartIcon.addEventListener("click", function () {
+            loadDuLieuVoGioHang()
+            showCart.classList.toggle("block")
+            loadDuLieuVoGioHang()
+        });
+
+
+    });
+    // cap nhat gio hang
+    function capNhatSoLuong(sl) {
+        const icon_show_cart = document.querySelector(".icon_show_cart")
+        icon_show_cart.innerText = sl
+    }
+
+    // load du lieu vo gio hang
+    function loadDuLieuVoGioHang() {
+        let tongDonHang = 0;
+
+        // Lấy dữ liệu từ localStorage
+        let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+        // Hiển thị sản phẩm trong giỏ hàng
+        document.querySelector(".my_cart").innerHTML = giohang.map((item, index) => {
+            let tongThanhTien = parseInt(item.gia) * parseInt(item.soluongsp);
+            tongDonHang += tongThanhTien;
+
+            return `
+            <tr>
+                <td>${index + 1}</td>
+                <td><img style="width: 50px;" src="${item.hinh}" alt=""></td>
+                <td>${item.tensp}</td>
+                <td>${item.gia}</td>
+                <td>${item.soluongsp}</td>
+                <td>
+                    <div>${tongThanhTien}</div>
+                </td>
+            </tr>
+        `;
+        });
+
+        // Hiển thị tổng đơn hàng
+        document.querySelector(".tong_don_hang").innerText = tongDonHang;
+    }
+    // Thực hiện cập nhật số lượng khi trang được tải
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy dữ liệu từ localStorage
+        let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+        // Cập nhật số lượng trên biểu tượng giỏ hàng
+        capNhatSoLuong(giohang.length);
+
+        // load du lieu vo cart 
+        loadDuLieuVoCarts();
+    });
+
+
+
 </script>
 
 </html>

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="http://localhost:8080/congkhai/assets/images/logo2.png">
+    <!-- Remix icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Swiper.js -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/assets/css/swiper-bundle.min.css" />
+    <!-- link css -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/assets/css/style.css">
+
+
+    <!-- bắt sự kiện onclick đăng xuất -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/btn_dang_xuat.js">
+
+    <!-- link css page product -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/img_product/sub_header_footer.css">
+
+
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/giohang.css">
+
+    <style>
+        /* Apply styles to the main element */
+        main {
+            padding: 20px;
+        }
+
+        /* Style the h1 inside the main element */
+        main h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* Style the shopping cart container */
+        .shopping-cart {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Style the column labels inside the shopping cart */
+        .column-labels {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Set a fixed width for each column label */
+        .product-image,
+        .product-price,
+        .product-quantity,
+        .product-removal,
+        .product-line-price {
+            flex: 1;
+        }
+
+        /* Style individual product rows inside the shopping cart */
+        .product {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .product img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 15px;
+        }
+
+        .product-details {
+            flex: 2;
+        }
+
+        .product-title {
+            font-weight: bold;
+        }
+
+        .product-price,
+        .product-quantity,
+        .product-removal,
+        .product-line-price {
+            flex: 1;
+        }
+
+        .product-quantity input {
+            width: 50px;
+            text-align: center;
+        }
+
+
+        .product-removal button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Style the totals section at the bottom of the shopping cart */
+
+
+        /* Style the checkout button */
+
+
+        /* Style the Grand Total label */
+        .totals-item-total label {
+            display: flex;
+            flex-direction: column;
+            font-weight: bold;
+            color: #333;
+            /* Change the color as needed */
+            /* Add margin to create space between "Grand Total" and "Checkout" */
+            margin-right: 10px;
+            justify-content: flex-end;
+            vertical-align: middle;
+        }
+
+
+        .totals {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            /* Đẩy về phía bên phải */
+        }
+
+        /* Style individual totals items */
+        .totals-item {
+            width: 21%;
+            /* Adjust as needed */
+            margin-bottom: 10px;
+        }
+
+
+
+        /* Style the checkout button */
+        .checkout {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-top: 20px;
+            /* Adjust as needed */
+        }
+
+        /* Hover effect for the checkout button */
+        .checkout:hover {
+            background-color: #45a049;
+        }
+
+        /* Make more adjustments for phone */
+        @media screen and (max-width: 350px) {
+            .product-removal {
+                float: right;
+            }
+
+            .product-line-price {
+                float: right;
+                clear: left;
+                width: auto;
+                margin-top: 10px;
+            }
+
+            .product .product-line-price:before {
+                content: 'Item Total: $';
+            }
+
+            .totals {
+                justify-content: flex-end;
+
+                /* Đẩy về phía bên phải */
+                .totals-item {
+                    label {
+                        width: 60%;
+                    }
+
+                    .totals-value {
+                        width: 40%;
+                    }
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header header_pt" id="header" style="padding: 0px;">
+        <nav class="navbar container">
+            <div class="logo">
+                <a href="/">
+                    <h3 class="animate-charcter">Adidas</h3>
+                </a>
+            </div>
+
+            <!-- <h2 class="name">Nyx</h2> -->
+
+            <div class="menu" id="menu">
+                <ul class="list">
+                    <li class="list-item">
+                        <a href="/" class="list-link ">Trang Chủ</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="/products" class="list-link">Sản Phẩm</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="/products" class="list-link">giỏ hàng</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Liên Hệ</a>
+                    </li>
+
+                    <li class="list-item">
+                        <a href="#" class="list-link screen-lg-hidden">Đăng nhập</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link screen-lg-hidden">Đăng ký</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="list list-right">
+
+
+
+                <button class=" btn place-items-center" id="cart-icon">
+
+                </button>
+
+
+                <h3 class="click_profile" style="cursor: pointer;">
+                    <% if (data && data.length> 0) { %>
+                        xin chào <%= data %>
+                            <% } else { %>
+
+                                <% } %>
+                </h3>
+
+
+                <button class=" btn_icon_cart place-items-center" id="cart-icon">
+
+                    <span class="icon_show_cart">0</span>
+
+                    <i class="ri-shopping-cart-line"></i>
+
+                </button>
+
+
+                <!-- gio hang -->
+                <div class="showcart none">
+                    <div class="row mb">
+                        <table class="table-header">
+                            <tr>
+                                <th>STT</th>
+                                <th>Hình</th>
+                                <th>Tên</th>
+                                <th>giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                            </tr>
+
+                            <!--  danh sach san pham -->
+                            <tbody class="my_cart">
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><img style="width: 50px;"
+                                            src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                            alt=""></td>
+                                    <td>Đồng hồ</td>
+                                    <td>10</td>
+                                    <td>1</td>
+                                    <td>
+                                        <div>10</div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><img style="width: 50px;"
+                                            src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                            alt=""></td>
+                                    <td>Đồng hồ</td>
+                                    <td>10</td>
+                                    <td>1</td>
+                                    <td>
+                                        <div>10</div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><img style="width: 50px;"
+                                            src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                            alt=""></td>
+                                    <td>Đồng hồ</td>
+                                    <td>10</td>
+                                    <td>1</td>
+                                    <td>
+                                        <div>10</div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+
+                            <tr>
+                                <th colspan="5">Tổng đơn hàng</th>
+                                <th>
+                                    <div class="tong_don_hang">10</div>
+                                </th>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+
+                <button class="btn place-items-center screen-lg-hidden menu-toggle-icon" id="menu-toggle-icon">
+                    <i class="ri-menu-3-line open-menu-icon"></i>
+                    <i class="ri-close-line close-menu-icon"></i>
+                </button>
+
+                <% if(data.length>0 ) { %>
+                    <form action="/" method="post">
+                        <button type="submit" class="list-link screen-sm-hidden">
+                            Đăng Xuất
+                        </button>
+                    </form>
+                    <% } else { %>
+                        <a href="/login" class="list-link screen-sm-hidden">
+                            Đăng nhập
+                        </a>
+                        <% } %>
+                            <a href="/register" class="list-link screen-sm-hidden btn sign-up-btn fancy-border">
+                                <span>Đăng ký</span>
+                            </a>
+            </div>
+        </nav>
+
+    </header>
+
+    <!-- container -->
+
+    <main class="main_pt">
+
+
+        <h1>Shopping Cart</h1>
+
+        <div class="shopping-cart">
+
+            <div class="column-labels">
+                <label class="product-image">Hình</label>
+
+                <label class="product-price">Giá</label>
+                <label class="product-quantity">Số Lượng</label>
+                <label class="product-removal">Xóa</label>
+                <label class="product-line-price">Tổng</label>
+            </div>
+
+
+            <div class="my_body_carts">
+
+                <div class="product">
+                    <div class="product-image">
+                        <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
+                    </div>
+                    <div class="product-price">12.99</div>
+                    <div class="product-quantity">
+                        <input type="number" value="2" min="1">
+                    </div>
+                    <div class="product-removal">
+                        <button class="remove-product">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="product-line-price">25.98</div>
+                </div>
+
+
+                <div class="product">
+                    <div class="product-image">
+                        <img src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png">
+                    </div>
+                    <div class="product-price">45.99</div>
+                    <div class="product-quantity">
+                        <input type="number" value="1" min="1">
+                    </div>
+                    <div class="product-removal">
+                        <button class="remove-product">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="product-line-price">45.99</div>
+                </div>
+            </div>
+
+            <div class="totals">
+
+
+                <div class="totals-item totals-item-total">
+                    <label>Grand Total</label>
+                    <div class="totals-value" id="cart-total">90.57</div>
+                    <button class="checkout">Checkout</button>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="footer section">
+
+        <div class="footer-container container d-grid">
+
+            <div class="company-data">
+                <a href="/">
+                    <!-- <img src="./assets/images/icon.png" alt=""> -->
+                    <h3 class="animate-charcter">Khanh</h3>
+                </a>
+                <p class="company-description">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam ipsum accusamus necessitatibus
+                    reprehenderit officiis
+                </p>
+
+                <ul class="list social-media">
+                    <li class="list-item">
+                        <a href="https://www.facebook.com/Narutocunung/" class="list-link">
+                            <i class="ri-facebook-circle-line"></i>
+                        </a>
+                        <a href="https://www.instagram.com/khanhho741/" class="list-link">
+                            <i class="ri-instagram-line"></i>
+                        </a>
+                        <a href="https://twitter.com/khanhho741" class="list-link">
+                            <i class="ri-twitter-line"></i>
+                        </a>
+                        <a href="#" class="list-link">
+                            <i class="ri-youtube-line"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <span class="copyright-notice">&copy; 2022 Khanh. All rights reserved</span>
+            </div>
+
+            <div>
+                <h6 class="title footer-title">Danh Mục</h6>
+
+                <ul class="list footer-list">
+                    <li class="list-item">
+                        <a href="#" class="list-link">Anime</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Art</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Cosplay</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Technology</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Sport</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Science</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h6 class="title footer-title">Liên Kết Hữu Ích</h6>
+
+                <ul class="list footer-list">
+                    <li class="list-item">
+                        <a href="#" class="list-link">Trang chủ</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Yếu tố</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Thẻ</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Tác giả</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Thành viên</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Vấn đề</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h6 class="title footer-title">Công Ty</h6>
+
+                <ul class="list footer-list">
+                    <li class="list-item">
+                        <a href="#" class="list-link">Liên hệ chúng tôi</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">F.A.Q</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Sự nghiệp</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Người sáng lập</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Thành viên</a>
+                    </li>
+                    <li class="list-item">
+                        <a href="#" class="list-link">Địa chỉ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Nhúng JavaScript -->
+    <script src="http://localhost:8080/congkhai/assets/js/main.js"></script>
+
+    <!-- nhúng jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
+        </script>
+
+    <script>
+
+
+
+
+
+        // js cho container
+        /* Set rates + misc */
+        var taxRate = 0;
+        var shippingRate = 0;
+        var fadeTime = 0;
+
+
+        /* Assign actions */
+        $('.product-quantity input').change(function () {
+            updateQuantity(this);
+        });
+
+        $('.product-removal button').click(function () {
+            removeItem(this);
+        });
+
+
+        /* Recalculate cart */
+        function recalculateCart() {
+            var subtotal = 0;
+
+            /* Sum up row totals */
+            $('.product').each(function () {
+                subtotal += parseFloat($(this).children('.product-line-price').text());
+            });
+
+            /* Calculate totals */
+            var tax = subtotal * taxRate;
+            var shipping = (subtotal > 0 ? shippingRate : 0);
+            var total = subtotal + tax + shipping;
+
+            /* Update totals display */
+            $('.totals-value').fadeOut(fadeTime, function () {
+                $('#cart-subtotal').html(subtotal.toFixed(2));
+                $('#cart-tax').html(tax.toFixed(2));
+                $('#cart-shipping').html(shipping.toFixed(2));
+                $('#cart-total').html(total.toFixed(2));
+                if (total == 0) {
+                    $('.checkout').fadeOut(fadeTime);
+                } else {
+                    $('.checkout').fadeIn(fadeTime);
+                }
+                $('.totals-value').fadeIn(fadeTime);
+            });
+        }
+
+
+        // Hàm cập nhật số lượng khi thay đổi
+        function updateQuantity(index, quantityInput) {
+            // Lấy giá trị mới của số lượng từ input
+            let newQuantity = parseInt(quantityInput.value);
+
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Cập nhật số lượng trong giỏ hàng
+            giohang[index].soluongsp = newQuantity;
+
+            // Lưu lại giỏ hàng mới vào localStorage
+            localStorage.setItem("giohang", JSON.stringify(giohang));
+
+            // Load lại giỏ hàng với dữ liệu đã cập nhật
+            loadDuLieuVoCarts();
+        }
+
+
+        /* Remove item from cart */
+        function removeItem(removeButton) {
+            const my_body_carts = document.querySelector(".my_body_carts")
+            console.log(my_body_carts.children[removeButton], removeButton)
+
+            // Remove the item from the localStorage
+            var giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+            giohang.splice(removeButton, 1);
+            localStorage.setItem("giohang", JSON.stringify(giohang));
+
+            // Reload the cart with updated data
+            loadDuLieuVoCarts();
+
+            location.reload()
+        };
+
+
+        function them_vao_gio_hang(e) {
+            const data = e.parentElement.children;
+
+            let hinh = data[0].src;
+            let tensp = data[1].innerText;
+            let soluongsp = data[3].value;
+            let gia = data[2].children[0].innerText;
+
+            let sp = {
+                hinh: hinh,
+                tensp: tensp,
+                soluongsp: soluongsp,
+                gia: gia
+            };
+
+            // Lấy dữ liệu hiện tại từ localStorage (nếu có)
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Thêm sản phẩm vào giỏ hàng
+            giohang.push(sp);
+
+            // Lưu lại giỏ hàng mới vào localStorage
+            localStorage.setItem("giohang", JSON.stringify(giohang));
+
+            // Cập nhật số lượng trên biểu tượng giỏ hàng
+            capNhatSoLuong(giohang.length);
+
+            location.reload()
+            loadDuLieuVoGioHang()
+        }
+
+
+
+
+        //  an hien gio hang
+        document.addEventListener("DOMContentLoaded", function () {
+            const cartIcon = document.querySelector(".btn_icon_cart")
+            const showCart = document.querySelector(".showcart");
+
+            // Show cart
+            cartIcon.addEventListener("click", function () {
+                loadDuLieuVoGioHang()
+                showCart.classList.toggle("block")
+                loadDuLieuVoGioHang()
+            });
+        });
+
+        // click vo trang profile
+        $(document).ready(function () {
+            const click_profile = document.querySelector(".click_profile")
+            click_profile.addEventListener("click", (e) => {
+                console.log("id hien tai ", document.querySelector(".id_user").value)
+                document.location.href = `/profile/${document.querySelector(".id_user").value}`
+            })
+        })
+
+
+        // cap nhat gio hang
+        function capNhatSoLuong(sl) {
+            const icon_show_cart = document.querySelector(".icon_show_cart")
+            icon_show_cart.innerText = sl
+        }
+
+        // load du lieu vo gio hang
+        function loadDuLieuVoGioHang() {
+            let tongDonHang = 0;
+
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Hiển thị sản phẩm trong giỏ hàng
+            document.querySelector(".my_cart").innerHTML = giohang.map((item, index) => {
+                let tongThanhTien = parseInt(item.gia) * parseInt(item.soluongsp);
+                tongDonHang += tongThanhTien;
+
+                return `
+            <tr>
+                <td>${index + 1}</td>
+                <td><img style="width: 50px;" src="${item.hinh}" alt=""></td>
+                <td>${item.tensp}</td>
+                <td>${item.gia}</td>
+                <td>${item.soluongsp}</td>
+                <td>
+                    <div>${tongThanhTien}</div>
+                </td>
+            </tr>
+        `;
+            });
+
+            // Hiển thị tổng đơn hàng
+            document.querySelector(".tong_don_hang").innerText = tongDonHang;
+        }
+
+
+        // load vo carts
+        function loadDuLieuVoCarts() {
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Chọn phần tử cha (.my_body_carts) để thêm sản phẩm
+            let my_body_carts = document.querySelector(".my_body_carts");
+
+            // Xóa nội dung hiện tại của my_body_carts để làm mới nó
+            my_body_carts.innerHTML = "";
+
+            // Duyệt qua mỗi sản phẩm trong giỏ hàng và thêm chúng vào my_body_carts
+            giohang.forEach((item, index) => {
+                // Tạo phần tử sản phẩm
+                let productElement = document.createElement("div");
+                productElement.className = "product";
+
+                // Tạo nội dung của sản phẩm
+                productElement.innerHTML = `
+            <div class="product-image">
+                <img src="${item.hinh}">
+            </div>
+            <div class="product-price">${item.gia}</div>
+            <div class="product-quantity">
+                <input type="number" value="${item.soluongsp}" min="1" onchange="updateQuantity(${index}, this)">
+            </div>
+            <div class="product-removal">
+                <button class="remove-product" onclick="removeItem(${index})">
+                    Remove
+                </button>
+            </div>
+            <div class="product-line-price">${parseInt(item.gia) * parseInt(item.soluongsp)}</div>
+        `;
+
+                // Thêm sản phẩm vào my_body_carts
+                my_body_carts.appendChild(productElement);
+            });
+
+            // Sau khi thêm sản phẩm, cập nhật lại giỏ hàng và các tổng số
+            recalculateCart();
+        }
+
+
+
+        // Thực hiện cập nhật số lượng khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Cập nhật số lượng trên biểu tượng giỏ hàng
+            capNhatSoLuong(giohang.length);
+
+            // load du lieu vo cart 
+            loadDuLieuVoCarts();
+        });
+
+    </script>
+
+</body>
+
+</html>

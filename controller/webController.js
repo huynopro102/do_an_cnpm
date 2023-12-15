@@ -2,6 +2,39 @@ const { render } = require("ejs");
 const pool = require("../model/connectdbUser");
 const jwt = require("jsonwebtoken");
 
+//  getCarts
+
+let getCarts = async (req, res) => {
+  try {
+    let data = "";
+    let id = req.params.id;
+
+    if (id == undefined) {
+      return res.render("cart.ejs", {
+        data: "",
+      });
+    } else {
+      const [rows, fields] = await pool.execute(
+        " select * from datausers where id = ? ",
+        [id]
+      );
+
+      if (rows.length !== 0) {
+        res.render("carts.ejs", {
+          data: rows[0].username,
+        });
+      } else {
+        res.render("carts.ejs",{
+          data: ""
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 //  getProfile
 let getProfile = async (req, res) => {
   console.log(req.params);
@@ -164,7 +197,7 @@ let getDeteleAdmin = async (req, res) => {
 let postHome = async (req, res) => {
   console.log("post home da login");
   res.clearCookie("tokenUser");
-  res.render("Home.ejs", { data: "" , id : "12313"});
+  res.render("Home.ejs", { data: "", id: "12313" });
 };
 
 let getHomeAdmin = async (req, res) => {
@@ -174,10 +207,18 @@ let getHomeAdmin = async (req, res) => {
 };
 // get home
 const getHome = async (req, res) => {
-  console.log("co kkee ",req.cookies)
+
+
+  console.log("co kkee ", req.cookies);
+  
+  
   try {
-    if (req.cookies.tokenAdmin || req.cookies.tokenUser == undefined) {
-      return res.render("Home.ejs", { data: ""  , id : ""});
+
+    const [sp , fieldsss] = await pool.execute(' select * from product ')
+    console.log("list sp " , sp)
+
+    if (req.cookies.tokenUser == undefined) {
+      return res.render("Home.ejs", { data: "", id: "" , list_sp : sp});
     }
     if (req.cookies.tokenUser) {
       const result = jwt.verify(req.cookies.tokenUser, "matkhau123");
@@ -188,17 +229,15 @@ const getHome = async (req, res) => {
         [id[0]]
       );
       console.log("data lay ddc ", rows[0]);
-      return res.render("Home.ejs", { data: rows[0].username, id: rows[0].id });
+      return res.render("Home.ejs", { data: rows[0].username, id: rows[0].id , list_sp : sp });
     }
   } catch (error) {
-    
     console.error("Error in getHome:", error);
-    
+
     return res
       .status(500)
       .render("error.ejs", { errorMessage: "Internal Server Error" });
   }
-
 };
 const getLogin = (req, res) => {
   res.render("Login.ejs");
@@ -284,8 +323,9 @@ const getProducts = async (req, res) => {
   // tong so trang
   let totalPage = Math.ceil(totalElements / limit);
 
+  let data = "";
   try {
-    let data = "";
+ 
     let data2 = "";
 
     const token = req.cookies.tokenUser;
@@ -300,10 +340,9 @@ const getProducts = async (req, res) => {
         [id[0], id[1]]
       );
       data = rows1[0].username;
-      data2 = rows1[0].id
+      data2 = rows1[0].id;
       console.log("user ", data);
     } else {
-
     }
 
     const [rows, fields] = await pool.execute(
@@ -316,7 +355,7 @@ const getProducts = async (req, res) => {
       totalPage: totalPage,
       page: parseInt(_page),
       data: data.length == 0 ? "" : data,
-      id : data2 != undefined ? data2 : ''
+      id: data2 != undefined ? data2 : "",
     });
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -488,4 +527,5 @@ module.exports = {
   getProductsDeleteAdmin,
 
   getProfile,
+  getCarts,
 };

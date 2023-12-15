@@ -24,6 +24,10 @@
     <link rel="stylesheet" href="http://localhost:8080/congkhai/img_product/sub_header_footer.css">
 
 
+    <!-- gio hang -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/giohang.css">
+
+
     <style>
         /* Thêm hoặc sửa đổi các quy tắc CSS trong phần style của bạn */
 
@@ -264,104 +268,6 @@
             background-color: #007bff;
             color: #fff;
         }
-
-
-
-        /*  gio hang */
-
-        .btn_icon_cart {
-            position: relative;
-        }
-
-        .icon_show_cart {
-            position: absolute;
-            background-color: #0056b3;
-            width: 20px;
-            /* Adjust the width and height to your preference */
-            height: 20px;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 14px;
-            /* Adjust font size as needed */
-            top: -5px;
-            /* Adjust the position to align with the cart icon */
-            right: -5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Adjust the color and size of the shopping cart icon */
-        .btn_icon_cart i {
-            font-size: 33px;
-            /* Adjust font size as needed */
-        }
-
-        /* Add some animation to the badge */
-        .icon_show_cart {
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        /* Change the background color on hover */
-        .btn_icon_cart:hover .icon_show_cart {
-            background-color: #004080;
-            /* Adjust the hover color */
-        }
-
-        /*  click hien thi gio hang */
-
-
-        .showcart {
-            position: fixed;
-
-            right: 200px;
-            top: 55px;
-            background-image: linear-gradient(#F90, #F60);
-
-            display: none;
-        }
-
-        .none {
-            display: none;
-
-        }
-
-        .block {
-            display: block;
-
-        }
-
-        /* gio hang */
-
-        .table-header {
-            width: 100%;
-            position: relative;
-        }
-
-        .table-header th,
-        .table-header td {
-            text-align: center;
-            background-color: #f2f2f2;
-        }
-
-        .table-header th {
-            position: sticky;
-            top: 0;
-            right: 0%;
-
-        }
-
-        .table-header th:first-child {
-            left: 0;
-            z-index: 1;
-        }
-
-        .table-header td:first-child {
-            position: sticky;
-            left: 0;
-            z-index: 1;
-            background-color: #f9f9f9;
-        }
     </style>
 </head>
 
@@ -386,7 +292,7 @@
                         <a href="/products" class="list-link">Sản Phẩm</a>
                     </li>
                     <li class="list-item">
-                        <a href="/products" class="list-link">giỏ hàng</a>
+                        <a href="/carts/<%= id.length == 0 ? '0' : id %>" class="list-link">giỏ hàng</a>
                     </li>
                     <li class="list-item">
                         <a href="#" class="list-link">Liên Hệ</a>
@@ -406,10 +312,9 @@
                 <input type="text" hidden class="id_user" value="<%= id%>">
 
 
-                <button class=" btn place-items-center" id="cart-icon">
+                <button class=" btn place-items-center" id="cart-icon"></button>
 
-                </button>
-
+                
                 <h3 class="click_profile" style="cursor: pointer;">
                     <% if (data && data.length> 0) { %>
                         xin chào <%= data %>
@@ -418,7 +323,7 @@
                                 <% } %>
                 </h3>
 
-                <% console.log("data: ", data) %>
+             
                   
 
                     <button class=" btn_icon_cart place-items-center" id="cart-icon">
@@ -490,9 +395,9 @@
 
 
                                 <tr>
-                                    <th  colspan="5">Tổng đơn hàng</th>
+                                    <th colspan="5">Tổng đơn hàng</th>
                                     <th>
-                                        <div class="tong_don_hang" >10</div>
+                                        <div class="tong_don_hang">10</div>
                                     </th>
                                 </tr>
 
@@ -754,25 +659,36 @@
 
     <script>
 
-        var giohang = new Array();
+
 
         function them_vao_gio_hang(e) {
+            const data = e.parentElement.children;
 
-            const data = e.parentElement.children
-            console.log("data ", data)
+            let hinh = data[0].src;
+            let tensp = data[1].innerText;
+            let soluongsp = data[3].value;
+            let gia = data[2].children[0].innerText;
 
-            let hinh = data[0].src
-            let tensp = data[1].innerText
-            let soluongsp = data[3].value
-            let gia = data[2].children[0].innerText
+            let sp = {
+                hinh: hinh,
+                tensp: tensp,
+                soluongsp: soluongsp,
+                gia: gia
+            };
 
-            let sp = new Array(hinh, tensp, soluongsp, gia)
+            // Lấy dữ liệu hiện tại từ localStorage (nếu có)
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
 
-            giohang.push(sp)
+            // Thêm sản phẩm vào giỏ hàng
+            giohang.push(sp);
 
-            console.log("gio hang ", giohang)
-            capNhatSoLuong(giohang.length == undefined ? '0' : giohang.length)
+            // Lưu lại giỏ hàng mới vào localStorage
+            localStorage.setItem("giohang", JSON.stringify(giohang));
+
+            // Cập nhật số lượng trên biểu tượng giỏ hàng
+            capNhatSoLuong(giohang.length);
         }
+
 
 
 
@@ -809,32 +725,42 @@
 
         // load du lieu vo gio hang
         function loadDuLieuVoGioHang() {
-            let tongDonHang = 0
+            let tongDonHang = 0;
 
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Hiển thị sản phẩm trong giỏ hàng
             document.querySelector(".my_cart").innerHTML = giohang.map((item, index) => {
-                let tongThanhTien = 0;
-                tongThanhTien += parseInt(item[3]) * parseInt(item[2]);
-                tongDonHang += tongThanhTien
-                return (
-                    `      <tr>
-                                    <td>${index + 1}</td>
-                                    <td><img style="width: 50px;"
-                                            src="${item[0]}"
-                                            alt=""></td>
-                                    <td>${item[1]}</td>
-                                    <td>${item[3]}</td>
-                                    <td>${item[2]}</td>
-                                    <td>
-                                        <div>${tongThanhTien}</div>
-                                    </td>
-                                </tr> 
-                    `
-                )
-            })
+                let tongThanhTien = parseInt(item.gia) * parseInt(item.soluongsp);
+                tongDonHang += tongThanhTien;
 
-            document.querySelector(".tong_don_hang").innerText = tongDonHang
+                return `
+            <tr>
+                <td>${index + 1}</td>
+                <td><img style="width: 50px;" src="${item.hinh}" alt=""></td>
+                <td>${item.tensp}</td>
+                <td>${item.gia}</td>
+                <td>${item.soluongsp}</td>
+                <td>
+                    <div>${tongThanhTien}</div>
+                </td>
+            </tr>
+        `;
+            });
 
+            // Hiển thị tổng đơn hàng
+            document.querySelector(".tong_don_hang").innerText = tongDonHang;
         }
+        
+        // Thực hiện cập nhật số lượng khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Cập nhật số lượng trên biểu tượng giỏ hàng
+            capNhatSoLuong(giohang.length);
+        });
 
     </script>
 

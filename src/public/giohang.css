@@ -1,0 +1,95 @@
+ /*  gio hang */
+
+ .btn_icon_cart {
+    position: relative;
+}
+
+.icon_show_cart {
+    position: absolute;
+    background-color: #0056b3;
+    width: 20px;
+    /* Adjust the width and height to your preference */
+    height: 20px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    /* Adjust font size as needed */
+    top: -5px;
+    /* Adjust the position to align with the cart icon */
+    right: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Adjust the color and size of the shopping cart icon */
+.btn_icon_cart i {
+    font-size: 33px;
+    /* Adjust font size as needed */
+}
+
+/* Add some animation to the badge */
+.icon_show_cart {
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Change the background color on hover */
+.btn_icon_cart:hover .icon_show_cart {
+    background-color: #004080;
+    /* Adjust the hover color */
+}
+
+/*  click hien thi gio hang */
+
+
+.showcart {
+    position: fixed;
+
+    right: 200px;
+    top: 55px;
+    background-image: linear-gradient(#F90, #F60);
+
+    display: none;
+}
+
+.none {
+    display: none;
+
+}
+
+.block {
+    display: block;
+
+}
+
+/* gio hang */
+
+.table-header {
+    width: 100%;
+    position: relative;
+}
+
+.table-header th,
+.table-header td {
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+.table-header th {
+    position: sticky;
+    top: 0;
+    right: 0%;
+
+}
+
+.table-header th:first-child {
+    left: 0;
+    z-index: 1;
+}
+
+.table-header td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: #f9f9f9;
+}
