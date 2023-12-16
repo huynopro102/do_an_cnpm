@@ -218,7 +218,7 @@ const getHome = async (req, res) => {
     console.log("list sp " , sp)
 
     if (req.cookies.tokenUser == undefined) {
-      return res.render("Home.ejs", { data: "", id: "" , list_sp : sp});
+      return res.render("Home.ejs", { data: "", id: "" , list_sp :  sp == undefined ? "" : sp  });
     }
     if (req.cookies.tokenUser) {
       const result = jwt.verify(req.cookies.tokenUser, "matkhau123");
@@ -229,7 +229,7 @@ const getHome = async (req, res) => {
         [id[0]]
       );
       console.log("data lay ddc ", rows[0]);
-      return res.render("Home.ejs", { data: rows[0].username, id: rows[0].id , list_sp : sp });
+      return res.render("Home.ejs", { data: rows[0].username, id: rows[0].id , list_sp :  sp == undefined ? "" : sp });
     }
   } catch (error) {
     console.error("Error in getHome:", error);

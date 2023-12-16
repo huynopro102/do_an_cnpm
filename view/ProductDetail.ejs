@@ -23,6 +23,9 @@
     <!-- link css page product -->
     <link rel="stylesheet" href="http://localhost:8080/congkhai/img_product/sub_header_footer.css">
 
+    <!-- link css an hien gio hang -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/giohang.css">
+
 
     <style>
         /* Add or modify CSS rules in your style section */
@@ -110,10 +113,11 @@
         .form-check {
             margin-top: 8px;
             margin-bottom: 8px;
-            
+
         }
-        .form-check-label , 
-        .form-check-input{
+
+        .form-check-label,
+        .form-check-input {
             cursor: pointer;
         }
     </style>
@@ -166,13 +170,87 @@
                     <%= data.length==0 ? '' : 'xin chào ' +data %>
                 </h3>
                 <%= console.log("data1 : ",data ) %>
-                <%= console.log("user1 : ",user ) %>
+                <%= console.log(" user1 : ",user ) %>
 
 
-                    <button class=" btn place-items-center" id="cart-icon">
+                <button class=" btn_icon_cart place-items-center" id="cart-icon">
+
+                    <span class="icon_show_cart">0</span>
+
                     <i class="ri-shopping-cart-line"></i>
+
                     </button>
 
+
+                    <!-- gio hang -->
+                    <div class="showcart none">
+                        <div class="row mb">
+                            <table class="table-header">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Hình</th>
+                                    <th>Tên</th>
+                                    <th>giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+
+                                <!--  danh sach san pham -->
+                                <tbody class="my_cart">
+
+                                    <tr>
+                                        <td>1</td>
+                                        <td><img style="width: 50px;"
+                                                src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                                alt=""></td>
+                                        <td>Đồng hồ</td>
+                                        <td>10</td>
+                                        <td>1</td>
+                                        <td>
+                                            <div>10</div>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>1</td>
+                                        <td><img style="width: 50px;"
+                                                src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                                alt=""></td>
+                                        <td>Đồng hồ</td>
+                                        <td>10</td>
+                                        <td>1</td>
+                                        <td>
+                                            <div>10</div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>1</td>
+                                        <td><img style="width: 50px;"
+                                                src="http://localhost:8080/congkhai/img_product/1702134099453-323829208-aobaba2.png"
+                                                alt=""></td>
+                                        <td>Đồng hồ</td>
+                                        <td>10</td>
+                                        <td>1</td>
+                                        <td>
+                                            <div>10</div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+
+                                <tr>
+                                    <th colspan="5">Tổng đơn hàng</th>
+                                    <th>
+                                        <div class="tong_don_hang">10</div>
+                                    </th>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
 
                     <button class="btn place-items-center screen-lg-hidden menu-toggle-icon" id="menu-toggle-icon">
                         <i class="ri-menu-3-line open-menu-icon"></i>
@@ -204,8 +282,12 @@
         <div class="wrap">
             <img src="http://localhost:8080/congkhai/img_product/<%= user.image%>" class="image_sub" alt="" srcset="">
             <div class="subwrap">
-                <h2><%= user.name%></h2>
-                <h3><%= user.price%>$</h3>
+                <h2>
+                    <%= user.name%>
+                </h2>
+                <h3>
+                    <%= user.price%>$
+                </h3>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                     <label class="form-check-label" for="flexRadioDefault1">
@@ -224,7 +306,7 @@
                         size L
                     </label>
                 </div>
-                <button type="button" class="btn btn-success">thêm giỏ hàng</button>
+                <button type="button" onclick="them_vao_gio_hang(this)" class="btn btn-success">thêm giỏ hàng</button>
                 <button type="button" class="btn btn-primary">trở lại</button>
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veniam, sequi tempora
                     obcaecati laborum ut aliquid similique nobis error blanditiis delectus eum quibusdam.
@@ -365,10 +447,104 @@
                 window.location.href = "/products";
             });
 
-            $(".click_profile").click(()=>{
+            $(".click_profile").click(() => {
                 window.location.href = `/profile/${document.querySelector(".id_user").value}`;
             })
         });
+
+
+
+        function them_vao_gio_hang(e) {
+            const data = e.parentElement.children;
+
+
+            let hinh = e.parentElement.parentElement.children[0].src
+            let tensp = e.parentElement.children[0].innerText;
+            let soluongsp = 1
+            let gia = e.parentElement.children[1].innerText.replace("$", "")
+
+            let sp = {
+                hinh: hinh,
+                tensp: tensp,
+                soluongsp: soluongsp,
+                gia: gia
+            };
+
+            // Lấy dữ liệu hiện tại từ localStorage (nếu có)
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Thêm sản phẩm vào giỏ hàng
+            giohang.push(sp);
+
+            // Lưu lại giỏ hàng mới vào localStorage
+            localStorage.setItem("giohang", JSON.stringify(giohang));
+
+            // Cập nhật số lượng trên biểu tượng giỏ hàng
+            capNhatSoLuong(giohang.length);
+        }
+
+
+        //  an hien gio hang
+        document.addEventListener("DOMContentLoaded", function () {
+            const cartIcon = document.querySelector(".btn_icon_cart")
+            const showCart = document.querySelector(".showcart");
+
+            // Show cart
+            cartIcon.addEventListener("click", function () {
+                loadDuLieuVoGioHang()
+                showCart.classList.toggle("block")
+                loadDuLieuVoGioHang()
+            });
+
+
+        });
+        // cap nhat gio hang
+        function capNhatSoLuong(sl) {
+            const icon_show_cart = document.querySelector(".icon_show_cart")
+            icon_show_cart.innerText = sl
+        }
+
+        // load du lieu vo gio hang
+        function loadDuLieuVoGioHang() {
+            let tongDonHang = 0;
+
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Hiển thị sản phẩm trong giỏ hàng
+            document.querySelector(".my_cart").innerHTML = giohang.map((item, index) => {
+                let tongThanhTien = parseInt(item.gia) * parseInt(item.soluongsp);
+                tongDonHang += tongThanhTien;
+
+                return `
+            <tr>
+                <td>${index + 1}</td>
+                <td><img style="width: 50px;" src="${item.hinh}" alt=""></td>
+                <td>${item.tensp}</td>
+                <td>${item.gia}</td>
+                <td>${item.soluongsp}</td>
+                <td>
+                    <div>${tongThanhTien}</div>
+                </td>
+            </tr>
+        `;
+            });
+
+            // Hiển thị tổng đơn hàng
+            document.querySelector(".tong_don_hang").innerText = tongDonHang;
+        }
+        // Thực hiện cập nhật số lượng khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            // Lấy dữ liệu từ localStorage
+            let giohang = JSON.parse(localStorage.getItem("giohang")) || [];
+
+            // Cập nhật số lượng trên biểu tượng giỏ hàng
+            capNhatSoLuong(giohang.length);
+
+            // load du lieu vo cart 
+            loadDuLieuVoCarts();
+        });
+
 
     </script>
 
