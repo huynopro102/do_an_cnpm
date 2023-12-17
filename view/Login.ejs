@@ -12,44 +12,86 @@
     <div class="login-01">
         <div class="one-login  hvr-float-shadow">
             <div class="one-login-head">
-                <img src="http://localhost:8080/congkhai/images/top-lock.png" alt="" />
-                <h1>LOGIN</h1>
+                <h1>Đăng Nhập</h1>
                 <span></span>
             </div>
-            <form method="post"  >
+            <form method="post">
                 <li>
-                    <input type="text" class="text" placeholder="username" name="UserName">
+                    <input type="text" class="text" placeholder="Username" name="UserName">
                     <a href="#" class=" icon user"></a>
                 </li>
+
                 <li>
-                    <input type="password"  placeholder="password" name="Password" >
+                    <input type="password" class="password" placeholder="Password" name="Password">
                     <a href="#" class=" icon lock"></a>
-                   
                 </li>
-                <div class="p-container">
-                    <label class="checkbox">
-                    <input type="checkbox" name="checkbox" checked >
-                    <i></i>Remember Me</label>
-                    <h6><a href="/forgotpassword">Forgot Password ?</a> </h6>
-                    <div class="clear"> </div>
+
+                <div class="checkbox">
+                    <input type="checkbox" name="checkbox" checked>
+                    <i></i>Lưu thông tin đăng nhập
                 </div>
+
                 <div class="submit">
-                    <input type="submit" value="SIGN IN" />
+                    <input class="btn-submit" type="submit" value="Đăng Nhập" style="
+                        margin-top: 13px " />
                 </div>
-                <div class="social-icons">
-                    <p>Or you can Login with one of the following</p>
-                    <ul class="soc_icons2">
-                        <li class="pic"><a href="#"><i class="icon_4"></i></a></li>
-                        <li class="pic"><a href="#"><i class="icon_5"></i></a></li>
-                        <li class="pic"><a href="#"><i class="icon_6"></i></a></li>
-                        <div class="clear"> </div>
-                    </ul>
+
+                <h5>Bạn không có tài khoản ?<a href="/register"> Đăng ký </a></h5>
+                <h5>Trở về trang chủ ?<a href="/"> Trang chủ </a></h5>
+                <div class="p-container">
+
+                    <h6>
+                        <a href="/forgotpassword">Quên mật khẩu ?</a>
+                    </h6>
+                    <!-- <div class="clear"> </div> -->
                 </div>
-                <h5>Don't have an account ?<a href="/register"> Sign Up </a></h5>
-                <h5>go back to the main page ?<a href="/"> Go Home </a></h5>
             </form>
         </div>
     </div>
 </body>
+
+<script>
+    const username = document.querySelector(".text")
+    const password = document.querySelector(".password")
+    const btn_sub_mit = document.querySelector(".btn-submit")
+    btn_sub_mit.addEventListener("click", async (e) => {
+        e.preventDefault()
+
+        if (!username || !password) {
+            alert("Không để rỗng dữ liệu");
+            return;
+        }
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    UserName: username,
+                    Password: password,
+                }),
+            });
+
+            if (response.ok) {
+                // Xử lý khi đăng nhập thành công
+                alert("Đăng nhập thành công");
+            } else if(response.status == 505){
+                alert("không tìm thấy tài khoản")
+            }
+             else {
+                // Xử lý khi đăng nhập thất bại
+                alert("Đăng nhập thất bại");
+            }
+        } catch (error) {
+            alert("Đã xảy ra lỗi:", error);
+        }
+
+
+    })
+
+
+</script>
 
 </html>

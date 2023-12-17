@@ -51,6 +51,34 @@
 
     display: none;
 }
+.showcart {
+    /* Thiết lập chiều cao tối đa là 700px */
+    max-height: 700px;
+
+    /* Thiết lập overflow-y là auto để hiển thị thanh cuộn khi nội dung vượt quá chiều cao tối đa */
+    overflow-y: auto;
+
+    /* Các quy tắc khác cho giao diện của phần 'showcart' */
+    /* ... */
+}
+
+/* Nếu bạn muốn thanh cuộn có màu khác, bạn có thể thêm các quy tắc cho thanh cuộn như sau: */
+.showcart::-webkit-scrollbar {
+    width: 10px;
+}
+
+.showcart::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.showcart::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.showcart::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 
 .none {
     display: none;

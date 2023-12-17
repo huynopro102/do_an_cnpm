@@ -35,7 +35,7 @@ router.get("/",webController.getHome)
 router.post("/",webController.postHome)
 
 //  login
-router.post("/login", MiddleWare.checkLogin ,webController.postLogin)
+router.post("/login" /*MiddleWare.checkLogin */,webController.postLogin)
 router.get("/login",webController.getLogin)
 
 // register
@@ -54,6 +54,9 @@ router.get("/profile/:id", webController.getProfile)
 
 // gio hang
 router.get("/carts/:id", webController.getCarts)
+
+// lien he
+router.get("/contact" , webController.getContact)
 
 
 

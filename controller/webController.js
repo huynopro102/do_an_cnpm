@@ -2,6 +2,27 @@ const { render } = require("ejs");
 const pool = require("../model/connectdbUser");
 const jwt = require("jsonwebtoken");
 
+// getContact
+let getContact = async (req, res) => {
+  if (req.cookies.tokenUser == undefined) {
+    return res.render("contact.ejs", { data: "", id: "" });
+  }
+  if (req.cookies.tokenUser) {
+    const result = jwt.verify(req.cookies.tokenUser, "matkhau123");
+    const id = result.split("/");
+    console.log("mang thong tin ", id);
+    const [rows, fields] = await pool.execute(
+      " select * from datausers where id = ?",
+      [id[0]]
+    );
+    console.log("data lay ddc ", rows[0]);
+    return res.render("contact.ejs", {
+      data: rows[0].username,
+      id: rows[0].id,
+    });
+  }
+};
+
 //  getCarts
 
 let getCarts = async (req, res) => {
@@ -24,8 +45,8 @@ let getCarts = async (req, res) => {
           data: rows[0].username,
         });
       } else {
-        res.render("carts.ejs",{
-          data: ""
+        res.render("carts.ejs", {
+          data: "",
         });
       }
     }
@@ -195,9 +216,14 @@ let getDeteleAdmin = async (req, res) => {
 
 // post home
 let postHome = async (req, res) => {
+  const [sp, fieldsss] = await pool.execute(" select * from product ");
+  console.log("list sp ", sp);
+
+  // Define list_sp in both scenarios
+  const list_sp = sp === undefined ? [] : sp;
   console.log("post home da login");
   res.clearCookie("tokenUser");
-  res.render("Home.ejs", { data: "", id: "12313" });
+  res.render("Home.ejs", { data: "", id: "12313", list_sp: list_sp });
 };
 
 let getHomeAdmin = async (req, res) => {
@@ -207,18 +233,17 @@ let getHomeAdmin = async (req, res) => {
 };
 // get home
 const getHome = async (req, res) => {
-
-
   console.log("co kkee ", req.cookies);
-  
-  
-  try {
 
-    const [sp , fieldsss] = await pool.execute(' select * from product ')
-    console.log("list sp " , sp)
+  try {
+    const [sp, fieldsss] = await pool.execute(" select * from product ");
+    console.log("list sp ", sp);
+
+    // Define list_sp in both scenarios
+    const list_sp = sp === undefined ? [] : sp;
 
     if (req.cookies.tokenUser == undefined) {
-      return res.render("Home.ejs", { data: "", id: "" , list_sp :  sp == undefined ? "" : sp  });
+      return res.render("Home.ejs", { data: "", id: "", list_sp: list_sp });
     }
     if (req.cookies.tokenUser) {
       const result = jwt.verify(req.cookies.tokenUser, "matkhau123");
@@ -229,7 +254,11 @@ const getHome = async (req, res) => {
         [id[0]]
       );
       console.log("data lay ddc ", rows[0]);
-      return res.render("Home.ejs", { data: rows[0].username, id: rows[0].id , list_sp :  sp == undefined ? "" : sp });
+      return res.render("Home.ejs", {
+        data: rows[0].username,
+        id: rows[0].id,
+        list_sp: list_sp,
+      });
     }
   } catch (error) {
     console.error("Error in getHome:", error);
@@ -325,7 +354,6 @@ const getProducts = async (req, res) => {
 
   let data = "";
   try {
- 
     let data2 = "";
 
     const token = req.cookies.tokenUser;
@@ -367,22 +395,29 @@ const getProducts = async (req, res) => {
 const postLogin = async (req, res) => {
   const username = req.body.UserName;
   const password = req.body.Password;
+
+  if (!username || !password) {
+    // Handle the case where username or password is missing
+    return res
+      .status(400)
+      .json({ error: "Username and password are required." });
+  }
   const [rows, fields] = await pool.execute(
-    "SELECT * FROM `datausers` where username = ? and password = ? ",
+    "SELECT * FROM `datausers` where username = ? and password = ?",
     [username, password]
   );
-  if (rows[0].admin === 0) {
-    console.log("admin == 0");
-    const tokenUser = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
-    res.cookie(`tokenUser`, tokenUser);
-    res.redirect("/");
+
+  console.log(rows[0]);
+  if (rows.length === 0) {
+    return res.status(404).json({ error: "User not found" });
+  } else if (rows[0].admin === 0) {
+    // Handle the case for admin === 0
+    res.status(200).json({ message: "Login successful for regular user" });
   } else if (rows[0].admin === 1) {
-    console.log("admin == 1");
+    // Handle the case for admin === 1
     const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
     res.cookie("tokenAdmin", tokenAdmin);
-    res.redirect("/admin/v1");
-  } else {
-    res.json("ko tim thay tài khoản này ");
+    res.status(200).json({ message: "Login successful for admin" });
   }
 };
 
@@ -528,4 +563,5 @@ module.exports = {
 
   getProfile,
   getCarts,
+  getContact,
 };
