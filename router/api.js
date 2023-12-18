@@ -36,6 +36,12 @@ const  router = express.Router()
         router.post("/create-product", MiddleWare.checkadmin , upload.single("image") , apiController.CreateProduct)
         router.post("/update-product/:id" , MiddleWare.checkadmin , upload.single("image") , apiController.UpdateProduct)
 
+        // login , register , forgotPassword
+        router.post("/login", apiController.postLogin)
+        router.post("/register",apiController.postRegister)
+
+      
+
         
 
     

@@ -16,6 +16,7 @@
                 <span></span>
             </div>
             <form method="post">
+
                 <li>
                     <input type="text" class="text" placeholder="Username" name="UserName">
                     <a href="#" class=" icon user"></a>
@@ -45,51 +46,58 @@
                     </h6>
                     <!-- <div class="clear"> </div> -->
                 </div>
+
             </form>
         </div>
     </div>
 </body>
 
 <script>
-    const username = document.querySelector(".text")
-    const password = document.querySelector(".password")
-    const btn_sub_mit = document.querySelector(".btn-submit")
-    btn_sub_mit.addEventListener("click", async (e) => {
-        e.preventDefault()
+    const username = document.querySelector(".text");
+    const password = document.querySelector(".password");
+    const btn_sub_mit = document.querySelector(".btn-submit");
+    console.log(username.value, password.value);
 
-        if (!username || !password) {
+    btn_sub_mit.addEventListener("click", async (e) => {
+        e.preventDefault();
+        console.log(username.value, password.value);
+        const data = {
+            UserName: username.value,
+            Password: password.value,
+        };
+
+        if (username.value == "" || password.value == "") {
             alert("Không để rỗng dữ liệu");
             return;
         }
 
         try {
-            const response = await fetch('/login', {
+            const response = await fetch('/api/v1/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    UserName: username,
-                    Password: password,
-                }),
+                body: JSON.stringify(data), // Remove the extra object here
             });
 
-            if (response.ok) {
+            if (response.status === 200) {
                 // Xử lý khi đăng nhập thành công
                 alert("Đăng nhập thành công");
-            } else if(response.status == 505){
-                alert("không tìm thấy tài khoản")
-            }
-             else {
+                location.href = '/';
+            } else if (response.status == 201) {
+                alert("Đăng nhập admin thành công");
+                location.href = '/admin/v1/';
+            } else if (response.status == 505) {
+                alert("Không tìm thấy tài khoản");
+            } else {
                 // Xử lý khi đăng nhập thất bại
                 alert("Đăng nhập thất bại");
             }
         } catch (error) {
             alert("Đã xảy ra lỗi:", error);
         }
+    });
 
-
-    })
 
 
 </script>

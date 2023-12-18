@@ -1,5 +1,82 @@
-const { render } = require("ejs");
 const pool = require("../model/connectDB");
+const jwt = require("jsonwebtoken");
+
+// post register
+let postRegister = async (req, res) => {
+  const username = req.body.UserName;
+  const password = req.body.Password;
+  const email = req.body.email;
+
+  console.log("/api/v1/register ", username, password, email);
+  const [rowss, fieldss] = await pool.execute(
+    "SELECT * FROM `datausers` WHERE email = ? or username = ?",
+    [email , username]
+  );
+
+  try {
+    console.log("rows ", rowss);
+
+    // kiểm tra email đã có chưa
+    if (rowss.length === 0) {
+     
+
+      const [rows, fields] = await pool.execute(
+        "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
+        [username, password, email, 0]
+      );
+        // const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
+        // res.cookie(`tokenUser`, token);
+        return res.status(200).json("thanh cong");
+      
+    } else {
+      return res.status(400).json(" email hoặc tên người dùng này đã tồn tại");
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.status(500).json("Internal server error");
+  }
+};
+
+let postLogin = async (req, res) => {
+  console.log("api/v1/login, post");
+  console.log(req.body.UserName);
+  console.log(req.body.Password);
+
+  if (req.body.UserName == "" || req.body.Password == "") {
+    return res.status(505).json("Không để rỗng dữ liệu");
+  }
+
+  const username = req.body.UserName;
+  const password = req.body.Password;
+
+  try {
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM `datausers` WHERE username = ? AND password = ?",
+      [username, password]
+    );
+    console.log("rowws ", rows);
+
+    if (rows.length === 0) {
+      return res.status(505).json("không tìm thấy người dùng");
+    }
+
+    console.log("api/v1/login, post 1 ", rows[0]);
+
+    if (rows[0].admin === 0) {
+      const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
+      res.cookie(`tokenUser`, token);
+      return res.status(200).json("thanh cong");
+    }
+    if (rows[0].admin === 1) {
+      const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
+      res.cookie("tokenAdmin", tokenAdmin);
+      return res.status(201).json("admin");
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.status(500).json("Internal server error");
+  }
+};
 
 let GET_DeleteUser = async (req, res) => {
   res.json("get delete user");
@@ -183,7 +260,7 @@ let UpdateProduct = async (req, res) => {
       const cutString =
         lastIndex !== -1 ? filePath.substring(lastIndex + 1) : null;
       databody.image = cutString;
-      console.log(databody)
+      console.log(databody);
       // Tạo câu lệnh SQL UPDATE
       const updateQuery =
         "UPDATE product SET name = ?, price = ?, sale_price = ?, image = ?, category_id = ?, status = ? WHERE id = ?";
@@ -198,8 +275,8 @@ let UpdateProduct = async (req, res) => {
         databody.status,
         productId,
       ]);
-      console.log("co file hinh anh ")
-    return  res.redirect("/admin/v1/product");
+      console.log("co file hinh anh ");
+      return res.redirect("/admin/v1/product");
     } else if (req.file == undefined) {
     }
 
@@ -217,7 +294,7 @@ let UpdateProduct = async (req, res) => {
       databody.status,
       productId,
     ]);
-    console.log("khong co file hinh anh ")
+    console.log("khong co file hinh anh ");
 
     // Nếu không có lỗi, trả về kết quả thành công
     res.redirect("/admin/v1/product");
@@ -227,35 +304,33 @@ let UpdateProduct = async (req, res) => {
   }
 };
 
-
-
-
-
 //  CreateProduct
 let CreateProduct = async (req, res) => {
   try {
     let databody = req.body;
     databody.image = req.file;
     console.log(databody);
-   
-    if (databody.name == "" || databody.price == "" || databody.sale_price == "" || databody.category == "" ) {
+
+    if (
+      databody.name == "" ||
+      databody.price == "" ||
+      databody.sale_price == "" ||
+      databody.category == ""
+    ) {
       return res.render("empty505.ejs");
     }
-    if(!req.file){
+    if (!req.file) {
       return res.render("errfile505.ejs");
-
     }
     const filePath = req.file.path;
     const lastIndex = filePath.lastIndexOf("\\");
     let cutString = null;
     if (lastIndex !== -1) {
       cutString = filePath.substring(lastIndex + 1);
-      console.log("day la cutstring " , cutString); // Output: aobaba1.jpg-1702133409552-481773093
-      
+      console.log("day la cutstring ", cutString); // Output: aobaba1.jpg-1702133409552-481773093
     } else {
       console.error('String does not contain "\\" character');
     }
-   
 
     await pool.query(
       "INSERT INTO product(name, price, sale_price, image, category_id, status) VALUES(?, ?, ?, ?, ?, ?)",
@@ -291,5 +366,6 @@ module.exports = {
 
   CreateProduct,
   UpdateProduct,
-
+  postLogin,
+  postRegister,
 };

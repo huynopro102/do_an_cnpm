@@ -497,6 +497,8 @@
                     <button onclick="them_vao_gio_hang(this)"
                         class="btn add-to-cart-button add-to-cart-button_pt btn_add ">Thêm giỏ hàng</button>
 
+                        <input type="text" hidden class="id_product" value="<%= item.id%>" >
+
                 </div>
                 <% }) %>
 
@@ -672,8 +674,11 @@
             let tensp = data[1].innerText;
             let soluongsp = data[3].value;
             let gia = data[2].children[0].innerText;
+            let ProductID = data[6].value
+           
 
             let sp = {
+                ProductID : ProductID,     
                 hinh: hinh,
                 tensp: tensp,
                 soluongsp: soluongsp,

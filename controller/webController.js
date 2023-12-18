@@ -2,6 +2,64 @@ const { render } = require("ejs");
 const pool = require("../model/connectdbUser");
 const jwt = require("jsonwebtoken");
 
+// PostCarts
+let PostCarts = async (req, res) => {
+  console.log("web post carts ", req.body);
+  console.log("web post params carts ", req.params.id);
+
+  const Order = {
+    userID: req.body.UserID,
+    totalAmount: req.body.totalAmount,
+    OrderDate: req.body.OrderDate,
+    status: req.body.status,
+  };
+
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
+  try {
+    console.log("bang order ", Order);
+    // Thực hiện insert vào bảng orders
+    const [orderResult] = await connection.execute(
+      "INSERT INTO orders (UserID, totalAmount, OrderDate, status) VALUES (?, ?, ?, ?)",
+      [Order.userID, Order.totalAmount, Order.OrderDate, Order.status]
+    );
+
+    // đây là  câu lênh lấy trường id khi mới tạo bảng orders
+    const orderID = orderResult.insertId;
+    const orderItems = Object.keys(req.body.giohang).map(
+      (key) => req.body.giohang[key]
+    );
+    // Thêm dữ liệu vào bảng orderItem
+    for (const item of orderItems) {
+      await connection.execute(
+        "INSERT INTO orderItem (OrderID, ProductID, Quantity, PricePerUnit, TotalPrice) VALUES (?, ?, ?, ?, ?)",
+        [
+          orderID,
+          item.ProductID,
+          item.soluongsp,
+          item.gia,
+          item.gia * item.soluongsp,
+        ]
+      );
+    }
+
+    // Commit transaction
+    await connection.commit();
+
+    res.status(200).json({ success: true, message: "Ghi dữ liệu thành công" });
+  } catch (error) {
+    // Rollback transaction nếu có lỗi
+    await connection.rollback();
+
+    console.error("Lỗi khi ghi dữ liệu:", error.message);
+    res.status(500).json({ success: false, message: "Lỗi khi ghi dữ liệu" });
+  } finally {
+    // Đóng kết nối
+    await connection.release();
+  }
+};
+
 // getContact
 let getContact = async (req, res) => {
   if (req.cookies.tokenUser == undefined) {
@@ -43,6 +101,7 @@ let getCarts = async (req, res) => {
       if (rows.length !== 0) {
         res.render("carts.ejs", {
           data: rows[0].username,
+          id: id,
         });
       } else {
         res.render("carts.ejs", {
@@ -61,6 +120,7 @@ let getProfile = async (req, res) => {
   console.log(req.params);
   const token = req.cookies.tokenUser;
   if (token) {
+    // lấy id
     const result = jwt.verify(token, "matkhau123");
     const id = result.split("/");
     console.log("mang thong tin ", id);
@@ -69,6 +129,37 @@ let getProfile = async (req, res) => {
       [id[0]]
     );
     console.log("data lay ddc ", rows[0]);
+
+    // lấy lịch sử đặt hàng , hoặc chờ xác nhận
+    
+    const [rowss, fieldss] = await pool.execute(
+      " select * from orders where UserID = ?",
+      [id[0]]
+    );
+
+
+
+
+   // Lấy lịch sử đặt hàng hoặc chờ xác nhận từ bảng orders và orderitem
+   const [orderHistory, orderHistoryFields] = await pool.execute(
+    "SELECT o.*, oi.* FROM orders o JOIN orderitem oi ON o.Order_ID = oi.OrderID WHERE o.UserID = ?",
+    [id[0]]
+  );
+
+
+
+
+    // chưa mua hàng
+    if (rowss == undefined) {
+      const[result , fieldsss] = await pool.execute(
+        "SELECT * FROM `orders` p JOIN orderitem c ON p.Order_ID = c.OrderID  " , 
+      )
+      console.log("lich su mua hang 1sư ", result);
+    } else {
+      console.log("lich su mua hang 2 dsa ", orderHistory);
+    }
+    // đã mua hàng
+
     return res.render("profile.ejs", {
       data: rows[0].username,
       id: rows[0].id,
@@ -409,15 +500,20 @@ const postLogin = async (req, res) => {
 
   console.log(rows[0]);
   if (rows.length === 0) {
-    return res.status(404).json({ error: "User not found" });
-  } else if (rows[0].admin === 0) {
-    // Handle the case for admin === 0
-    res.status(200).json({ message: "Login successful for regular user" });
-  } else if (rows[0].admin === 1) {
-    // Handle the case for admin === 1
-    const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
-    res.cookie("tokenAdmin", tokenAdmin);
-    res.status(200).json({ message: "Login successful for admin" });
+    return res.status(505).json({ error: "User not found" });
+  } else {
+    console.log("rows vo kiem tra admin user");
+
+    if (rows[0].admin === 0) {
+      const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
+      res.cookie(`token`, token);
+      return res.redirect("/");
+    } else if (rows[0].admin === 1) {
+      // Handle the case for admin === 1
+      const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
+      res.cookie("tokenAdmin", tokenAdmin);
+      return res.redirect("/admin/v1");
+    }
   }
 };
 
@@ -564,4 +660,5 @@ module.exports = {
   getProfile,
   getCarts,
   getContact,
+  PostCarts,
 };

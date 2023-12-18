@@ -16,34 +16,114 @@
                 <h2>Đăng Ký</h2>
                 <lable></lable>
             </div>
-            <form method="post"  >
+            <form method="post">
 
                 <li>
                     <input type="text" class="text" placeholder="Username" name="UserName" />
                     <a href="#" class=" icon2 user2"></a>
                 </li>
-    
+
                 <li>
-                    <input type="password" placeholder="Password" name="PassWord" />
-                    <a href="#"  class=" icon2 lock2"></a>
+                    <input type="password" class="password" placeholder="Password" name="PassWord" />
+                    <a href="#" class=" icon2 lock2"></a>
                 </li>
                 <li>
-                    <input type="password"  placeholder="Confirm Password" name="ConfirmPassWord" />
-                    <a href="#"  class=" icon2 lock2"></a>
+                    <input type="password" class="cfpassword" placeholder="Confirm Password" name="ConfirmPassWord" />
+                    <a href="#" class=" icon2 lock2"></a>
                 </li>
                 <li>
-                    <input type="text" class="text"  placeholder="Email" name="Email"  />
-                        <a href="#" class=" icon2 mail"></a>
+                    <input type="text" class="email" placeholder="Email" name="Email" />
+                    <a href="#" class=" icon2 mail"></a>
                 </li>
 
                 <div class="submit two">
-                    <input type="submit"  value="Đăng Ký" />
+                    <input class="btn-submit" type="submit" value="Đăng Ký" />
                 </div>
-                <h5>Đã có tài khoản ?<a href="/login"> 
-                    Đăng nhập tại đây</a></h5>
+                <h5>Đã có tài khoản ?<a href="/login">
+                        Đăng nhập tại đây</a></h5>
             </form>
         </div>
     </div>
 </body>
+
+<script>
+
+    // check email
+    function checkEmail() {
+        let  email = document.querySelector(".email");
+        const regexEmail =
+            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        let isEmailError = !regexEmail.test(email.value);
+        if (isEmailError) {
+            // Nếu có lỗi, bạn có thể thông báo lỗi hoặc thực hiện các hành động khác ở đây
+            isEmailError = true
+            return isEmailError;
+        }
+        return isEmailError = false
+    }
+    const username = document.querySelector(".text");
+    const password = document.querySelector(".password");
+    const cfpassword = document.querySelector(".cfpassword");
+    const email = document.querySelector(".email");
+    const btn_sub_mit = document.querySelector(".btn-submit");
+    console.log(username.value, password.value);
+
+    btn_sub_mit.addEventListener("click", async (e) => {
+        e.preventDefault();
+        console.log(username.value, password.value);
+        const data = {
+            UserName: username.value,
+            Password: password.value,
+            email : email.value
+        };
+
+        if (username.value == "" || password.value == "" || cfpassword.value == 0 || email.value == 0) {
+            alert("Không để rỗng dữ liệu");
+            return;
+        }
+        if (password.value.length <= 5 && cfpassword.value.length <= 5) {
+            alert("mật khẩu trên 5 kỹ tự ")
+            return;
+        }
+        if (password.value !== cfpassword.value) {
+            alert("mật khẩu không khớp")
+            return;
+
+        }
+        if( checkEmail() ){
+            alert("email nhập đúng form vd : 123@gmail.com")
+            return ;
+        }
+
+        try {
+            const response = await fetch('/api/v1/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), // Remove the extra object here
+            });
+
+            if (response.status === 200) {
+                // Xử lý khi đăng nhập thành công
+                alert("Đăng ký thành công");
+                location.href = '/login';
+            } else if (response.status == 201) {
+                alert("Đăng nhập admin thành công");
+                location.href = '/admin/v1/';
+            } else if (response.status == 505) {
+                alert("Không tìm thấy tài khoản");
+            } else if(response.status == 400){
+                alert("email hoặc tên người dùng này đã tồn tại")
+            } 
+            else {
+                // Xử lý khi đăng nhập thất bại
+                alert("Đăng nhập thất bại");
+            }
+        } catch (error) {
+            alert("Đã xảy ra lỗi:", error);
+        }
+    });
+</script>
 
 </html>

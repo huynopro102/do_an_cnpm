@@ -30,29 +30,32 @@ CREATE TABLE users
     status TINYINT DEFAULT 1
 );
 
--- Tạo bảng order
-CREATE TABLE orders
-(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    order_date DATETIME NOT NULL,
-    total_amount FLOAT NOT NULL,
-    status ENUM('pending', 'completed') DEFAULT 'pending',
-    FOREIGN KEY (user_id) REFERENCES user(id)
+
+
+-- Bảng Order
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID INT,
+    TotalAmount FLOAT,
+    OrderDate DATETIME,
+    Status VARCHAR(50)
 );
 
--- Tạo bảng order_item
-CREATE TABLE order_item
-(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    order_id INT NOT NULL,
-    product_id INT NOT NULL,
-    quantity INT NOT NULL,
-    price_per_unit FLOAT NOT NULL,
-    total_amount FLOAT NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES order(id),
-    FOREIGN KEY (product_id) REFERENCES product(id)
+-- Bảng OrderItem
+CREATE TABLE OrderItem (
+    OrderItemID INT PRIMARY KEY AUTO_INCREMENT,
+    OrderID INT,
+    ProductID INT,
+    Quantity INT,
+    PricePerUnit FLOAT,
+    TotalPrice FLOAT,
+    FOREIGN KEY (OrderID) REFERENCES Orders(Order_ID),
+    FOREIGN KEY (ProductID) REFERENCES product(id)
 );
+
+
+
+
 insert into category(name,status) values
 ("Túi xách",1),
 ("Áo nam",1),

@@ -23,12 +23,272 @@
     <!-- link css page product -->
     <link rel="stylesheet" href="http://localhost:8080/congkhai/img_product/sub_header_footer.css">
 
+    <!-- css gio hang -->
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/giohang.css">
+
 
     <style>
+        .mainDiv {
+            display: flex;
+            min-height: 100%;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .cardStyle {
+            width: 500px;
+            border-color: white;
+            background: #fff;
+            padding: 36px 0;
+            border-radius: 4px;
+            margin: 30px 0;
+            box-shadow: 0px 0 2px 0 rgba(0, 0, 0, 0.25);
+        }
+
+        #signupLogo {
+            max-height: 100px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .formTitle {
+            font-weight: 600;
+            margin-top: 20px;
+            color: #2F2D3B;
+            text-align: center;
+        }
+
+        .inputLabel {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 6px;
+            margin-top: 24px;
+        }
+
+        .inputDiv {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+        }
+
+        input {
+            height: 40px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: none;
+            border: solid 1px #ccc;
+            padding: 0 11px;
+        }
+
+        input:disabled {
+            cursor: not-allowed;
+            border: solid 1px #eee;
+        }
+
+        .buttonWrapper {
+            margin-top: 40px;
+        }
+
+        .submitButton {
+            width: 70%;
+            height: 40px;
+            margin: auto;
+            display: block;
+            color: #fff;
+            background-color: #065492;
+            border-color: #065492;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.035);
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .submitButton:disabled,
+        button[disabled] {
+            border: 1px solid #cccccc;
+            background-color: #cccccc;
+            color: #666666;
+        }
 
 
 
+
+        /* css lich su mua hang */
+        .shopping-cart {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Style the column labels inside the shopping cart */
+        .column-labels {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Set a fixed width for each column label */
+        .product-image,
+        .product-price,
+        .product-quantity,
+        .product-removal,
+        .product-line-price {
+            flex: 1;
+        }
+
+        /* Style individual product rows inside the shopping cart */
+        .product {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .product img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 15px;
+        }
+
+        .product-details {
+            flex: 2;
+        }
+
+        .product-title {
+            font-weight: bold;
+        }
+
+        .product-price,
+        .product-quantity,
+        .product-removal,
+        .product-line-price {
+            flex: 1;
+        }
+
+        .product-quantity input {
+            width: 50px;
+            text-align: center;
+        }
+
+
+        .product-removal button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Style the totals section at the bottom of the shopping cart */
+
+        /* Style the Grand Total label */
+        .totals-item-total label {
+            display: flex;
+            flex-direction: column;
+            font-weight: bold;
+            color: #333;
+            /* Change the color as needed */
+            /* Add margin to create space between "Grand Total" and "Checkout" */
+            margin-right: 10px;
+            justify-content: flex-end;
+            vertical-align: middle;
+        }
+
+
+        .totals {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            /* Đẩy về phía bên phải */
+        }
+
+        /* Style individual totals items */
+        .totals-item {
+            width: 21%;
+            /* Adjust as needed */
+            margin-bottom: 10px;
+        }
+
+
+
+        /* Style the checkout button */
+        .checkout {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-top: 20px;
+            /* Adjust as needed */
+        }
+
+        /* Hover effect for the checkout button */
+        .checkout:hover {
+            background-color: #45a049;
+        }
+
+        /* Make more adjustments for phone */
+        @media screen and (max-width: 350px) {
+            .product-removal {
+                float: right;
+            }
+
+            .product-line-price {
+                float: right;
+                clear: left;
+                width: auto;
+                margin-top: 10px;
+            }
+
+            .product .product-line-price:before {
+                content: 'Item Total: $';
+            }
+
+            .totals {
+                justify-content: flex-end;
+
+                /* Đẩy về phía bên phải */
+                .totals-item {
+                    label {
+                        width: 60%;
+                    }
+
+                    .totals-value {
+                        width: 40%;
+                    }
+                }
+            }
+        }
+
+
+        /* form thông tin đặt hàng */
+        #frm-send-contact textarea,
+        #frm-send-contact button,
+        #frm-send-contact input {
+            margin: 10px;
+        }
+
+        .btn-submit:hover {
+            color: aliceblue;
+            background-color: #9a9898;
+        }
     </style>
+
+
 </head>
 
 <body>
@@ -108,19 +368,178 @@
 
     <!-- container -->
 
+    <div class="container_main" style="margin-top: 74px;">
+        <div class="mainDiv">
+            <div class="cardStyle">
+                <form action="" method="post" name="signupForm" id="signupForm">
 
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
-    <ul class="li">profile 123 1231 </ul>
+                    <img src="" id="signupLogo" />
+
+                    <h2 class="formTitle">
+                        Thay Đổi Mật Khẩu Của Bạn
+                    </h2>
+
+                    <div class="inputDiv">
+                        <label class="inputLabel" for="password">mật khẩu cũ</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+
+
+                    <div class="inputDiv">
+                        <label class="inputLabel" for="password">Mật khẩu mới</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+
+
+                    <div class="inputDiv">
+                        <label class="inputLabel" for="confirmPassword">xác nhận mật khẩu mới</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword">
+                    </div>
+
+                    <div class="buttonWrapper">
+                        <button type="submit" id="submitButton" onclick="validateSignupForm()"
+                            class="submitButton pure-button pure-button-primary">
+                            <span>Continue</span>
+                            <span id="loader"></span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+
+        <!-- lịch sử mua hàng nếu có -->
+        <div class="shopping-cart">
+
+            <h1 style="transform: translate(100%); margin-right: 61%; margin-bottom: 40px; margin-top: 30px;">Lịch Sử
+                Mua Hàng</h1>
+
+            <div class="column-labels">
+                <label class="product-image">Hình</label>
+
+                <label class="product-price">Giá</label>
+                <label class="product-quantity">Số Lượng</label>
+                <label class="product-removal">Xóa</label>
+                <label class="product-line-price">Tổng</label>
+            </div>
+
+
+            <div class="my_body_carts">
+
+                <div class="product">
+                    <div class="product-image">
+                        <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
+                    </div>
+                    <div class="product-price">12.99</div>
+                    <div class="product-quantity">
+                        <input type="number" value="2" min="1">
+                    </div>
+                    <div class="product-removal">
+                        <button class="remove-product">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="product-line-price">25.98</div>
+                </div>
+
+
+                <div class="product">
+                    <div class="product-image">
+                        <img src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png">
+                    </div>
+                    <div class="product-price">45.99</div>
+                    <div class="product-quantity">
+                        <input type="number" value="1" min="1">
+                    </div>
+                    <div class="product-removal">
+                        <button class="remove-product">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="product-line-price">45.99</div>
+                </div>
+            </div>
+
+            <div class="totals">
+
+
+                <div class="totals-item totals-item-total">
+                    <label>Grand Total</label>
+                    <div class="totals-value" id="cart-total">90.57</div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <!-- đơn hàng đang giao -->
+        <div class="shopping-cart">
+
+            <h1 style="transform: translate(100%); margin-right: 61%; margin-bottom: 40px; margin-top: 30px;">
+                đơn hàng đang giao</h1>
+
+            <div class="column-labels">
+                <label class="product-image">Hình</label>
+
+                <label class="product-price">Giá</label>
+                <label class="product-quantity">Số Lượng</label>
+                <label class="product-removal">Xóa</label>
+                <label class="product-line-price">Tổng</label>
+            </div>
+
+
+            <div class="my_body_carts">
+
+                <div class="product">
+                    <div class="product-image">
+                        <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
+                    </div>
+                    <div class="product-price">12.99</div>
+                    <div class="product-quantity">
+                        <input type="number" value="2" min="1">
+                    </div>
+                    <div class="product-removal">
+                        <button class="remove-product">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="product-line-price">25.98</div>
+                </div>
+
+
+                <div class="product">
+                    <div class="product-image">
+                        <img src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png">
+                    </div>
+                    <div class="product-price">45.99</div>
+                    <div class="product-quantity">
+                        <input type="number" value="1" min="1">
+                    </div>
+                    <div class="product-removal">
+                        <button class="remove-product">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="product-line-price">45.99</div>
+                </div>
+            </div>
+
+            <div class="totals">
+
+
+                <div class="totals-item totals-item-total">
+                    <label>Grand Total</label>
+                    <div class="totals-value" id="cart-total">90.57</div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
 
 
 
