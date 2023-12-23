@@ -1,7 +1,8 @@
 const pool = require("../model/connectDB");
 const jwt = require("jsonwebtoken");
 const sendEmailService = require("../services/emailServices");
-
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 // forgotpassword ID
 
 let postForgotPasswordID = async (req, res) => {
@@ -20,7 +21,7 @@ let postForgotPasswordID = async (req, res) => {
       }
       // Xử lý lỗi ở đây
     } else {
-      console.log(new_password , decoded.email)
+      console.log(new_password, decoded.email);
       const [rows, fields] = await pool.execute(
         "UPDATE datausers SET  password = ? WHERE email = ?",
         [new_password, decoded.email]
@@ -91,12 +92,17 @@ let postRegister = async (req, res) => {
 
     // kiểm tra email đã có chưa
     if (rowss.length === 0) {
-      const [rows, fields] = await pool.execute(
-        "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
-        [username, password, email, 0]
-      );
-      // const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
-      // res.cookie(`tokenUser`, token);
+      await bcrypt.genSalt(saltRounds, async function (err, salt) {
+        await bcrypt.hash(password, salt, async function (err, hash) {
+          encrypted_password = hash;
+          console.log("encrypt password , ", hash);
+          const [rows, fields] = await pool.execute(
+            "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
+            [username, encrypted_password, email, 0]
+          );
+        });
+      });
+
       return res.status(200).json("thanh cong");
     } else {
       return res.status(400).json(" email hoặc tên người dùng này đã tồn tại");
@@ -107,7 +113,7 @@ let postRegister = async (req, res) => {
   }
 };
 
-let postLogin = async (req, res) => {
+const postLogin = async (req, res) => {
   console.log("api/v1/login, post");
   console.log(req.body.UserName);
   console.log(req.body.Password);
@@ -121,10 +127,9 @@ let postLogin = async (req, res) => {
 
   try {
     const [rows, fields] = await pool.execute(
-      "SELECT * FROM `datausers` WHERE username = ? AND password = ?",
-      [username, password]
+      "SELECT * FROM `datausers` WHERE email = ?",
+      [username]
     );
-    console.log("rowws ", rows);
 
     if (rows.length === 0) {
       return res.status(505).json("không tìm thấy người dùng");
@@ -133,18 +138,33 @@ let postLogin = async (req, res) => {
     console.log("api/v1/login, post 1 ", rows[0]);
 
     if (rows[0].admin === 0) {
-      const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
-      res.cookie(`tokenUser`, token);
-      return res.status(200).json("thanh cong");
+      const result = await bcrypt.compare(password, rows[0].password);
+
+      console.log("result ", result)
+
+      if (result) {
+        const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
+        res.cookie(`tokenUser`, token);
+        return res.status(200).json("thanh cong");
+      } else {
+        return res.status(500).json("Lỗi máy chủ nội bộ");
+      }
     }
+
     if (rows[0].admin === 1) {
-      const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
-      res.cookie("tokenAdmin", tokenAdmin);
-      return res.status(201).json("admin");
+      const result = await bcrypt.compare(password, rows[0].password);
+
+      if (result) {
+        const tokenAdmin = jwt.sign(rows[0].id, "matkhau1234");
+        res.cookie("tokenAdmin", tokenAdmin);
+        return res.status(201).json("admin");
+      } else {
+        return res.status(500).json("Lỗi máy chủ nội bộ");
+      }
     }
   } catch (error) {
-    console.error("Error during login:", error);
-    return res.status(500).json("Internal server error");
+    console.error("Lỗi trong quá trình đăng nhập:", error);
+    return res.status(500).json("Lỗi máy chủ nội bộ");
   }
 };
 
