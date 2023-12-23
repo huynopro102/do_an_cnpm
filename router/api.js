@@ -39,6 +39,11 @@ const  router = express.Router()
         // login , register , forgotPassword
         router.post("/login", apiController.postLogin)
         router.post("/register",apiController.postRegister)
+   
+
+        // forgot password
+        router.post("/forgotpassword",apiController.postForgotPassword)
+        router.post("/forgotpassword/:id",apiController.postForgotPasswordID)
 
       
 

@@ -6,35 +6,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForgotPassword</title>
     <link rel="stylesheet" href="http://localhost:8080/congkhai/loginRegisterForgotPassword.css">
-    
+
 </head>
 
 <body>
     <div class="login-03">
         <div class="three-login  hvr-float-shadow">
             <div class="three-login-head">
-                <img src="images/top-key.png" alt="" />
+                <img src="http://localhost:8080/congkhai/images/top-key.png" alt="" />
                 <h3>quên mật khẩu</h3>
                 <lable></lable>
             </div>
+
             <form>
                 <h5>Quên mật khẩu hoặc tên người dùng?</h5>
                 <p>Để đặt lại mật khẩu hoặc tên người dùng tài khoản của bạn, hãy nhập
                     địa chỉ email và chúng tôi sẽ gửi hướng dẫn cho bạn.</p>
                 <li>
-                    <input type="text" class="text" value="E-mail" onfocus="this.value = '';"
-                        onblur="if (this.value == '') {this.value = 'E-mail';}" />
+                    <input id="emailInput" type="text" class="text" placeholder="email" />
                     <a href="#" class=" icon2 mail"></a>
                 </li>
-                
+
+
+
                 <div class="submit three">
-                    <input type="submit" value="QUÊN MẬT KHẨU" />
+                    <input onclick="submitForm(event)" type="submit" value="QUÊN MẬT KHẨU" />
                 </div>
-                <h5>Trở về trang chủ  ?<a href="/"> Trang chủ </a></h5>
+
+                <h5>Trở về trang chủ ?<a href="/"> Trang chủ </a></h5>
+
             </form>
-            
+
         </div>
     </div>
 </body>
+<script>
+
+
+    
+
+
+
+    // check email
+    function checkEmail() {
+        const email = document.querySelector('#emailInput')
+
+        const regexEmail =
+            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        let isEmailError = !regexEmail.test(email.value);
+        if (isEmailError) {
+            // Nếu có lỗi, bạn có thể thông báo lỗi hoặc thực hiện các hành động khác ở đây
+            isEmailError = true
+            return isEmailError;
+        }
+        return isEmailError = false
+        alert("fjdklafjdkla")
+    }
+    async function submitForm(event) {
+
+        // Chặn hành vi mặc định của sự kiện click trên nút submit
+        event.preventDefault();
+
+
+
+        const email = document.querySelector('#emailInput').value;
+
+        if (email == "") {
+            alert("không để rỗng email")
+            return
+        }
+        if (await checkEmail() == true) {
+            alert(" không phải email")
+            return
+        }
+
+        console.log(email)
+
+        fetch('/api/v1/forgotpassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: email }),
+        })
+        
+            .then(data => {
+                console.log("du lieu ", data.status); // Log the entire response data for debugging
+
+                if (data.status === 200) {
+                    console.log(data.token_password);
+                    alert(`Hãy kiểm tra email ${email}`);
+                    location.href = `/forgotpassword/${email}`;
+                }
+                if (data.status === 404) {
+                    alert("Không tìm thấy email");
+                }
+            })
+
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
 
 </html>

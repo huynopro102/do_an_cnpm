@@ -1,6 +1,6 @@
 require("dotenv").config()
 const nodemailer = require("nodemailer");
-const sendEmailService = async (email) =>{
+const sendEmailService = async (email,token) =>{
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -12,11 +12,11 @@ const sendEmailService = async (email) =>{
       }
     });
     const info = await transporter.sendMail({
-        from: '"Mã Quên Mật Khẩu" <sodienthoai1230123@gmail.com>', // sender address
-        to: email , // list of receivers
-        subject: "send email api", // Subject line
-        text: `Mã Đổi Mật Khẩu ${"fjdkae32"}`, // plain text body
-        html: "<b>Mã Đổi Mật Khẩu</b>", // html body
+        from: '"Mã Quên Mật Khẩu" <DarkT@gmail.com>', // sender address
+        to: "huynopro102@gmail.com" , // list of receivers
+        subject: "DarkT@gmail.com", // Subject line
+        text: `Mã Đổi Mật Khẩu ${token}`, // plain text body
+        html: `Mã Đổi Mật Khẩu Là :  ${token}`, // html body
       });
       return info
 }

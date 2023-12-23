@@ -23,7 +23,6 @@
 
     <style>
         /* Thêm quy tắc CSS cho phần có class là 'showcart' */
-    
     </style>
 
 </head>
@@ -189,7 +188,7 @@
                     <% } else { %>
                         <a href="/" class="list-link screen-sm-hidden" id="btn_dang_xuat">
                             <form action="/" method="post">
-                                <input type="submit" value="Đăng Xuất">
+                                <input type="submit" value="Đăng Xuất" onclick=" set_value_cart()">
                             </form>
                         </a>
                         <% } %>
@@ -562,6 +561,9 @@
             </div>
         </div>
     </footer>
+
+
+
 </body>
 
 <!-- Swiper.js -->
@@ -577,7 +579,29 @@
 
 <script>
 
+
+    // click để chuyển sang trang profile
     $(document).ready(function () {
+        const click_profile = document.querySelector(".click_profile")
+        click_profile.addEventListener("click", (e) => {
+            console.log("id hien tai ", document.querySelector(".id_user").value)
+            document.location.href = `/profile/${document.querySelector(".id_user").value}`
+        })
+    })
+
+
+
+
+
+    // khi click thì sẽ reset lại giỏ hàng 
+
+    function set_value_cart() {
+        localStorage.clear()
+    }
+
+    $(document).ready(function () {
+
+        console.log("local storage la ", localStorage123)
         const click_profile = document.querySelector(".click_profile")
         click_profile.addEventListener("click", (e) => {
             console.log("id hien tai ", document.querySelector(".id_user").value)

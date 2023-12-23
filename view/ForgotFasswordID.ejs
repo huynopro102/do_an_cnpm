@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForgotPassword</title>
+    <link rel="stylesheet" href="http://localhost:8080/congkhai/loginRegisterForgotPassword.css">
+
+</head>
+
+<body>
+    <div class="login-03">
+        <div class="three-login  hvr-float-shadow">
+            <div class="three-login-head">
+                <img src="http://localhost:8080/congkhai/images/top-key.png" alt="" />
+                <h3>quên mật khẩu</h3>
+                <lable></lable>
+            </div>
+            
+            <form>
+                <h5>Quên mật khẩu hoặc tên người dùng?</h5>
+                <p>Để đặt lại mật khẩu hoặc tên người dùng tài khoản của bạn, hãy nhập
+                    địa chỉ email và chúng tôi sẽ gửi hướng dẫn cho bạn.</p>
+                <li>
+                    <input id="emailInput1" type="text" class="text" placeholder="mã code" />
+                    <a href="#" class=" icon2 mail"></a>
+                </li>
+                <li>
+                    <input id="emailInput2" type="text" class="text" placeholder="mật khẩu mới" />
+                    <a href="#" class=" icon2 mail"></a>
+                </li>
+                <li>
+                    <input id="emailInput3" type="text" class="text" placeholder="xác nhận mật khẩu" />
+                    <a href="#" class=" icon2 mail"></a>
+                </li>
+
+                
+
+                <div class="submit three">
+                    <input onclick="submitForm(event)" type="submit" value="XÁC NHẬN" />
+                </div>
+                
+                <h5>Trở về trang chủ ?<a href="/"> Trang chủ </a></h5>
+                
+            </form>
+
+        </div>
+    </div>
+</body>
+<script>
+
+
+    async function submitForm (event) {
+
+        // Chặn hành vi mặc định của sự kiện click trên nút submit
+        event.preventDefault();
+
+
+        const code = document.querySelector('#emailInput1').value;
+        const password = document.querySelector('#emailInput2').value;
+        const cfpassword = document.querySelector('#emailInput3').value;
+
+        if (code == "" || password == "" || cfpassword == "" ) {
+            alert("không để rỗng")
+            return;
+        }
+        if(password != cfpassword){
+            alert("mật khẩu không khớp")
+            return;
+        }
+        
+    
+        const result = location.href.substring( location.href.lastIndexOf("/") +1 ) 
+
+        fetch(`/api/v1/forgotpassword/${result}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code: code  , password : cfpassword} ),
+        })
+            .then(response => {
+                if(response.status == 200){
+                    alert("đổi mật khẩu thành công")
+                    location.href="/login"
+                }
+                if(response.status == 500){
+                    alert("token het han")
+                }
+                if(response.status == 501){
+                    alert("token khong hop le")
+                }
+            })
+        
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+</html>

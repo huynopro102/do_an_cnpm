@@ -2,6 +2,68 @@ const { render } = require("ejs");
 const pool = require("../model/connectdbUser");
 const jwt = require("jsonwebtoken");
 
+// getForgotFasswordID
+
+let getForgotFasswordID = async (req, res) => {
+  res.render("ForgotFasswordID.ejs");
+};
+
+// order
+let getHomeControllerOrder = async (req, res) => {
+  try {
+    let _page = req.query.page ? req.query.page : 1;
+    let limit = 5;
+    let start = (_page - 1) * limit;
+    // let totalRow = 20;
+    let name = req.query.name;
+
+    // total tổng các item trong database
+    const [total, fields] = await pool.execute(
+      " select count(*) as total from orders where status = ? ",
+      ["chưa xác nhận"]
+    );
+    let totalRow = total[0].total;
+
+    // tong so trang
+    let totalPage = Math.ceil(totalRow / limit);
+
+    console.log("day la order ");
+
+    res.render("ordersAdmin.ejs", {
+      dataProduct: rows ? rows : [],
+      totalPage: totalPage,
+      page: parseInt(_page),
+    });
+
+    // if (name) {
+    //   const [rows, fields] = await pool.execute(
+    //     "SELECT * FROM `product` p JOIN category c ON p.category_id = c.id WHERE p.`name` LIKE ? LIMIT ? , ?",
+    //     [`%${name}%`, start, limit]
+    //   );
+
+    //   res.render("ProductsAdmin.ejs", {
+    //     dataProduct: rows ? rows : [],
+    //     totalPage: totalPage,
+    //     page: parseInt(_page),
+    //   });
+    // }
+    // if(!name) {
+    //   const [rows, fields] = await pool.execute(
+    //     "SELECT p.*, c.name as cname FROM `product` p JOIN category c ON p.category_id = c.id LIMIT ? , ?",
+    //     [start, limit]
+    //   );
+    //   res.render("ProductsAdmin.ejs", {
+    //     dataProduct: rows ? rows : [],
+    //     totalPage: totalPage,
+    //     page: parseInt(_page),
+    //   });
+    // }
+  } catch (error) {
+    console.error("Error in gethomeControllerProduct:", error);
+    res.render("err500.ejs");
+  }
+};
+
 // PostCarts
 let PostCarts = async (req, res) => {
   console.log("web post carts ", req.body);
@@ -101,11 +163,12 @@ let getCarts = async (req, res) => {
       if (rows.length !== 0) {
         res.render("carts.ejs", {
           data: rows[0].username,
-          id: id,
+          id: id == undefined ? "0" : id,
         });
       } else {
         res.render("carts.ejs", {
           data: "",
+          id: id == undefined ? "0" : id,
         });
       }
     }
@@ -131,39 +194,73 @@ let getProfile = async (req, res) => {
     console.log("data lay ddc ", rows[0]);
 
     // lấy lịch sử đặt hàng , hoặc chờ xác nhận
-    
+
     const [rowss, fieldss] = await pool.execute(
       " select * from orders where UserID = ?",
       [id[0]]
     );
 
-
-
-
-   // Lấy lịch sử đặt hàng hoặc chờ xác nhận từ bảng orders và orderitem
-   const [orderHistory, orderHistoryFields] = await pool.execute(
-    "SELECT o.*, oi.* FROM orders o JOIN orderitem oi ON o.Order_ID = oi.OrderID WHERE o.UserID = ?",
-    [id[0]]
-  );
-
-
-
-
     // chưa mua hàng
     if (rowss == undefined) {
-      const[result , fieldsss] = await pool.execute(
-        "SELECT * FROM `orders` p JOIN orderitem c ON p.Order_ID = c.OrderID  " , 
-      )
-      console.log("lich su mua hang 1sư ", result);
+      return res.render("profile.ejs", {
+        data: rows[0].username,
+        id: rows[0].id,
+        delivery_history: [],
+        awaiting_delivery: [],
+      });
     } else {
-      console.log("lich su mua hang 2 dsa ", orderHistory);
-    }
-    // đã mua hàng
+      // lưu giá trị của phần tử Order_ID khi xác nhận
+      const [orderHistory_confirm1, orderHistoryFields1] = await pool.execute(
+        "select distinct o.Order_ID " +
+          "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
+        [id[0], "xác nhận"]
+      );
 
-    return res.render("profile.ejs", {
-      data: rows[0].username,
-      id: rows[0].id,
-    });
+      // lưu giá trị của phần tử Order_ID khi xác nhận
+      const [orderHistory_confirm2, orderHistoryFields2] = await pool.execute(
+        "select distinct o.Order_ID  " +
+          "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
+        [id[0], "chưa xác nhận"]
+      );
+
+      console.log("cac bang order xac nhan ", orderHistory_confirm1);
+      console.log("cac bang order chua xac nhan ", orderHistory_confirm2);
+
+      const [orderHistory_confirm, orderHistoryFields] = await pool.execute(
+        "select o.Order_ID , oi.Quantity , oi.PricePerUnit , oi.TotalPrice , o.TotalAmount , o.OrderDate " +
+          "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
+        [id[0], "xác nhận"]
+      );
+
+      const [orderHistory_confirm_no, orderHistoryFields_no] =
+        await pool.execute(
+          "select o.Order_ID , oi.Quantity , oi.PricePerUnit , oi.TotalPrice , o.TotalAmount , o.OrderDate " +
+            "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
+          [id[0], "chưa xác nhận"]
+        );
+      console.log(
+        "so luong don hang : chua xac nhan ",
+        orderHistory_confirm_no[0].orderIDCount
+      );
+      console.log("chua giao hang ", orderHistory_confirm_no);
+      console.log("da giao hang ", orderHistory_confirm);
+
+      // duyệt để lưu mỗi order vào array
+      const arr_X_N = orderHistory_confirm1;
+      const arr_C_X_N = orderHistory_confirm2;
+
+      const so_luong_don_hang_da_mua = new Array();
+
+      orderHistory_confirm_no.forEach((item, index) => {});
+
+      // đã mua hàng
+      return res.render("profile.ejs", {
+        data: rows[0].username,
+        id: rows[0].id,
+        delivery_history: orderHistory_confirm,
+        awaiting_delivery: orderHistory_confirm_no,
+      });
+    }
   }
   return res.render("err500.ejs");
 };
@@ -313,8 +410,15 @@ let postHome = async (req, res) => {
   // Define list_sp in both scenarios
   const list_sp = sp === undefined ? [] : sp;
   console.log("post home da login");
+
   res.clearCookie("tokenUser");
-  res.render("Home.ejs", { data: "", id: "12313", list_sp: list_sp });
+
+  res.render("Home.ejs", {
+    data: "",
+    id: "12313",
+    list_sp: list_sp,
+    localStorage123: [],
+  });
 };
 
 let getHomeAdmin = async (req, res) => {
@@ -387,7 +491,8 @@ const postRegister = async (req, res) => {
 };
 
 const getForgotFassword = (req, res) => {
-  res.render("ForgotFassword.ejs");
+  console.log("get forgot password");
+  return res.render("ForgotFassword.ejs");
 };
 
 // router get product detail
@@ -661,4 +766,7 @@ module.exports = {
   getCarts,
   getContact,
   PostCarts,
+
+  getHomeControllerOrder,
+  getForgotFasswordID,
 };

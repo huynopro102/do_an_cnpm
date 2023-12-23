@@ -25,7 +25,8 @@ router.get("/admin/v1/productscreate", MiddleWare.checkadmin , webController.get
 router.get("/admin/v1/productsedit/:id" , MiddleWare.checkadmin ,webController.getProductsEditAdmin)
 router.get("/admin/v1/productsdelete/:id" , MiddleWare.checkadmin , webController.getProductsDeleteAdmin    )
 
-
+// order 
+router.get("/admin/v1/order", MiddleWare.checkadmin , webController.getHomeControllerOrder)
 
 
 
@@ -44,6 +45,7 @@ router.get("/register",webController.getRegister)
 
 // forgotFassword
 router.get("/forgotpassword",webController.getForgotFassword)
+router.get("/forgotpassword/:id",webController.getForgotFasswordID)
 
 // san pham
 router.get("/products" , webController.getProducts)

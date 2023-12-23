@@ -1,5 +1,78 @@
 const pool = require("../model/connectDB");
 const jwt = require("jsonwebtoken");
+const sendEmailService = require("../services/emailServices");
+
+// forgotpassword ID
+
+let postForgotPasswordID = async (req, res) => {
+  console.log(req.body);
+  const key_verify_token = req.body.code;
+  const new_password = req.body.password;
+  const token = req.cookies.token_password;
+  jwt.verify(token, key_verify_token, async function (err, decoded) {
+    if (err) {
+      if (err.name === "TokenExpiredError") {
+        return res.status(500).json("Token đã hết hạn");
+      } else if (err.name === "JsonWebTokenError") {
+        return res.status(501).json("Token không hợp lệ");
+      } else {
+        console.error("Lỗi khác:", err.message);
+      }
+      // Xử lý lỗi ở đây
+    } else {
+      console.log(new_password , decoded.email)
+      const [rows, fields] = await pool.execute(
+        "UPDATE datausers SET  password = ? WHERE email = ?",
+        [new_password, decoded.email]
+      );
+      return res.status(200).json("updata thanh cong");
+    }
+  });
+};
+
+// forgot password
+let postForgotPassword = async (req, res) => {
+  console.log("post forgotpassword ", req.body);
+  const email = req.body.email;
+  const [email1, fields] = await pool.execute(
+    " select * from datausers where email = ?",
+    [email]
+  );
+  console.log(email1);
+  if (email1.length == 0) {
+    console.log("1");
+    return res.status(404).json("khong tim thay");
+  } else {
+    try {
+      function generateRandomString(length) {
+        const characters =
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let randomString = "";
+
+        for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          randomString += characters.charAt(randomIndex);
+        }
+
+        return randomString;
+      }
+
+      const password = generateRandomString(10);
+      const password_token = await jwt.sign({ email }, password, {
+        expiresIn: 120,
+      });
+
+      console.log("2");
+      res.cookie("token_password", password_token);
+      // send email
+      sendEmailService(email, password);
+      return res.status(200).json({ token_password: password_token });
+    } catch (error) {
+      console.error("Error:", error);
+      return res.status(500).json("Internal Server Error");
+    }
+  }
+};
 
 // post register
 let postRegister = async (req, res) => {
@@ -10,7 +83,7 @@ let postRegister = async (req, res) => {
   console.log("/api/v1/register ", username, password, email);
   const [rowss, fieldss] = await pool.execute(
     "SELECT * FROM `datausers` WHERE email = ? or username = ?",
-    [email , username]
+    [email, username]
   );
 
   try {
@@ -18,16 +91,13 @@ let postRegister = async (req, res) => {
 
     // kiểm tra email đã có chưa
     if (rowss.length === 0) {
-     
-
       const [rows, fields] = await pool.execute(
         "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
         [username, password, email, 0]
       );
-        // const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
-        // res.cookie(`tokenUser`, token);
-        return res.status(200).json("thanh cong");
-      
+      // const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
+      // res.cookie(`tokenUser`, token);
+      return res.status(200).json("thanh cong");
     } else {
       return res.status(400).json(" email hoặc tên người dùng này đã tồn tại");
     }
@@ -368,4 +438,6 @@ module.exports = {
   UpdateProduct,
   postLogin,
   postRegister,
+  postForgotPassword,
+  postForgotPasswordID,
 };
