@@ -21,11 +21,19 @@ let postForgotPasswordID = async (req, res) => {
       }
       // Xử lý lỗi ở đây
     } else {
+      let encrypted_password = "";
       console.log(new_password, decoded.email);
-      const [rows, fields] = await pool.execute(
-        "UPDATE datausers SET  password = ? WHERE email = ?",
-        [new_password, decoded.email]
-      );
+      await bcrypt.genSalt(saltRounds, async function (err, salt) {
+        await bcrypt.hash(new_password, salt, async function (err, hash) {
+          encrypted_password = hash;
+          console.log("encrypt password , ", hash);
+          const [rows, fields] = await pool.execute(
+            "UPDATE datausers SET  password = ? WHERE email = ?",
+            [encrypted_password, decoded.email]
+          );
+        });
+      });
+
       return res.status(200).json("updata thanh cong");
     }
   });
@@ -140,7 +148,7 @@ const postLogin = async (req, res) => {
     if (rows[0].admin === 0) {
       const result = await bcrypt.compare(password, rows[0].password);
 
-      console.log("result ", result)
+      console.log("result ", result);
 
       if (result) {
         const token = jwt.sign(rows[0].id + "/" + rows[0].admin, "matkhau123");
