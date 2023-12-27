@@ -44,72 +44,111 @@
 
 
                                 <% console.log("dataProduct ",dataProduct.length ) %>
-                <% dataProduct.map(item=> { %>
+                <% dataProduct.map((item,index)=> { %>
 
 
-                  <div class=" column-labels">
+                    <div class=" column-labels">
+                                    <label class="product-image">id</label>
                                     <label class="product-image">Hình</label>
+                                    <label class="product-image">Tên</label>
                                     <label class="product-price">Giá</label>
                                     <label class="product-quantity">Tên Sản Phẩm</label>
                                     <label class="product-quantity">Số Lượng</label>
                                     <label class="product-removal">Trạng Thái</label>
                                     <label class="product-line-price">Tổng</label>
                     </div>
-                    <% let total = 0 %>
-                    <% item.forEach((item2,index2)=>{ %>
-                        <div class="my_body_carts">
-    
-                            <div class="product">
-                                
-                                <!-- hình  -->
-                                <div class="product-image">
-                                    <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+
+                    <% let total=0 %>
+                        <% item.forEach((item2,index2)=>{ %>
+                            <div class="my_body_carts">
+
+                                <div class="product">
+
+                                    <!-- id -->
+                                    <div class="product-price">
+                                        <%= index +1%>
+                                    </div>
+
+
+                                    <!-- hình  -->
+                                    <div class="product-image">
+                                        <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                                    </div>
+
+                                    <!-- tên của 1 sản phẩm -->
+                                    <div class="product-price">
+                                        <%= item2.name %>
+                                    </div>
+
+
+                                    <!-- giá của 1 sản phẩm -->
+                                    <div class="product-price">
+                                        <%= item2.PricePerUnit.toFixed(2) %>
+                                    </div>
+
+
+                                    <!-- tên của 1 sản phẩm -->
+                                    <div class="product-price">
+                                        <%= item2.name %>
+                                    </div>
+
+                                    <!-- số lượng sản phẩm -->
+                                    <div class="product-quantity">
+                                        <input type="number" value="<%= item2.Quantity %>" min="1">
+                                    </div>
+
+                                    <!-- trạng thái chưa xác nhận -->
+                                    <div class="product-removal">
+                                        <button class="remove-product">
+                                            chưa xác nhận
+                                        </button>
+                                    </div>
+
+                                    <!-- tổng đơn hàng -->
+                                    <div class="product-line-price">
+                                        <%= item2.TotalPrice.toFixed(2) %>
+                                    </div>
+                                    <% total +=item2.TotalPrice %>
+
                                 </div>
 
-                                <!-- giá của 1 sản phẩm -->
-                                <div class="product-price"><%= item2.PricePerUnit.toFixed(2) %></div>
-                                
 
-                                <!-- tên của 1 sản phẩm -->
-                                <div class="product-price"><%= item2.name %></div>
 
-                                <!-- số lượng sản phẩm -->
-                                <div class="product-quantity">
-                                    <input type="number" value="<%= item2.Quantity %>" min="1">
-                                </div>
-
-                                <!-- trạng thái chưa xác nhận -->
-                                <div class="product-removal">
-                                    <button class="remove-product">
-                                        chưa xác nhận
-                                    </button>
-                                </div>
-
-                                <!-- tổng đơn hàng -->
-                                <div class="product-line-price"> <%= item2.TotalPrice.toFixed(2) %> </div>
-                                <% total += item2.TotalPrice %>
 
                             </div>
-    
-    
-                          
-    
-                        </div>
-                    <% }) %>
+                            <% }) %>
 
-                    <div class="totals">
-                        <div class="totals-item totals-item-total">
-                            <label>Tổng Thành Tiền</label>
-                            <div class="totals-value" id="cart-total"> <%= total.toFixed(2) %> </div>
-                            <button class="checkout">Xác Nhận Đơn Hàng</button>
-                        </div>
-                    </div>
+                                <div class="totals">
+                                    <div class="totals-item totals-item-total">
+                                        <label>Tổng Thành Tiền : <%= total.toFixed(2) %> $ </label>
+                                        <label>
+                                            <%= item[0].CustomerName %>
+                                        </label>
+                                        <label>
+                                            <%= item[0].CustomerEmail %>
+                                        </label>
+                                        <label>
+                                            <%= item[0].CustomerAddress %>
+                                        </label>
+                                        <label>
+                                            <%= item[0].CustomerPhone %>
+                                        </label>
+                                        <label>
+                                            <%= item[0].OrderDate %>
+                                        </label>
+
+                                        <button class="checkout"
+                                            onclick="confirmOrder('<%= item[0].Order_ID  %>','<%= item[0].OrderDate  %>',' , <%= index  %>')">Xác
+                                            Nhận Đơn Hàng</button>
+
+                                    </div>
+                                </div>
 
 
-                    <% }); %>
+                                <% }); %>
 
-                        </tbody>
-                        </table>
+                                    </tbody>
+                                    </table>
                 </div>
 
 
@@ -313,39 +352,44 @@
 
 
             <script>
-                // btn xoa
-                const btn_xoa_list = document.querySelectorAll(".btn-xoa");
+                function confirmOrder(data, index) {
+                    const result = confirm("Bạn có muốn xác nhận đơn hàng có ID bằng " + data +" / " +index);
+                    if (result) {
+                        // Nếu người dùng đồng ý, thực hiện fetch
+                        fetch('http://localhost:8080/admin/v1/order-no-confirm', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ data: data})
+                        })
+                            .then(response => {
+                                // Kiểm tra trạng thái của response
+                                if (response.status === 200) {
+                                    // Xác nhận thành công
+                                    return response.json();
+                                } else if (response.status === 404) {
+                                    // Đơn hàng không tồn tại
+                                    throw new Error('Đơn hàng không tồn tại');
+                                } else if (response.status === 500) {
+                                    // Lỗi server
+                                    throw new Error('Lỗi server');
+                                }
+                            })
+                            .then(data => {
+                                // Xử lý dữ liệu sau khi xác nhận đơn hàng thành công
+                                console.log('Success:', data);
+                                alert('Đã xác nhận đơn hàng thành công');
+                                location.reload()
+                            })
+                            .catch((error) => {
+                                // Xử lý lỗi
+                                console.error('Error:', error.message);
+                                alert('Có lỗi xảy ra: ' + error.message);
+                            });
+                    } else {
+                        console.log("Không xác nhận đơn hàng");
+                    }
+                }
 
-                btn_xoa_list.forEach(item => {
-                    item.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        const result = confirm(`Bạn có chắc chắn muốn xóa không?`);
-                        if (result) {
-                            const trElement = item.closest("tr");
-                            const thIdElement = trElement.querySelector("th");
-                            const userId = thIdElement.textContent || thIdElement.innerText;
-
-                            if (userId) {
-                                // Thực hiện yêu cầu DELETE sử dụng fetch
-                                await(`/api/v1/delete-product/${parseInt(userId.trim())}`, {
-                                    method: 'DELETE',
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        alert("xóa thành công")
-                                        console.log(data);
-                                        location.reload();
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        alert("Xóa thất bại");
-                                    });
-                            } else {
-                                alert("Không thể xác định userId");
-                            }
-                        } else {
-
-                        }
-                    });
-                });
             </script>

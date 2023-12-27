@@ -8,6 +8,58 @@ let getForgotFasswordID = async (req, res) => {
   res.render("ForgotFasswordID.ejs");
 };
 
+// post HomeControllerOrderNoCofirm
+let postHomeControllerOrderNoCofirm = async (req, res) => {
+  console.log("id, orderdate ", req.body);
+
+  try {
+    // Lấy thông tin đơn hàng
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM orders WHERE Order_ID = ?",
+      [req.body.data]
+    );
+
+    console.log("rows ",rows)  
+
+    if (rows.length > 0) {
+      
+      const [deleteResult, deleteFields] = await pool.execute(
+        "UPDATE orders SET status = 'xác nhận' WHERE Order_ID = ?",
+        [req.body.data]
+    );
+    
+
+      if (deleteResult.affectedRows > 0) {
+        res
+          .status(200)
+          .json({
+            success: true,
+            message: "Đã xác nhận đơn hàng thành công",
+          });
+      } else {
+        res
+          .status(500)
+          .json({
+            success: false,
+            message: "Xác nhận đơn hàng thành công, nhưng xóa không thành công",
+          });
+      }
+    } else {
+      res
+        .status(404)
+        .json({ success: false, message: "Đơn hàng không tồn tại" });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Lỗi trong quá trình xác nhận và xóa đơn hàng",
+      });
+  }
+};
+
 // getHomeControllerOrder No Cofirm
 let getHomeControllerOrderNoCofirm = async (req, res) => {
   // mảng các đơn hàng của id này và đã xác nhận
@@ -35,9 +87,9 @@ let getHomeControllerOrderNoCofirm = async (req, res) => {
   for (const item of order_array) {
     // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
     const sqlQuery =
-      "SELECT `or`.*, ori.* , p.name ,p.image FROM `orders` `or` JOIN " +
+      "SELECT `or`.*, ori.* , p.name ,p.image , info.* FROM `orders` `or` JOIN " +
       " `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` " +
-      " join product p on ori.ProductID = p.id " +
+      " join product p on ori.ProductID = p.id join orderinginformation info on info.OrderID = or.Order_ID " +
       " where or.Order_ID = ? ";
     const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
     list_no_confirm.push(items);
@@ -98,11 +150,11 @@ let getHomeControllerOrder = async (req, res) => {
 // PostCarts
 let PostCarts = async (req, res) => {
   console.log("web post carts ", req.body);
-  
 
   const [email, email1] = await pool.execute(
-    'select * from datausers where id = ?', [req.body.UserID]
-);
+    "select * from datausers where id = ?",
+    [req.body.UserID]
+  );
 
   const Order = {
     userID: req.body.UserID,
@@ -110,12 +162,12 @@ let PostCarts = async (req, res) => {
     OrderDate: req.body.OrderDate,
     status: req.body.status,
   };
-  const ordering_information ={
-    CustomerName : req.body.username ,
-    CustomerEmail : email[0].email ,
-    CustomerAddress : req.body.address ,
-    CustomerPhone : req.body.numberphone
-  }
+  const ordering_information = {
+    CustomerName: req.body.username,
+    CustomerEmail: email[0].email,
+    CustomerAddress: req.body.address,
+    CustomerPhone: req.body.numberphone,
+  };
 
   const connection = await pool.getConnection();
   await connection.beginTransaction();
@@ -132,28 +184,17 @@ let PostCarts = async (req, res) => {
     const orderID = orderResult.insertId;
     const orderItems = Object.values(req.body.giohang);
 
-
-
-
-
-
-
-     // Thêm dữ liệu vào bảng orderinginformation
-     await connection.execute(
+    // Thêm dữ liệu vào bảng orderinginformation
+    await connection.execute(
       "INSERT INTO orderinginformation (OrderID, CustomerName, CustomerEmail, CustomerAddress, CustomerPhone) VALUES (?, ?, ?, ?, ?)",
       [
         orderID,
-        ordering_information.CustomerName , 
-        ordering_information.CustomerEmail, 
-        ordering_information.CustomerAddress, 
-        ordering_information.CustomerPhone, 
+        ordering_information.CustomerName,
+        ordering_information.CustomerEmail,
+        ordering_information.CustomerAddress,
+        ordering_information.CustomerPhone,
       ]
     );
-
-
-
-
-
 
     // Thêm dữ liệu vào bảng orderItem
     for (const item of orderItems) {
@@ -168,10 +209,6 @@ let PostCarts = async (req, res) => {
         ]
       );
     }
-
-
-  
-      
 
     // Commit transaction
     await connection.commit();
@@ -841,4 +878,5 @@ module.exports = {
   getHomeControllerOrder,
   getForgotFasswordID,
   getHomeControllerOrderNoCofirm,
+  postHomeControllerOrderNoCofirm,
 };

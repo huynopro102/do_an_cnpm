@@ -42,7 +42,7 @@
 
 
                 <% console.log("dataProduct ",dataProduct.length ) %>
-                <% dataProduct.map(item=> { %>
+                <% dataProduct.map((item,index)=> { %>
 
 
                   <div class=" column-labels">
@@ -62,7 +62,7 @@
                 <div class="product">
 
                   <div class="product-id">
-                    <%= index2 +1 %>
+                    <%= index +1 %>
                   </div>
 
                   <div class="product-image">
@@ -92,6 +92,9 @@
                     <%= item2.TotalPrice.toFixed(2) %>
                   </div>
                   <% total +=item2.TotalPrice %>
+
+
+
 
                 </div>
                 <% }) %>

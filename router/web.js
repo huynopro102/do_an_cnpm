@@ -28,6 +28,7 @@ router.get("/admin/v1/productsdelete/:id" , MiddleWare.checkadmin , webControlle
 // order 
 router.get("/admin/v1/order", MiddleWare.checkadmin , webController.getHomeControllerOrder)
 router.get("/admin/v1/order-no-confirm", MiddleWare.checkadmin , webController.getHomeControllerOrderNoCofirm)
+router.post("/admin/v1/order-no-confirm", MiddleWare.checkadmin , webController.postHomeControllerOrderNoCofirm)
 
 
 
