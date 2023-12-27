@@ -1,0 +1,351 @@
+<%- include('HeaderAdmin.ejs') %>
+    <%- include('aside.ejs') %>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Quản lý sản phẩm chưa xác nhận
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li><a href="#">Examples</a></li>
+                    <li class="active">Blank page</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <!-- Default box -->
+                <div class="box">
+
+
+                    <div class="box-body">
+                        <table class="table">
+
+                            <form class="form-inline" method="get">
+                                <div class="form-group mb-2">
+                                    <label for="staticEmail2" class="sr-only">Email</label>
+                                    <input type="text" name="name" class="form-control-plaintext" id="staticEmail2"
+                                        placeholder="input field">
+                                    <button type="submit" class="btn btn-primary mb-5"><i
+                                            class="fa fa-search"></i></button>
+                                    <a href="/admin/v1/productscreate" class="btn btn-success mb-5"><i
+                                            class="fa fa-plus"></i> Create</a>
+                                </div>
+
+                            </form>
+
+                            <thead>
+                                <!-- header -->
+                            </thead>
+                            <tbody>
+
+
+                                <% console.log("dataProduct ",dataProduct.length ) %>
+                <% dataProduct.map(item=> { %>
+
+
+                  <div class=" column-labels">
+                                    <label class="product-image">Hình</label>
+                                    <label class="product-price">Giá</label>
+                                    <label class="product-quantity">Tên Sản Phẩm</label>
+                                    <label class="product-quantity">Số Lượng</label>
+                                    <label class="product-removal">Trạng Thái</label>
+                                    <label class="product-line-price">Tổng</label>
+                    </div>
+                    <% let total = 0 %>
+                    <% item.forEach((item2,index2)=>{ %>
+                        <div class="my_body_carts">
+    
+                            <div class="product">
+                                
+                                <!-- hình  -->
+                                <div class="product-image">
+                                    <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                                </div>
+
+                                <!-- giá của 1 sản phẩm -->
+                                <div class="product-price"><%= item2.PricePerUnit.toFixed(2) %></div>
+                                
+
+                                <!-- tên của 1 sản phẩm -->
+                                <div class="product-price"><%= item2.name %></div>
+
+                                <!-- số lượng sản phẩm -->
+                                <div class="product-quantity">
+                                    <input type="number" value="<%= item2.Quantity %>" min="1">
+                                </div>
+
+                                <!-- trạng thái chưa xác nhận -->
+                                <div class="product-removal">
+                                    <button class="remove-product">
+                                        chưa xác nhận
+                                    </button>
+                                </div>
+
+                                <!-- tổng đơn hàng -->
+                                <div class="product-line-price"> <%= item2.TotalPrice.toFixed(2) %> </div>
+                                <% total += item2.TotalPrice %>
+
+                            </div>
+    
+    
+                          
+    
+                        </div>
+                    <% }) %>
+
+                    <div class="totals">
+                        <div class="totals-item totals-item-total">
+                            <label>Tổng Thành Tiền</label>
+                            <div class="totals-value" id="cart-total"> <%= total.toFixed(2) %> </div>
+                            <button class="checkout">Xác Nhận Đơn Hàng</button>
+                        </div>
+                    </div>
+
+
+                    <% }); %>
+
+                        </tbody>
+                        </table>
+                </div>
+
+
+
+
+        </div>
+
+        </section>
+
+        </div>
+
+        <%- include("FooterAdmin.ejs") %>
+
+
+            <!-- ... (các phần khác của trang) ... -->
+
+            <style>
+                /* Bạn có thể thêm CSS của mình ở đây */
+
+                /* Apply styles to the main element */
+                main {
+                    padding: 20px;
+                }
+
+                /* Style the h1 inside the main element */
+                main h1 {
+                    font-size: 2em;
+                    margin-bottom: 20px;
+                }
+
+                /* Style the shopping cart container */
+                .shopping-cart {
+                    background-color: #fff;
+                    border: 1px solid #ddd;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    position: relative;
+                }
+
+                /* Style the column labels inside the shopping cart */
+                .column-labels {
+                    display: flex;
+                    justify-content: space-between;
+                    font-weight: bold;
+                    margin-bottom: 15px;
+                }
+
+                /* Set a fixed width for each column label */
+                .product-image,
+                .product-price,
+                .product-quantity,
+                .product-removal,
+                .product-line-price {
+                    flex: 1;
+                }
+
+                /* Style individual product rows inside the shopping cart */
+                .product {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 15px;
+                    align-items: center;
+                }
+
+                .product img {
+                    max-width: 100px;
+                    max-height: 100px;
+                    margin-right: 15px;
+                }
+
+                .product-details {
+                    flex: 2;
+                }
+
+                .product-title {
+                    font-weight: bold;
+                }
+
+                .product-price,
+                .product-quantity,
+                .product-removal,
+                .product-line-price {
+                    flex: 1;
+                }
+
+                .product-quantity input {
+                    width: 50px;
+                    text-align: center;
+                }
+
+
+                .product-removal button {
+                    background-color: #e74c3c;
+                    color: #fff;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                /* Style the totals section at the bottom of the shopping cart */
+
+                /* Style the Grand Total label */
+                .totals-item-total label {
+                    display: flex;
+                    flex-direction: column;
+                    font-weight: bold;
+                    color: #333;
+                    /* Change the color as needed */
+                    /* Add margin to create space between "Grand Total" and "Checkout" */
+                    margin-right: 10px;
+                    justify-content: flex-end;
+                    vertical-align: middle;
+                }
+
+
+                .totals {
+                    width: 100%;
+                    margin-top: 20px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: flex-end;
+                    /* Đẩy về phía bên phải */
+                }
+
+                /* Style individual totals items */
+                .totals-item {
+                    width: 21%;
+                    /* Adjust as needed */
+                    margin-bottom: 10px;
+                }
+
+
+
+                /* Style the checkout button */
+                .checkout {
+                    background-color: #4caf50;
+                    color: #fff;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 1.2em;
+                    margin-top: 20px;
+                    /* Adjust as needed */
+                }
+
+                /* Hover effect for the checkout button */
+                .checkout:hover {
+                    background-color: #45a049;
+                }
+
+                /* Make more adjustments for phone */
+                @media screen and (max-width: 350px) {
+                    .product-removal {
+                        float: right;
+                    }
+
+                    .product-line-price {
+                        float: right;
+                        clear: left;
+                        width: auto;
+                        margin-top: 10px;
+                    }
+
+                    .product .product-line-price:before {
+                        content: 'Item Total: $';
+                    }
+
+                    .totals {
+                        justify-content: flex-end;
+
+                        /* Đẩy về phía bên phải */
+                        .totals-item {
+                            label {
+                                width: 60%;
+                            }
+
+                            .totals-value {
+                                width: 40%;
+                            }
+                        }
+                    }
+                }
+
+
+                /* form thông tin đặt hàng */
+                #frm-send-contact textarea,
+                #frm-send-contact button,
+                #frm-send-contact input {
+                    margin: 10px;
+                }
+
+                .btn-submit:hover {
+                    color: aliceblue;
+                    background-color: #9a9898;
+                }
+            </style>
+
+
+
+            <script>
+                // btn xoa
+                const btn_xoa_list = document.querySelectorAll(".btn-xoa");
+
+                btn_xoa_list.forEach(item => {
+                    item.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        const result = confirm(`Bạn có chắc chắn muốn xóa không?`);
+                        if (result) {
+                            const trElement = item.closest("tr");
+                            const thIdElement = trElement.querySelector("th");
+                            const userId = thIdElement.textContent || thIdElement.innerText;
+
+                            if (userId) {
+                                // Thực hiện yêu cầu DELETE sử dụng fetch
+                                await(`/api/v1/delete-product/${parseInt(userId.trim())}`, {
+                                    method: 'DELETE',
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        alert("xóa thành công")
+                                        console.log(data);
+                                        location.reload();
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert("Xóa thất bại");
+                                    });
+                            } else {
+                                alert("Không thể xác định userId");
+                            }
+                        } else {
+
+                        }
+                    });
+                });
+            </script>

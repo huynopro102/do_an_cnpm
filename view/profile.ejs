@@ -191,14 +191,14 @@
 
         /* Style the totals section at the bottom of the shopping cart */
 
-        /* Style the Grand Total label */
+        /* Style the Tổng Hóa Đơn label */
         .totals-item-total label {
             display: flex;
             flex-direction: column;
             font-weight: bold;
             color: #333;
             /* Change the color as needed */
-            /* Add margin to create space between "Grand Total" and "Checkout" */
+            /* Add margin to create space between "Tổng Hóa Đơn" and "Checkout" */
             margin-right: 10px;
             justify-content: flex-end;
             vertical-align: middle;
@@ -376,7 +376,7 @@
     <div class="container_main" style="margin-top: 74px;">
         <div class="mainDiv">
             <div class="cardStyle">
-                <form action="" method="post" name="signupForm" id="signupForm">
+                <form name="signupForm" id="signupForm">
 
                     <img src="" id="signupLogo" />
 
@@ -386,7 +386,7 @@
 
                     <div class="inputDiv">
                         <label class="inputLabel" for="password">mật khẩu cũ</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" id="old_password" name="password" required>
                     </div>
 
 
@@ -402,8 +402,7 @@
                     </div>
 
                     <div class="buttonWrapper">
-                        <button type="submit" id="submitButton" onclick="validateSignupForm()"
-                            class="submitButton pure-button pure-button-primary">
+                        <button id="btn_continue" class="submitButton pure-button pure-button-primary">
                             <span>Continue</span>
                             <span id="loader"></span>
                         </button>
@@ -415,7 +414,7 @@
 
 
         <!-- lịch sử mua hàng nếu có -->
-        <% delivery_history.map((item,index)=> { %>
+        <% item_list_confirm.map((item,index)=> { %>
 
             <div class="shopping-cart">
 
@@ -429,56 +428,53 @@
 
                     <label class="product-price">Giá</label>
                     <label class="product-quantity">Số Lượng</label>
-                    <label class="product-removal">Xóa</label>
+                 
                     <label class="product-line-price">Tổng</label>
                 </div>
 
+                <!-- ở đây -->
+                <% let total=0 %>
+                    <% item.forEach((item2,index2)=>{ %>
 
-                <div class="my_body_carts">
+                        <div class="my_body_carts">
+                            <div class="product">
 
-                    <div class="product">
-                        <div class="product-image">
-                            <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
+
+                                <div class="product-image">
+                                    <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                                </div>
+
+                                <div class=" product-price">
+                                    <%= item2.PricePerUnit.toFixed(2) %>
+                                </div>
+
+                                <div class="product-quantity">
+                                    <input type="number" value="<%= item2.Quantity %>" min="1">
+                                </div>
+
+
+
+                                <div class="product-line-price">
+                                    <%= item2.TotalPrice.toFixed(2) %>
+                                </div>
+
+
+                            </div>
                         </div>
-                        <div class="product-price">12.99</div>
-                        <div class="product-quantity">
-                            <input type="number" value="2" min="1">
-                        </div>
-                        <div class="product-removal">
-                            <button class="remove-product">
-                                Remove
-                            </button>
-                        </div>
-                        <div class="product-line-price">25.98</div>
-                    </div>
+                        <% total +=item2.TotalPrice %>
+
+                            <% }) %>
 
 
-                    <div class="product">
-                        <div class="product-image">
-                            <img src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png">
-                        </div>
-                        <div class="product-price">45.99</div>
-                        <div class="product-quantity">
-                            <input type="number" value="1" min="1">
-                        </div>
-                        <div class="product-removal">
-                            <button class="remove-product">
-                                Remove
-                            </button>
-                        </div>
-                        <div class="product-line-price">45.99</div>
-                    </div>
-                </div>
-
-                <div class="totals">
-
-
-                    <div class="totals-item totals-item-total">
-                        <label>Grand Total</label>
-                        <div class="totals-value" id="cart-total">90.57</div>
-                    </div>
-
-                </div>
+                                <!-- ở đây -->
+                                <div class="totals">
+                                    <div class="totals-item totals-item-total">
+                                        <label>Tổng Hóa Đơn</label>
+                                        <div class="totals-value" id="cart-total">
+                                            <%= total.toFixed(2) %>
+                                        </div>
+                                    </div>
+                                </div>
 
 
             </div>
@@ -487,78 +483,75 @@
             <!-- đơn hàng đang giao -->
             <% }) %>
 
-                <% awaiting_delivery.map((item,index)=> { %>
+                <% item_list_no_confirm.forEach( (item1,index1)=> { %>
                     <div class="shopping-cart">
 
                         <h1
                             style="transform: translate(100%); margin-right: 61%; margin-bottom: 40px; margin-top: 30px;">
-                            đơn hàng đang giao <%= index+1%></h1>
+                            đơn hàng đang giao <%= index1 +1%>
+                        </h1>
 
                         <div class="column-labels">
                             <label class="product-image">Hình</label>
 
                             <label class="product-price">Giá</label>
                             <label class="product-quantity">Số Lượng</label>
-                            <label class="product-removal">Xóa</label>
+                           
                             <label class="product-line-price">Tổng</label>
                         </div>
+                        <% let TotalPriceAllRows=0 %>
 
 
-                        <div class="my_body_carts">
+                            <!-- ở đây -->
+                            <% let total=0 %>
+                                <% item1.forEach((item2,index2)=>{ %>
 
-                            <div class="product">
-                                <div class="product-image">
-                                    <img src="https://s.cdpn.io/3/dingo-dog-bones.jpg">
-                                </div>
-                                <div class="product-price">12.99</div>
-                                <div class="product-quantity">
-                                    <input type="number" value="2" min="1">
-                                </div>
-                                <div class="product-removal">
-                                    <button class="remove-product">
-                                        Remove
-                                    </button>
-                                </div>
-                                <div class="product-line-price">25.98</div>
-                            </div>
+                                    <div class="my_body_carts">
+                                        <div class="product">
 
 
-                            <div class="product">
-                                <div class="product-image">
-                                    <img
-                                        src="https://s.cdpn.io/3/large-NutroNaturalChoiceAdultLambMealandRiceDryDogFood.png">
-                                </div>
-                                <div class="product-price">45.99</div>
-                                <div class="product-quantity">
-                                    <input type="number" value="1" min="1">
-                                </div>
-                                <div class="product-removal">
-                                    <button class="remove-product">
-                                        Remove
-                                    </button>
-                                </div>
-                                <div class="product-line-price">45.99</div>
-                            </div>
-                        </div>
+                                            <div class="product-image">
+                                                <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                                            </div>
 
-                        <div class="totals">
+                                            <div class=" product-price">
+                                                <%= item2.PricePerUnit.toFixed(2) %>
+                                            </div>
+
+                                            <div class="product-quantity">
+                                                <input type="number" value="<%= item2.Quantity %>" min="1">
+                                            </div>
 
 
-                            <div class="totals-item totals-item-total">
-                                <label>Grand Total</label>
-                                <div class="totals-value" id="cart-total">90.57</div>
-                            </div>
+                                            <div class="product-line-price">
+                                                <%= item2.TotalPrice.toFixed(2) %>
+                                            </div>
 
-                        </div>
+
+                                        </div>
+                                    </div>
+                                    <% total +=item2.TotalPrice %>
+
+                                        <% }) %>
+
+
+                                            <!-- ở đây -->
+                                            <div class="totals">
+                                                <div class="totals-item totals-item-total">
+                                                    <label>Tổng Hóa Đơn</label>
+                                                    <div class="totals-value" id="cart-total">
+                                                        <%= total.toFixed(2) %>
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
                     </div>
                     <% }) %>
 
 
+
     </div>
-
-
 
 
 
@@ -681,12 +674,40 @@
 
     <!-- Nhúng JavaScript -->
     <script src="http://localhost:8080/congkhai/assets/js/main.js"></script>
+
+    <!-- nhúng jquery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script>
 
-        localStorage.setItem("user_info ", JSON.stringify({
-            username: "nguyen van d",
-            password: "123"
-        }))
+
+        $(document).ready(() => {
+
+            function checkEmpty() {
+                const old_password = document.querySelector("#old_password")
+                const password = document.querySelector("#password")
+                const confirmPassword = document.querySelector("#confirmPassword")
+                if (old_password.value == '' || password.value == "" || confirmPassword == "") {
+                    alert("không để rỗng thông tin")
+                    return false;
+                }
+                return true
+            }
+
+            document.querySelector("#btn_continue").addEventListener("click", (e) => {
+                e.preventDefault()
+                if (checkEmpty() == true) {
+
+                    alert("fjklfjda")
+                    console.log(old_password, password, confirmPassword)
+                }
+            })
+
+
+        })
+
+
+
 
     </script>
 

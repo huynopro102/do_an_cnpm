@@ -8,66 +8,101 @@ let getForgotFasswordID = async (req, res) => {
   res.render("ForgotFasswordID.ejs");
 };
 
+// getHomeControllerOrder No Cofirm
+let getHomeControllerOrderNoCofirm = async (req, res) => {
+  // mảng các đơn hàng của id này và đã xác nhận
+  let order_array_confirm = [];
+  const [rowsss, fieldsss] = await pool.execute(
+    " select * from orders where status = ? ",
+    ["xác nhận"]
+  );
+  order_array_confirm = rowsss;
+  console.log("array orders confirm ", order_array_confirm);
+
+  // mảng các đơn hàng của id này và chưa xác nhận
+  let order_array = [];
+  const [rowssss, fieldssss] = await pool.execute(
+    " select * from orders where status = ? ",
+    ["chưa xác nhận"]
+  );
+  order_array = rowssss;
+  console.log("array orders ", order_array);
+
+  // lặp các phần tử trong order_array và order_array_confirm
+  let list_confirm = [];
+  let list_no_confirm = [];
+
+  for (const item of order_array) {
+    // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
+    const sqlQuery =
+      "SELECT `or`.*, ori.* , p.name ,p.image FROM `orders` `or` JOIN " +
+      " `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` " +
+      " join product p on ori.ProductID = p.id " +
+      " where or.Order_ID = ? ";
+    const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
+    list_no_confirm.push(items);
+  }
+
+  for (const item of order_array_confirm) {
+    // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
+    const sqlQuery =
+      "SELECT `or`.*, ori.* FROM `orders` `or` JOIN `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` where or.Order_ID = ? ";
+    const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
+    list_confirm.push(items);
+  }
+
+  console.log(
+    "list_no_confirm , and length  ",
+    list_no_confirm.length,
+    list_no_confirm
+  );
+  console.log("list_confirm , and length  ", list_confirm.length, list_confirm);
+
+  res.render("no_confirm_orderAdmin.ejs", {
+    dataProduct: list_no_confirm,
+  });
+};
+
 // order
 let getHomeControllerOrder = async (req, res) => {
-  try {
-    let _page = req.query.page ? req.query.page : 1;
-    let limit = 5;
-    let start = (_page - 1) * limit;
-    // let totalRow = 20;
-    let name = req.query.name;
+  // mảng các đơn hàng của id này và đã xác nhận
+  let order_array_confirm = [];
+  const [rowsss, fieldsss] = await pool.execute(
+    " select * from orders where status = ? ",
+    ["xác nhận"]
+  );
+  order_array_confirm = rowsss;
+  console.log("array orders confirm ", order_array_confirm);
 
-    // total tổng các item trong database
-    const [total, fields] = await pool.execute(
-      " select count(*) as total from orders where status = ? ",
-      ["chưa xác nhận"]
-    );
-    let totalRow = total[0].total;
+  // lặp các phần tử trong order_array và order_array_confirm
+  let list_confirm = [];
 
-    // tong so trang
-    let totalPage = Math.ceil(totalRow / limit);
-
-    console.log("day la order ");
-
-    res.render("ordersAdmin.ejs", {
-      dataProduct: rows ? rows : [],
-      totalPage: totalPage,
-      page: parseInt(_page),
-    });
-
-    // if (name) {
-    //   const [rows, fields] = await pool.execute(
-    //     "SELECT * FROM `product` p JOIN category c ON p.category_id = c.id WHERE p.`name` LIKE ? LIMIT ? , ?",
-    //     [`%${name}%`, start, limit]
-    //   );
-
-    //   res.render("ProductsAdmin.ejs", {
-    //     dataProduct: rows ? rows : [],
-    //     totalPage: totalPage,
-    //     page: parseInt(_page),
-    //   });
-    // }
-    // if(!name) {
-    //   const [rows, fields] = await pool.execute(
-    //     "SELECT p.*, c.name as cname FROM `product` p JOIN category c ON p.category_id = c.id LIMIT ? , ?",
-    //     [start, limit]
-    //   );
-    //   res.render("ProductsAdmin.ejs", {
-    //     dataProduct: rows ? rows : [],
-    //     totalPage: totalPage,
-    //     page: parseInt(_page),
-    //   });
-    // }
-  } catch (error) {
-    console.error("Error in gethomeControllerProduct:", error);
-    res.render("err500.ejs");
+  for (const item of order_array_confirm) {
+    // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
+    const sqlQuery =
+      "SELECT `or`.*, ori.* , p.name ,p.image FROM `orders` `or` JOIN " +
+      " `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` " +
+      " join product p on ori.ProductID = p.id " +
+      " where or.Order_ID = ? ";
+    const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
+    list_confirm.push(items);
   }
+
+  console.log("list_confirm , and length  ", list_confirm.length, list_confirm);
+
+  res.render("ordersAdmin.ejs", {
+    dataProduct: list_confirm,
+  });
 };
 
 // PostCarts
 let PostCarts = async (req, res) => {
   console.log("web post carts ", req.body);
-  console.log("web post params carts ", req.params.id);
+  
+
+  const [email, email1] = await pool.execute(
+    'select * from datausers where id = ?', [req.body.UserID]
+);
 
   const Order = {
     userID: req.body.UserID,
@@ -75,6 +110,12 @@ let PostCarts = async (req, res) => {
     OrderDate: req.body.OrderDate,
     status: req.body.status,
   };
+  const ordering_information ={
+    CustomerName : req.body.username ,
+    CustomerEmail : email[0].email ,
+    CustomerAddress : req.body.address ,
+    CustomerPhone : req.body.numberphone
+  }
 
   const connection = await pool.getConnection();
   await connection.beginTransaction();
@@ -89,9 +130,31 @@ let PostCarts = async (req, res) => {
 
     // đây là  câu lênh lấy trường id khi mới tạo bảng orders
     const orderID = orderResult.insertId;
-    const orderItems = Object.keys(req.body.giohang).map(
-      (key) => req.body.giohang[key]
+    const orderItems = Object.values(req.body.giohang);
+
+
+
+
+
+
+
+     // Thêm dữ liệu vào bảng orderinginformation
+     await connection.execute(
+      "INSERT INTO orderinginformation (OrderID, CustomerName, CustomerEmail, CustomerAddress, CustomerPhone) VALUES (?, ?, ?, ?, ?)",
+      [
+        orderID,
+        ordering_information.CustomerName , 
+        ordering_information.CustomerEmail, 
+        ordering_information.CustomerAddress, 
+        ordering_information.CustomerPhone, 
+      ]
     );
+
+
+
+
+
+
     // Thêm dữ liệu vào bảng orderItem
     for (const item of orderItems) {
       await connection.execute(
@@ -105,6 +168,10 @@ let PostCarts = async (req, res) => {
         ]
       );
     }
+
+
+  
+      
 
     // Commit transaction
     await connection.commit();
@@ -193,8 +260,56 @@ let getProfile = async (req, res) => {
     );
     console.log("data lay ddc ", rows[0]);
 
-    // lấy lịch sử đặt hàng , hoặc chờ xác nhận
+    // mảng các đơn hàng của id này và đã xác nhận
+    let order_array_confirm = [];
+    const [rowsss, fieldsss] = await pool.execute(
+      " select * from orders where UserID = ? and status = ? ",
+      [id[0], "xác nhận"]
+    );
+    order_array_confirm = rowsss;
+    console.log("array orders confirm ", order_array_confirm);
 
+    // mảng các đơn hàng của id này và chưa xác nhận
+    let order_array = [];
+    const [rowssss, fieldssss] = await pool.execute(
+      " select * from orders where UserID = ? and status = ? ",
+      [id[0], "chưa xác nhận"]
+    );
+    order_array = rowssss;
+    console.log("array orders ", order_array);
+
+    // lặp các phần tử trong order_array và order_array_confirm
+    let list_confirm = [];
+    let list_no_confirm = [];
+
+    for (const item of order_array) {
+      // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
+      const sqlQuery =
+        "SELECT `or`.*, ori.* FROM `orders` `or` JOIN `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` where or.Order_ID = ? ";
+      const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
+      list_no_confirm.push(items);
+    }
+
+    for (const item of order_array_confirm) {
+      // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
+      const sqlQuery =
+        "SELECT `or`.*, ori.* FROM `orders` `or` JOIN `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` where or.Order_ID = ? ";
+      const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
+      list_confirm.push(items);
+    }
+
+    console.log(
+      "list_no_confirm , and length  ",
+      list_no_confirm.length,
+      list_no_confirm
+    );
+    console.log(
+      "list_confirm , and length  ",
+      list_confirm.length,
+      list_confirm
+    );
+
+    // lấy lịch sử đặt hàng , hoặc chờ xác nhận
     const [rowss, fieldss] = await pool.execute(
       " select * from orders where UserID = ?",
       [id[0]]
@@ -205,60 +320,16 @@ let getProfile = async (req, res) => {
       return res.render("profile.ejs", {
         data: rows[0].username,
         id: rows[0].id,
-        delivery_history: [],
-        awaiting_delivery: [],
+        item_list_confirm: [],
+        item_list_no_confirm: [],
       });
     } else {
-      // lưu giá trị của phần tử Order_ID khi xác nhận
-      const [orderHistory_confirm1, orderHistoryFields1] = await pool.execute(
-        "select distinct o.Order_ID " +
-          "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
-        [id[0], "xác nhận"]
-      );
-
-      // lưu giá trị của phần tử Order_ID khi xác nhận
-      const [orderHistory_confirm2, orderHistoryFields2] = await pool.execute(
-        "select distinct o.Order_ID  " +
-          "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
-        [id[0], "chưa xác nhận"]
-      );
-
-      console.log("cac bang order xac nhan ", orderHistory_confirm1);
-      console.log("cac bang order chua xac nhan ", orderHistory_confirm2);
-
-      const [orderHistory_confirm, orderHistoryFields] = await pool.execute(
-        "select o.Order_ID , oi.Quantity , oi.PricePerUnit , oi.TotalPrice , o.TotalAmount , o.OrderDate " +
-          "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
-        [id[0], "xác nhận"]
-      );
-
-      const [orderHistory_confirm_no, orderHistoryFields_no] =
-        await pool.execute(
-          "select o.Order_ID , oi.Quantity , oi.PricePerUnit , oi.TotalPrice , o.TotalAmount , o.OrderDate " +
-            "from orders o JOIN orderitem oi where o.UserID = ? and o.Status = ? and o.Order_ID = oi.OrderID ",
-          [id[0], "chưa xác nhận"]
-        );
-      console.log(
-        "so luong don hang : chua xac nhan ",
-        orderHistory_confirm_no[0].orderIDCount
-      );
-      console.log("chua giao hang ", orderHistory_confirm_no);
-      console.log("da giao hang ", orderHistory_confirm);
-
-      // duyệt để lưu mỗi order vào array
-      const arr_X_N = orderHistory_confirm1;
-      const arr_C_X_N = orderHistory_confirm2;
-
-      const so_luong_don_hang_da_mua = new Array();
-
-      orderHistory_confirm_no.forEach((item, index) => {});
-
       // đã mua hàng
       return res.render("profile.ejs", {
         data: rows[0].username,
         id: rows[0].id,
-        delivery_history: orderHistory_confirm,
-        awaiting_delivery: orderHistory_confirm_no,
+        item_list_confirm: list_confirm,
+        item_list_no_confirm: list_no_confirm,
       });
     }
   }
@@ -769,4 +840,5 @@ module.exports = {
 
   getHomeControllerOrder,
   getForgotFasswordID,
+  getHomeControllerOrderNoCofirm,
 };

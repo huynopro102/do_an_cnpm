@@ -368,21 +368,10 @@
     </header>
 
     <!-- container -->
-
-
-
     <main class="main_pt">
-
-
-
-
-
-
         <h1>Shopping Cart</h1>
 
         <div class="shopping-cart">
-
-
 
             <!-- thông tin liên hệ -->
             <div class="form-contact"
@@ -390,27 +379,26 @@
                 <h3>DarkT software Company</h3>
                 <form id="frm-send-contact" class="" method=" " action="" novalidate="novalidate">
 
-                    <div class="form-group as"> <input style="border: 1px solid #ccc; padding: 4px;"
+                    <div class="form-group as"> <input id="username" style="border: 1px solid #ccc; padding: 4px;"
                             class="form-control form-control-1 required" type="text" name="full_name"
                             placeholder="Họ và tên" aria-required="true"></div>
 
 
-                    <div class="form-group as"> <input style="border: 1px solid #ccc; padding: 4px;"
+                    <div class="form-group as"> <input id="numberphone"  style="border: 1px solid #ccc; padding: 4px;"
                             class="form-control form-control-2 required" type="text" name="phone"
                             placeholder="Số điện thoại" aria-required="true" oninput="validateInput(this)">
                     </div>
 
 
-                    <div class="form-group"><textarea style="padding: 4px;" id="content_textarea" name="content"
+                    <div class="form-group"><textarea id="address" style="padding: 4px;" id="content_textarea" name="content"
                             class="form-control form-control-3 required" rows="3" placeholder="Địa Chỉ"
-                            aria-required="true"></textarea></div>
+                            aria-required="true"></textarea>
+                    </div>
 
                     <input hidden class="id_user_cart" type="text" value="<%= id %>">
                 </form>
 
             </div>
-
-
 
             <div class="column-labels">
                 <label class="product-image">Hình</label>
@@ -919,8 +907,6 @@
             }
 
 
-
-
             // Chuẩn bị dữ liệu để gửi lên server
 
 
@@ -950,6 +936,12 @@
 
             console.log(id_user, totalAmount, " / ", formattedDate)
 
+
+            // thong tin khach hang
+            const username1 = document.querySelector("#username").value
+            const address1 = document.querySelector("#address").value
+            const numberphone1 = document.querySelector("#numberphone").value
+            console.log(username1 , address1 , numberphone1)
             const dataToSend = {
 
                 // bảng order
@@ -959,7 +951,12 @@
                 status: "chưa xác nhận",
 
                 // orderItem
-                giohang: giohang
+                giohang: giohang ,
+            
+                // orderinginformation
+                username : username1 , 
+                numberphone : numberphone1 ,
+                address : address1
             };
 
             try {
@@ -981,7 +978,7 @@
                     location.reload()
 
                     // Nếu có thể, bạn có thể thực hiện các xử lý tiếp theo dựa trên phản hồi từ server
-                } else if (response.status == 500) {
+                } else if (response.status == 500) {    
 
                     return alert("that bai")
                 }
@@ -992,11 +989,6 @@
             } catch (error) {
                 console.error("Lỗi khi gửi yêu cầu:", error.message);
             }
-
-
-
-
-
 
         })
 
