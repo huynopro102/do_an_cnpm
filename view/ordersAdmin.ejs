@@ -103,10 +103,11 @@
 
           <div class="totals">
             <div class="totals-item totals-item-total">
-              <label>Tổng Thành Tiền</label>
-              <div class="totals-value" id="cart-total">
-                <%= total.toFixed(2) %>
-              </div>
+              <label> Tổng Thành Tiền : <%= total.toFixed(2) %>$ </label>
+              <label> <%= item[0].CustomerName %> </label>
+              <label> <%= item[0].CustomerEmail %> </label>
+              <label> <%= item[0].CustomerAddress  %>  </label>
+              <label> <%= item[0].CustomerPhone %> </label>
               <button class="checkout">Đã Xác Nhận Đơn Hàng</button>
             </div>
           </div>

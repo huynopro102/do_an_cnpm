@@ -1,7 +1,7 @@
-const { render } = require("ejs");
+const bcrypt = require("bcrypt");
 const pool = require("../model/connectdbUser");
 const jwt = require("jsonwebtoken");
-
+const saltRounds = 10;
 // getForgotFasswordID
 
 let getForgotFasswordID = async (req, res) => {
@@ -19,30 +19,24 @@ let postHomeControllerOrderNoCofirm = async (req, res) => {
       [req.body.data]
     );
 
-    console.log("rows ",rows)  
+    console.log("rows ", rows);
 
     if (rows.length > 0) {
-      
       const [deleteResult, deleteFields] = await pool.execute(
         "UPDATE orders SET status = 'xác nhận' WHERE Order_ID = ?",
         [req.body.data]
-    );
-    
+      );
 
       if (deleteResult.affectedRows > 0) {
-        res
-          .status(200)
-          .json({
-            success: true,
-            message: "Đã xác nhận đơn hàng thành công",
-          });
+        res.status(200).json({
+          success: true,
+          message: "Đã xác nhận đơn hàng thành công",
+        });
       } else {
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Xác nhận đơn hàng thành công, nhưng xóa không thành công",
-          });
+        res.status(500).json({
+          success: false,
+          message: "Xác nhận đơn hàng thành công, nhưng xóa không thành công",
+        });
       }
     } else {
       res
@@ -51,12 +45,10 @@ let postHomeControllerOrderNoCofirm = async (req, res) => {
     }
   } catch (error) {
     console.error("Error:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Lỗi trong quá trình xác nhận và xóa đơn hàng",
-      });
+    res.status(500).json({
+      success: false,
+      message: "Lỗi trong quá trình xác nhận và xóa đơn hàng",
+    });
   }
 };
 
@@ -132,9 +124,9 @@ let getHomeControllerOrder = async (req, res) => {
   for (const item of order_array_confirm) {
     // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
     const sqlQuery =
-      "SELECT `or`.*, ori.* , p.name ,p.image FROM `orders` `or` JOIN " +
+      "SELECT `or`.*, ori.* , p.name ,p.image , info.* FROM `orders` `or` JOIN " +
       " `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` " +
-      " join product p on ori.ProductID = p.id " +
+      " join product p on ori.ProductID = p.id join orderinginformation info on info.OrderID = or.Order_ID  " +
       " where or.Order_ID = ? ";
     const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
     list_confirm.push(items);
@@ -198,6 +190,7 @@ let PostCarts = async (req, res) => {
 
     // Thêm dữ liệu vào bảng orderItem
     for (const item of orderItems) {
+      console.log("item ", item);
       await connection.execute(
         "INSERT INTO orderItem (OrderID, ProductID, Quantity, PricePerUnit, TotalPrice) VALUES (?, ?, ?, ?, ?)",
         [
@@ -282,6 +275,77 @@ let getCarts = async (req, res) => {
   }
 };
 
+
+
+
+
+// post Profile
+let postProfile = async (req, res) => {
+  console.log(req.body);
+
+  try {
+    const [rows, fields] = await pool.execute(
+      "SELECT * FROM datausers WHERE id = ?",
+      [req.body.id]
+    );
+
+    if (rows.length > 0) {
+      const passwordMatch = await new Promise((resolve, reject) => {
+        bcrypt.compare(
+          req.body.old_password,
+          rows[0].password,
+          function (err, result) {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      });
+
+      if (passwordMatch) {
+        let hash_password = "";
+        let id = req.body.id;
+
+        await bcrypt.hash(
+          req.body.confirmPassword,
+          saltRounds,
+          function (err, hash) {
+            if (err) {
+              console.error("Lỗi khi hash mật khẩu mới:", err);
+              res.status(500).json("Internal Server Error");
+              return;
+            }
+            hash_password = hash;
+            pool.execute(
+              "UPDATE datausers SET password = ? WHERE id = ?",
+              [hash_password, id] 
+              )
+            console.log("hash ", hash);
+          }
+        );
+
+
+        console.log("Password matches!");
+        res.status(200).json("oke");
+      } else {
+        console.log("Incorrect old password.");
+        res.status(403).json("mat khau cu sai");
+      }
+    } else {
+      console.log("User not found.");
+      res.status(404).json("not found user");
+    }
+  } catch (error) {
+    console.error("Lỗi trong quá trình xử lý:", error);
+    res.status(500).json("Internal Server Error");
+  }
+};
+
+
+
+
 //  getProfile
 let getProfile = async (req, res) => {
   console.log(req.params);
@@ -322,7 +386,7 @@ let getProfile = async (req, res) => {
     for (const item of order_array) {
       // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
       const sqlQuery =
-        "SELECT `or`.*, ori.* FROM `orders` `or` JOIN `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` where or.Order_ID = ? ";
+        "SELECT `or`.*, ori.* , p.* , info.* FROM `orders` `or` JOIN `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` join product p on p.id = ori.ProductID join orderinginformation info on info.OrderID = ori.OrderID where or.Order_ID = ? ";
       const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
       list_no_confirm.push(items);
     }
@@ -330,7 +394,7 @@ let getProfile = async (req, res) => {
     for (const item of order_array_confirm) {
       // Tạo câu truy vấn SQL với chuỗi được phân tách bằng dấu phẩy
       const sqlQuery =
-        "SELECT `or`.*, ori.* FROM `orders` `or` JOIN `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` where or.Order_ID = ? ";
+        "SELECT `or`.*, ori.* , p.* , info.* FROM `orders` `or` JOIN `orderitem` `ori` ON `or`.`Order_ID` = `ori`.`OrderID` join product p on p.id = ori.ProductID join orderinginformation info on info.OrderID = ori.OrderID  where or.Order_ID = ? ";
       const [items, itemss] = await pool.execute(sqlQuery, [item.Order_ID]);
       list_confirm.push(items);
     }
@@ -879,4 +943,5 @@ module.exports = {
   getForgotFasswordID,
   getHomeControllerOrderNoCofirm,
   postHomeControllerOrderNoCofirm,
+  postProfile,
 };

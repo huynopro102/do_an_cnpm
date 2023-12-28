@@ -425,10 +425,9 @@
 
                 <div class="column-labels">
                     <label class="product-image">Hình</label>
-
+                    <label class="product-image">Tên</label>
                     <label class="product-price">Giá</label>
                     <label class="product-quantity">Số Lượng</label>
-                 
                     <label class="product-line-price">Tổng</label>
                 </div>
 
@@ -439,9 +438,12 @@
                         <div class="my_body_carts">
                             <div class="product">
 
-
                                 <div class="product-image">
                                     <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                                </div>
+
+                                <div class=" product-price">
+                                    <%= item2.name%>
                                 </div>
 
                                 <div class=" product-price">
@@ -452,12 +454,10 @@
                                     <input type="number" value="<%= item2.Quantity %>" min="1">
                                 </div>
 
-
-
                                 <div class="product-line-price">
                                     <%= item2.TotalPrice.toFixed(2) %>
-                                </div>
 
+                                </div>
 
                             </div>
                         </div>
@@ -465,18 +465,27 @@
 
                             <% }) %>
 
-
                                 <!-- ở đây -->
                                 <div class="totals">
                                     <div class="totals-item totals-item-total">
-                                        <label>Tổng Hóa Đơn</label>
-                                        <div class="totals-value" id="cart-total">
-                                            <%= total.toFixed(2) %>
-                                        </div>
+                                        <label>Tổng Hóa Đơn <%= total.toFixed(2) %>$ </label>
+                                        <label>
+                                            <%= item[0].CustomerName %>
+                                        </label>
+                                        <label>
+                                            <%= item[0].CustomerEmail %>
+                                        </label>
+                                        <label>
+                                            <%= item[0].CustomerAddress %>
+                                        </label>
+                                        <label>
+                                            <%= item[0].CustomerPhone %>
+                                        </label>
+
+
+
                                     </div>
                                 </div>
-
-
             </div>
 
 
@@ -493,10 +502,9 @@
 
                         <div class="column-labels">
                             <label class="product-image">Hình</label>
-
+                            <label class="product-image">Tên</label>
                             <label class="product-price">Giá</label>
                             <label class="product-quantity">Số Lượng</label>
-                           
                             <label class="product-line-price">Tổng</label>
                         </div>
                         <% let TotalPriceAllRows=0 %>
@@ -509,9 +517,13 @@
                                     <div class="my_body_carts">
                                         <div class="product">
 
-
                                             <div class="product-image">
                                                 <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                                            </div>
+
+
+                                            <div class=" product-price">
+                                                <%= item2.name%>
                                             </div>
 
                                             <div class=" product-price">
@@ -522,30 +534,31 @@
                                                 <input type="number" value="<%= item2.Quantity %>" min="1">
                                             </div>
 
-
                                             <div class="product-line-price">
                                                 <%= item2.TotalPrice.toFixed(2) %>
                                             </div>
-
 
                                         </div>
                                     </div>
                                     <% total +=item2.TotalPrice %>
 
                                         <% }) %>
-
-
                                             <!-- ở đây -->
                                             <div class="totals">
                                                 <div class="totals-item totals-item-total">
-                                                    <label>Tổng Hóa Đơn</label>
-                                                    <div class="totals-value" id="cart-total">
-                                                        <%= total.toFixed(2) %>
-                                                    </div>
+                                                    <label>Tổng Hóa Đơn <%= total.toFixed(2) %>$</label>
+                                                    <label>
+                                                        <%= item1[0].CustomerAddress %>
+                                                    </label>
+                                                    <label>
+                                                        <%= item1[0].CustomerName %>
+                                                    </label>
+
+                                                    <label>
+                                                        <%= item1[0].CustomerPhone %>
+                                                    </label>
                                                 </div>
                                             </div>
-
-
                     </div>
                     <% }) %>
 
@@ -682,29 +695,68 @@
 
 
         $(document).ready(() => {
+            $(document).on("click", "#btn_continue", function (e) {
+                e.preventDefault();
+
+                const old_password = $("#old_password").val();
+                const password = $("#password").val();
+                const confirmPassword = $("#confirmPassword").val();
+
+                if (password !== confirmPassword) {
+                    alert("không khớp mật khẩu")
+                    return
+                }
+
+                if (checkEmpty()) {
+                    $.ajax({
+                        url: `/profile/:${location.href.split('/')[4]}`,
+                        type: "POST",
+                        data: {
+                            id: location.href.split('/')[4],
+                            old_password: old_password,
+                            password: password,
+                            confirmPassword: confirmPassword,
+                        },
+                        success: function (response) {
+                            console.log(response)
+                            alert("Đã gửi thành công!");
+                            $("#old_password").val('');
+                            $("#password").val('');
+                            $("#confirmPassword").val('');
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // Handle error
+                            console.log(xhr.status)
+                            console.log(textStatus)
+                            console.log(errorThrown)
+                            if (xhr.status === 404) {
+                                alert("not found user")
+                            } if (xhr.status === 403) {
+                                alert("mat khau cu sai")
+                            }
+                            else {
+                                // Generic error handling
+                                alert("error Server")
+
+                            }
+                        }
+                    });
+                }
+            });
 
             function checkEmpty() {
-                const old_password = document.querySelector("#old_password")
-                const password = document.querySelector("#password")
-                const confirmPassword = document.querySelector("#confirmPassword")
-                if (old_password.value == '' || password.value == "" || confirmPassword == "") {
-                    alert("không để rỗng thông tin")
+                const old_password = $("#old_password").val();
+                const password = $("#password").val();
+                const confirmPassword = $("#confirmPassword").val();
+
+                if (old_password === "" || password === "" || confirmPassword === "") {
+                    alert("Không để rỗng thông tin");
                     return false;
                 }
-                return true
+                return true;
             }
+        });
 
-            document.querySelector("#btn_continue").addEventListener("click", (e) => {
-                e.preventDefault()
-                if (checkEmpty() == true) {
-
-                    alert("fjklfjda")
-                    console.log(old_password, password, confirmPassword)
-                }
-            })
-
-
-        })
 
 
 

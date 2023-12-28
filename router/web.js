@@ -23,7 +23,7 @@ router.get("/admin/v1/categorysedit/:id" , MiddleWare.checkadmin ,webController.
 router.get("/admin/v1/product", MiddleWare.checkadmin  ,webController.gethomeControllerProduct)
 router.get("/admin/v1/productscreate", MiddleWare.checkadmin , webController.gethomeControllerProductsCreate)
 router.get("/admin/v1/productsedit/:id" , MiddleWare.checkadmin ,webController.getProductsEditAdmin)
-router.get("/admin/v1/productsdelete/:id" , MiddleWare.checkadmin , webController.getProductsDeleteAdmin    )
+router.get("/admin/v1/productsdelete/:id" , MiddleWare.checkadmin , webController.getProductsDeleteAdmin)
 
 // order 
 router.get("/admin/v1/order", MiddleWare.checkadmin , webController.getHomeControllerOrder)
@@ -55,6 +55,7 @@ router.get("/productsDetail/:id" , webController.getProductsDetails)
 
 // thong tin ca nhan khi dang nhap
 router.get("/profile/:id", webController.getProfile)
+router.post("/profile/:id", webController.postProfile)
 
 // gio hang
 router.get("/carts/:id", webController.getCarts)
