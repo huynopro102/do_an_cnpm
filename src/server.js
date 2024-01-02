@@ -33,5 +33,6 @@ app.use("/api/v1",initApiRouter)
 app.use("/",initEmail)
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(` f Example app listening on port ${port}`)
+
 })
