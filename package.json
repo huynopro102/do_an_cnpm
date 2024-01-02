@@ -4,8 +4,10 @@
   "description": "do an muon cong nghe phan mem",
   "main": "index.js",
   "scripts": {
+    "postinstall": "chmod +x ./node_modules/.bin/nodemon",
     "start": " nodemon src/server.js"
   },
+  
   "author": "",
   "license": "ISC",
   "dependencies": {
