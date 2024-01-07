@@ -3,6 +3,26 @@ const jwt = require("jsonwebtoken");
 const sendEmailService = require("../services/emailServices");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+
+
+// getSignOutAdmin
+
+let getSignOutAdmin = async (req, res) => {
+  try {
+    // Clear the "cookieAdmin" cookie
+    res.clearCookie("tokenAdmin");
+
+    // Redirect or respond as needed
+    // For example, redirect to the home page
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error during sign out:", error);
+    // Handle errors appropriately
+    res.status(500).json("Internal Server Error");
+  }
+}
+
+
 // forgotpassword ID
 
 let postForgotPasswordID = async (req, res) => {
@@ -468,4 +488,7 @@ module.exports = {
   postRegister,
   postForgotPassword,
   postForgotPasswordID,
+
+  getSignOutAdmin
+
 };

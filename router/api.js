@@ -45,6 +45,9 @@ const  router = express.Router()
         router.post("/forgotpassword",apiController.postForgotPassword)
         router.post("/forgotpassword/:id",apiController.postForgotPasswordID)
 
+        // sign out admin
+        router.get("/admin/v1/signout",apiController.getSignOutAdmin)
+
       
 
         
