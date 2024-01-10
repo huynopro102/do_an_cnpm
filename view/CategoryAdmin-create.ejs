@@ -22,7 +22,7 @@
 
           <div class="box-body">
 
-            <form action="/api/v1/create-category" method="post">
+            <form action="https://thoitrangdarkt-com.onrender.com/api/v1/create-category" method="post">
 
               <!-- username -->
               <div class="form-group">
@@ -50,7 +50,7 @@
 
               <!-- button submit -->
               <button type="submit" class="btn btn-primary btnSubmit"><i class="fa fa-save"></i> Submit</button>
-              <a href="/admin/v1/category" class="btn btn-default"><i class="fa fa-arrow-left"></i> Trở lại</a>
+              <a href="https://thoitrangdarkt-com.onrender.com/admin/v1/category" class="btn btn-default"><i class="fa fa-arrow-left"></i> Trở lại</a>
 
             </form>
 
@@ -82,7 +82,7 @@
         const postRequired = async (requestBody) => {
           // Send POST request using Fetch API
           try {
-            const response = await fetch('/api/v1/create-category', {
+            const response = await fetch('https://thoitrangdarkt-com.onrender.com/api/v1/create-category', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

@@ -30,7 +30,7 @@
                   <input type="text" name="name" class="form-control-plaintext" id="staticEmail2"
                     placeholder="input field">
                   <button type="submit" class="btn btn-primary mb-5"><i class="fa fa-search"></i></button>
-                  <a href="/admin/v1/categoryscreate" class="btn btn-success mb-5"><i class="fa fa-plus"></i> Create</a>
+                  <a href="https://thoitrangdarkt-com.onrender.com/admin/v1/categoryscreate" class="btn btn-success mb-5"><i class="fa fa-plus"></i> Create</a>
                 </div>
               </form>
 
@@ -55,7 +55,7 @@
                    <%= item.status == 0 ? "tạm ẩn" : "hiển thị"   %>
                   </td>
                   <td>
-                    <a href="/admin/v1/categorysedit/<%=item.id%>" class="btn btn-sm btn-primary btn-sua" 
+                    <a href="https://thoitrangdarkt-com.onrender.com/admin/v1/categorysedit/<%=item.id%>" class="btn btn-sm btn-primary btn-sua" 
                       data-id="<%=item.id%>"><i class="fa fa-edit"></i> sua</a>
                     <a href="#" class="btn btn-sm btn-danger btn-xoa "><i class="fa fa-trash"></i> xoa</a>
                   </td>
@@ -107,7 +107,7 @@
           const categoryId = btn_sua.getAttribute("data-id");
 
           // Use Fetch API to make a GET request
-          fetch(`/admin/v1/categorysedit/${categoryId}`)
+          fetch(`https://thoitrangdarkt-com.onrender.com/admin/v1/categorysedit/${categoryId}`)
             .then((response) => {
               // Check if the request was successful (status code 2xx)
               if (response.ok) {
@@ -147,7 +147,7 @@
 
               if (userId) {
                 // Thực hiện yêu cầu DELETE sử dụng fetch
-                fetch(`/api/v1/delete-category/${parseInt(userId.trim())}`, {
+                fetch(`https://thoitrangdarkt-com.onrender.com/api/v1/delete-category/${parseInt(userId.trim())}`, {
                   method: 'DELETE',
                 })
                   .then(response => response.json())
