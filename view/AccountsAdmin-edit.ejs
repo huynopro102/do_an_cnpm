@@ -23,7 +23,7 @@
           <div class="box-body">
 
 
-            <form action="/api/v1/create-user" method="post">
+            <form action="https://thoitrangdarkt-com.onrender.com/api/v1/create-user" method="post">
 
               <!-- email -->
               <div class="form-group">
@@ -58,7 +58,7 @@
 
               <!-- button submit -->
               <button type="submit" class="btn btn-primary btnluu"><i class="fa fa-save"></i> Lưu </button>
-              <a href="/admin/v1/accounts" class="btn btn-default"><i class="fa fa-arrow-left"></i> Trở lại</a>
+              <a href="https://thoitrangdarkt-com.onrender.com/admin/v1/accounts" class="btn btn-default"><i class="fa fa-arrow-left"></i> Trở lại</a>
 
             </form>
 
@@ -132,7 +132,7 @@
         const postRequired = async (requestBody) => {
           // Send POST request using Fetch API
           try {
-            const response = await fetch(`/api/v1/update-user/${document.querySelector(".cachCuChuoi").value.trim()}`, {
+            const response = await fetch(`https://thoitrangdarkt-com.onrender.com/api/v1/update-user/${document.querySelector(".cachCuChuoi").value.trim()}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
