@@ -73,7 +73,7 @@
     
         const result = location.href.substring( location.href.lastIndexOf("/") +1 ) 
 
-        fetch(`/api/v1/forgotpassword/${result}`, {
+        fetch(`https://thoitrangdarkt-com.onrender.com/api/v1/forgotpassword/${result}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
