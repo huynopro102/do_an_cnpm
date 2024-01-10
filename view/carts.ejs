@@ -805,7 +805,7 @@
             <div class="product-image">
                 <img src="${item.hinh}">
             </div>
-            <div class="product-price">${item.gia}</div>
+            <div class="product-price">${  (item.gia) }   </div>
             <div class="product-quantity">
                 <input type="number" value="${item.soluongsp}" min="1" onchange="updateQuantity(${index}, this)">
             </div>
@@ -816,7 +816,6 @@
             </div>
             <div class="product-line-price">${parseInt(item.gia) * parseInt(item.soluongsp)}</div>
         `;
-
                 // Thêm sản phẩm vào my_body_carts
                 my_body_carts.appendChild(productElement);
             });
