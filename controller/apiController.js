@@ -239,9 +239,9 @@ let CreateUser = async (req, res) => {
     return res.status(200).json("không để trống các trường dữ liệu");
   }
  await bcrypt.genSalt(saltRounds, function(err, salt) {
-     bcrypt.hash(confirmpassword, salt,  function(err, hash) {
+     bcrypt.hash(confirmpassword, salt, async function(err, hash) {
         hash_password = hash
-        const [rows, fields] = pool.execute(
+        const [rows, fields] = await pool.execute(
           "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
           [username, hash_password, email, 0]
         );
