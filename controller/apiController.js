@@ -4,7 +4,6 @@ const sendEmailService = require("../services/emailServices");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-
 // getSignOutAdmin
 
 let getSignOutAdmin = async (req, res) => {
@@ -20,8 +19,7 @@ let getSignOutAdmin = async (req, res) => {
     // Handle errors appropriately
     res.status(500).json("Internal Server Error");
   }
-}
-
+};
 
 // forgotpassword ID
 
@@ -229,8 +227,9 @@ let CreateUser = async (req, res) => {
   let password = req.body.PassWord;
   let confirmpassword = req.body.ConfirmPassWord;
   let email = req.body.Email;
-  let hash_password = ''
+  let hash_password = "";
   console.log("create user");
+
   if (password !== confirmpassword) {
     return res.json("không khớp mật khẩu");
   }
@@ -238,16 +237,25 @@ let CreateUser = async (req, res) => {
   if (!username || !confirmpassword || !password || !email) {
     return res.status(200).json("không để trống các trường dữ liệu");
   }
- await bcrypt.genSalt(saltRounds, function(err, salt) {
-     bcrypt.hash(confirmpassword, salt, async function(err, hash) {
-        hash_password = hash
-        const [rows, fields] = await pool.execute(
-          "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
-          [username, hash_password, email, 0]
-        );
-    });
-});
-  res.status(200).json("tạo thành công ");
+
+  try {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(confirmpassword, salt);
+    hash_password = hash;
+
+    const result = await pool.execute(
+      "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
+      [username, hash_password, email, 0]
+    );
+
+    // Xử lý kết quả nếu cần
+    console.log(result);
+
+    res.status(200).json("tạo thành công");
+  } catch (error) {
+    console.error("Lỗi khi tạo người dùng:", error.message);
+    res.status(500).json("Lỗi khi tạo người dùng");
+  }
 };
 
 let UpdateUser = async (req, res) => {
@@ -494,6 +502,5 @@ module.exports = {
   postForgotPassword,
   postForgotPasswordID,
 
-  getSignOutAdmin
-
+  getSignOutAdmin,
 };
