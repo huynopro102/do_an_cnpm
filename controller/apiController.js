@@ -241,12 +241,12 @@ let CreateUser = async (req, res) => {
  await bcrypt.genSalt(saltRounds, function(err, salt) {
      bcrypt.hash(confirmpassword, salt,  function(err, hash) {
         hash_password = hash
+        const [rows, fields] = pool.execute(
+          "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
+          [username, hash_password, email, 0]
+        );
     });
 });
-  const [rows, fields] = await pool.execute(
-    "INSERT INTO datausers(username,password,email,admin) VALUES(?,?,?,?)",
-    [username, hash_password, email, 0]
-  );
   res.status(200).json("tạo thành công ");
 };
 
