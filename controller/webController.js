@@ -192,7 +192,7 @@ let PostCarts = async (req, res) => {
     for (const item of orderItems) {
       console.log("item ", item);
       await connection.execute(
-        "INSERT INTO orderItem (OrderID, ProductID, Quantity, PricePerUnit, TotalPrice) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO orderitem (OrderID, ProductID, Quantity, PricePerUnit, TotalPrice) VALUES (?, ?, ?, ?, ?)",
         [
           orderID,
           item.ProductID,
