@@ -4,7 +4,7 @@ const path = require("path")
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        console.log("Đây là app-root-path", appRoot.path);
+        console.log("Đây là app-root-path", appRoot.path +"/public/img_product");
         cb(null, appRoot.path+"/public/img_product");
     },
     filename: function (req, file, cb) {
