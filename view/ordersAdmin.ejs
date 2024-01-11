@@ -30,7 +30,7 @@
                   <input type="text" name="name" class="form-control-plaintext" id="staticEmail2"
                     placeholder="input field">
                   <button type="submit" class="btn btn-primary mb-5"><i class="fa fa-search"></i></button>
-                  <a href="/admin/v1/productscreate" class="btn btn-success mb-5"><i class="fa fa-plus"></i> Create</a>
+                  <a href="https://thoitrangdarkt-com.onrender.com/admin/v1/productscreate" class="btn btn-success mb-5"><i class="fa fa-plus"></i> Create</a>
                 </div>
 
               </form>
@@ -66,7 +66,7 @@
                   </div>
 
                   <div class="product-image">
-                    <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                    <img src="https://thoitrangdarkt-com.onrender.com/congkhai/img_product/<%= item2.image%>">
                   </div>
 
                   <div class="product-price">
@@ -339,7 +339,7 @@
 
               if (userId) {
                 // Thực hiện yêu cầu DELETE sử dụng fetch
-                await(`/api/v1/delete-product/${parseInt(userId.trim())}`, {
+                await(`https://thoitrangdarkt-com.onrender.com/api/v1/delete-product/${parseInt(userId.trim())}`, {
                   method: 'DELETE',
                 })
                   .then(response => response.json())

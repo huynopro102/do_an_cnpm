@@ -31,7 +31,7 @@
                                         placeholder="input field">
                                     <button type="submit" class="btn btn-primary mb-5"><i
                                             class="fa fa-search"></i></button>
-                                    <a href="/admin/v1/productscreate" class="btn btn-success mb-5"><i
+                                    <a href="https://thoitrangdarkt-com.onrender.com/admin/v1/productscreate" class="btn btn-success mb-5"><i
                                             class="fa fa-plus"></i> Create</a>
                                 </div>
 
@@ -72,7 +72,7 @@
 
                                     <!-- hình  -->
                                     <div class="product-image">
-                                        <img src="http://localhost:8080/congkhai/img_product/<%= item2.image%>">
+                                        <img src="https://thoitrangdarkt-com.onrender.com/congkhai/img_product/<%= item2.image%>">
                                     </div>
 
                                     <!-- tên của 1 sản phẩm -->
@@ -356,7 +356,7 @@
                     const result = confirm("Bạn có muốn xác nhận đơn hàng có ID bằng " + data +" / " +index);
                     if (result) {
                         // Nếu người dùng đồng ý, thực hiện fetch
-                        fetch('http://localhost:8080/admin/v1/order-no-confirm', {
+                        fetch('https://thoitrangdarkt-com.onrender.com/admin/v1/order-no-confirm', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
