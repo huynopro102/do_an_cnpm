@@ -3,7 +3,7 @@ const mysql = require('mysql2/promise');
 
 // create the connection to database
  const pool = mysql.createPool({
-     port : '80',
+     port : '3306',
    host: 'huynguyen-nginx.io.vn',
   user: 'huynguyen',
   password: '12345678',
