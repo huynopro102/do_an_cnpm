@@ -2,7 +2,7 @@ const mysql = require("mysql2/promise")
 
 
 const poolUser = mysql.createPool({
-   port : '3306',
+   port : '80',
    host: 'huynguyen-nginx.io.vn',
   user: 'huynguyen',
   password: '12345678',
